@@ -1,0 +1,14 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm=".handleGroupDialogConfirm2"
+    reset=".resetGroupDialog2">    
+    <groupItems>
+        <ViewSettingsItem selected="false" text="{i18n>colDatamart}" key="datamart" />        
+        <ViewSettingsItem selected="false" text="{i18n>colMultiproviderVsDatamart}" key="multi" />        
+    </groupItems>    
+</ViewSettingsDialog>
+</c:FragmentDefinition>

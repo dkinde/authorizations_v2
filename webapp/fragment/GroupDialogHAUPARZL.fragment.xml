@@ -1,0 +1,17 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm=".handleGroupDialogConfirm"
+    reset=".resetGroupDialog">    
+    <groupItems>
+        <ViewSettingsItem selected="false" text="{i18n>colAUPARNAME}" key="InfoAuthName" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUZIEL}" key="NameCube" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUIOBJ}" key="InfoName" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUIOBJTYP}" key="InfoTyp" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUSEQUENZ}" key="Sequenz" /> 
+    </groupItems>    
+</ViewSettingsDialog>
+</c:FragmentDefinition>

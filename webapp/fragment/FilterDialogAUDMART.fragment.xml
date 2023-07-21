@@ -1,0 +1,21 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core">
+<ViewSettingsDialog    
+    title=""    
+    confirm="handleFilterDialogConfirm1">    
+    <filterItems>
+        <ViewSettingsFilterItem 
+            multiSelect="false" text="{i18n>colDatamart}" key="datamart"> 
+            <items>
+                <ViewSettingsItem text="DB" key="datamart___DB"/>
+                <ViewSettingsItem text="GK" key="datamart___GK"/>
+                <ViewSettingsItem text="IA" key="datamart___IA"/>
+                <ViewSettingsItem text="KI" key="datamart___KI"/>
+                <ViewSettingsItem text="MT" key="datamart___MT"/>
+                <ViewSettingsItem text="PP" key="datamart___PP"/>
+            </items>
+        </ViewSettingsFilterItem>        
+    </filterItems>     
+</ViewSettingsDialog>
+</c:FragmentDefinition>

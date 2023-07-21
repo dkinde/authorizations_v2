@@ -1,0 +1,43 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"     
+>
+<Dialog title="{i18n>editDialogTitle}" id="dialog2" >
+    <content>
+        <form:SimpleForm editable="true">
+            <form:content>
+                <Label text="{i18n>colAUFKT}" required="true"/>
+                <Input  id="__editCRUD0" 
+                        placeholder="Geben Sie 2 Ziffern ein" 
+                        type="Number" 
+                        liveChange="editValidation" 
+                        valueLiveUpdate="true" 
+                        valueStateText="Geben Sie nicht mehr als 2 Zahlen ein"/>
+                <Label  text="{i18n>colAUENTTYP}" />
+                <Input  id="__editCRUD1" 
+                        placeholder="Geben Sie 1 Zeichen ein" 
+                        liveChange="editValidation" 
+                        valueLiveUpdate="true" 
+                        valueStateText="Nicht mehr als 1 Zeichen eingeben"/>
+                <Label  text="{i18n>colAUENT}" />
+                <Input  id="__editCRUD2" 
+                        liveChange="editValidation" 
+                        valueLiveUpdate="true" 
+                        valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>
+                <Label  text="{i18n>colAUWERT}" />
+                <Input  id="__editCRUD3" 
+                        liveChange="editValidation" 
+                        valueLiveUpdate="true" 
+                        valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>
+            </form:content>							
+        </form:SimpleForm>			
+    </content>
+    <beginButton>
+        <Button id="editButton" text="{i18n>editDialogBeginButton}" type="Accept" press=".onUpdateEditPress"/>
+    </beginButton>
+    <endButton>
+        <Button text="{i18n>editDialogEndButton}"  type="Reject" press=".onCloseEditDialog"/>
+    </endButton>
+</Dialog>
+</c:FragmentDefinition>

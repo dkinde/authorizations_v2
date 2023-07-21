@@ -1,0 +1,82 @@
+<mvc:View 
+    controllerName="authorization.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" 
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout">
+    <Page id="page" title="{i18n>pageTitle}">
+        <!-- <core:Icon
+            activeBackgroundColor=""
+            activeColor=""
+            alt=""
+            backgroundColor=""
+            color=""
+            decorative="true"
+            height=""
+            hoverBackgroundColor=""
+            hoverColor=""
+            noTabStop="false"
+            size="2rem"
+            src="/src/DVZ_icon.png"
+            useIconTooltip="true"
+            width=""
+        >            
+        </core:Icon> -->
+        <Toolbar height="5rem">
+            <Title  titleStyle="H2" 
+                    text="{i18n>startpageTitle}" 
+                    class="sapUiTinyMarginBegin" 
+                    id="t1"/>
+            <ToolbarSpacer/>
+            <Image  alt="DVZ Icon"                    
+                    src="src/DVZ_icon.png"
+                    useMap=""
+                    height="5rem"
+                    width="5rem">            
+            </Image>                  
+        </Toolbar> 
+        <layout:VerticalLayout class="sapUiResponsiveMargin" id="layout1">                       
+            <layout:HorizontalLayout allowWrapping="true" id="layout2">
+                <GenericTile 
+                            class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"  
+                            frameType="TwoByOne"                          
+                            id="g1" 
+                            header="{i18n>startpageGenTile1Header}"                             
+                            press="onNavToBasisKonfig">                    
+                        <TileContent id="t2">
+                                <FeedContent contentText="{i18n>startpageGenTile1Content}" />                           
+                                <!--<NumericContent value="{
+                                                    path: '/HAUPARZL/$count'
+                                                }" indicator="None" valueColor="Neutral"  id="n1" /> -->                           
+                        </TileContent>                    
+                </GenericTile>
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                                id="g2" 
+                                frameType="TwoByOne"                          
+                                header="{i18n>startpageGenTile2Header}"                                 
+                                press="onNavToFunktion">                    
+                        <TileContent id="t3">                              
+                            <FeedContent    contentText="{i18n>startpageGenTile2Content}" />                        
+                                <!-- <NumericContent value="{
+                                                    path: '/HAUPARZL/$count'
+                                                }" indicator="None" valueColor="Neutral" id="n2" />-->                            
+                        </TileContent>                    
+                </GenericTile>                
+            </layout:HorizontalLayout>            
+            <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                                id="g3" 
+                                frameType="TwoByOne"                          
+                                header="{i18n>startpageGenTile3Header}"                                 
+                                press="onNavToWizard">                    
+                        <TileContent id="t4">                            
+                            <FeedContent    contentText="{i18n>startpageGenTile3Content}" />
+                                <!-- <NumericContent value="{
+                                                    path: '/HAUPARZL/$count'
+                                                }" indicator="None" valueColor="Neutral" id="n3" />-->                            
+                        </TileContent>                    
+                </GenericTile>
+        </layout:VerticalLayout>
+        <content />
+    </Page>
+</mvc:View>

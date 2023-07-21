@@ -1,0 +1,189 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"            
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    controllerName="authorization.controller.AUDMART">
+    <Page
+        title="{i18n>table1PageTitle}"
+        showNavButton="true"
+        navButtonPress=".onNavButtonPressed"
+        backgroundDesign="Solid">    
+        <content>        
+        <VBox>           
+                            <Table 
+                                sticky="ColumnHeaders,HeaderToolbar" 
+                                id="table1" 
+                                growing="true"
+                                growingScrollToLoad="true"
+                                growingThreshold="10"
+                                mode="SingleSelectMaster" 
+                                selectionChange="onDatamartSelect"
+                                items="{
+                                    path: '/AUDMART',
+                                    parameters: {
+                                        $count: true,
+                                        $expand: { _Datamart: { 
+                                            $select:    ['datamart','multi']                                            
+                                        }},
+                                        $select:    ['datamart','Txtsh','Txtmd','Txtlg']                                                                                             
+                                    }    
+                                }">
+                                <headerToolbar>
+                                    <Toolbar>                                        
+                                        <content>
+                                            <Button 
+                                                id="buttonAddTable1"
+                                                icon="sap-icon://add" 
+                                                text="{i18n>tableToolbarButtonAdd}" 
+                                                press="onOpenDialog1"
+                                                type="Accept"/>
+                                            <Button 
+                                                id="buttonUpdTable1"
+                                                icon="sap-icon://edit"
+                                                text="{i18n>tableToolbarButtonEdit}" 
+                                                press="onUpdatePress1"/>                                                
+                                            <Button 
+                                                id="buttonDelTable1"
+                                                icon="sap-icon://delete" 
+                                                type="Reject" 
+                                                text="{i18n>tableToolbarButtonDelete}" 
+                                                press="onDeletePress1"/>
+                                            <ToolbarSpacer/>
+                                            <SearchField
+                                                id="searchTable1"								    
+											    width="20%"
+                                                liveChange=".onSearch1"
+											    placeholder="{i18n>searchFieldPlaceholder}"/>
+                                            <Button
+                                                id="sortTable1"
+                                                icon="sap-icon://sort"
+                                                tooltip="{i18n>sortButtonText}"
+                                                press="handleSortButtonPressed1"/> 
+                                            <Button    
+                                                id="filterTable1"                                             
+                                                icon="sap-icon://filter"
+                                                tooltip="{i18n>filterButtonText}"
+                                                press="handleFilterButtonPressed1"/>
+                                            <Button             
+                                                id="groupTable1"                                   
+                                                icon="sap-icon://group-2"
+                                                tooltip="{i18n>groupButtonText}"
+                                                press="handleGroupButtonPressed1"/>
+                                            <Button 
+                                                id="excelTable1"
+                                                icon="sap-icon://excel-attachment"
+                                                tooltip="{i18n>excelButtonText}" 
+                                                press="onExport1"/>                                                
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column>
+                                        <Text text="{i18n>colDatamart}" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="{i18n>colTxtSh}" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="{i18n>colTxtMd}" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="{i18n>colTxtLg}" />
+                                    </Column>                                       
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <ObjectIdentifier text="{datamart}" />
+                                            <ObjectIdentifier text="{Txtsh}" />
+                                            <ObjectIdentifier text="{Txtmd}" />
+                                            <ObjectIdentifier text="{Txtlg}" />                                           
+                                        </cells>                                        
+                                    </ColumnListItem>
+                                </items>
+                            </Table> 
+                            <Table 
+                                sticky="ColumnHeaders,HeaderToolbar"
+                                growing="true"
+                                growingScrollToLoad="true"
+                                growingThreshold="10"
+                                id="table2" 
+                                mode="SingleSelectMaster" 
+                                items="{_Datamart}">                                
+                                <headerToolbar>                                    
+                                    <Toolbar>                                        
+                                        <content>
+                                            <Button 
+                                                id="buttonAddTable2"
+                                                icon="sap-icon://add" 
+                                                text="{i18n>tableToolbarButtonAdd}" 
+                                                press="onOpenDialog2"
+                                                type="Accept"/>
+                                            <Button 
+                                                id="buttonUpdTable2"
+                                                icon="sap-icon://edit"
+                                                text="{i18n>tableToolbarButtonEdit}" 
+                                                press="onUpdatePress2"/>                                                
+                                            <Button 
+                                                id="buttonDelTable2"
+                                                icon="sap-icon://delete" 
+                                                type="Reject" 
+                                                text="{i18n>tableToolbarButtonDelete}" 
+                                                press="onDeletePress2"/>
+                                            <ToolbarSpacer/>
+                                            <SearchField			
+                                                id="searchTable2"								    
+											    width="20%"
+                                                liveChange=".onSearch2"
+											    placeholder="{i18n>searchFieldPlaceholder}"/>
+                                            <Button            
+                                                id="sortTable2"                                    
+                                                icon="sap-icon://sort"
+                                                tooltip="{i18n>sortButtonText}"
+                                                press="handleSortButtonPressed2"/> 
+                                            <Button     
+                                                id="filterTable2"                                            
+                                                icon="sap-icon://filter"
+                                                tooltip="{i18n>filterButtonText}"
+                                                press="handleFilterButtonPressed2"/>
+                                            <Button             
+                                                id="groupTable2"                                   
+                                                icon="sap-icon://group-2"
+                                                tooltip="{i18n>groupButtonText}"
+                                                press="handleGroupButtonPressed2"/>
+                                            <Button 
+                                                id="excelTable2"
+                                                icon="sap-icon://excel-attachment"
+                                                tooltip="{i18n>excelButtonText}" 
+                                                press="onExport2"/>                                                
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column>
+                                        <Text text="{i18n>colDatamart}" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="{i18n>colMultiproviderVsDatamart}" />
+                                    </Column>                                                                                                                                              
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <ObjectIdentifier text="{datamart}" />
+                                            <ObjectIdentifier text="{multi}" />                                                                                                                                                                                                                                                                   
+                                        </cells>                                        
+                                    </ColumnListItem>
+                                </items>
+                            </Table>  
+                        </VBox>            
+        </content> 
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button id="saveButton" text="Save" type="Accept" press="onSave" visible="false" />
+                <Button id="cancelButton" text="Cancel" type="Reject" press="onCancel" visible="false" />
+            </OverflowToolbar>
+        </footer>                                               
+    </Page>
+</mvc:View>

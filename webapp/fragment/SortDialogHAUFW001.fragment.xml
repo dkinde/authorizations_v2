@@ -1,0 +1,15 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm="handleSortDialogConfirm">    
+    <sortItems>
+        <ViewSettingsItem selected="true" text="{i18n>colAUFKT}" key="funktion" />
+        <ViewSettingsItem text="{i18n>colAUENTTYP}" key="typ" />
+        <ViewSettingsItem text="{i18n>colAUENT}" key="entit" />
+        <ViewSettingsItem text="{i18n>colAUWERT}" key="wert" />                
+    </sortItems>
+</ViewSettingsDialog>
+</c:FragmentDefinition>

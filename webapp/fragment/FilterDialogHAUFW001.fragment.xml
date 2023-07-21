@@ -1,0 +1,28 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""    
+    confirm="handleFilterDialogConfirm">    
+    <filterItems>        
+        <ViewSettingsFilterItem text="{i18n>colAUENTTYP}" key="typ" > 
+            <items>
+                <ViewSettingsItem text="D" key="typ___D"/>
+                <ViewSettingsItem text="I" key="typ___I"/>
+                <ViewSettingsItem text="S" key="typ___S"/>                
+            </items>
+        </ViewSettingsFilterItem>
+        <ViewSettingsFilterItem text="{i18n>colAUENT}" key="entit"> 
+            <items>
+                <ViewSettingsItem text="DATAMART" key="entit___DATAMART"/>
+                <ViewSettingsItem text="BEREICH" key="entit___BEREICH"/>
+                <ViewSettingsItem text="COKOST" key="entit___COKOST"/>
+                <ViewSettingsItem text="MMMATKL" key="entit___MMMATKL"/>
+                <ViewSettingsItem text="OE" key="entit___OE"/>
+                <ViewSettingsItem text="OEM" key="entit___OEM"/>
+            </items>
+        </ViewSettingsFilterItem>
+    </filterItems>     
+</ViewSettingsDialog>
+</c:FragmentDefinition>

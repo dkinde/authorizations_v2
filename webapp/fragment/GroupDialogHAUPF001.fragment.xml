@@ -1,0 +1,14 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm=".handleGroupDialogConfirm"
+    reset=".resetGroupDialog">    
+    <groupItems>
+        <ViewSettingsItem selected="false" text="{i18n>colPIPEPERID}" key="personalnummer" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUFKT}" key="funktion" />         
+    </groupItems>    
+</ViewSettingsDialog>
+</c:FragmentDefinition>

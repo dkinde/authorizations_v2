@@ -1,0 +1,16 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm=".handleGroupDialogConfirm"
+    reset=".resetGroupDialog">    
+    <groupItems>
+        <ViewSettingsItem selected="false" text="{i18n>colAUFKT}" key="funktion" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUENTTYP}" key="typ" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUENT}" key="entit" />
+        <ViewSettingsItem selected="false" text="{i18n>colAUWERT}" key="wert" />        
+    </groupItems>    
+</ViewSettingsDialog>
+</c:FragmentDefinition>
