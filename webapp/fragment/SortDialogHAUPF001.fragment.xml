@@ -6,8 +6,8 @@
     title=""
     confirm="handleSortDialogConfirm">    
     <sortItems>
-        <ViewSettingsItem selected="true" text="{i18n>colPIPEPERID}" key="personalnummer" />
-        <ViewSettingsItem selected="false" text="{i18n>colAUFKT}" key="funktion" />                
+        <ViewSettingsItem selected="true" text="Personalnummer" key="personalnummer" />
+        <ViewSettingsItem selected="false" text="Funktion für Berechtigung" key="funktion" />                
     </sortItems>
 </ViewSettingsDialog>
 </c:FragmentDefinition>

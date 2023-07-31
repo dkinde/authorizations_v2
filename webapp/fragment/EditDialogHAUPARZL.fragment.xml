@@ -1,6 +1,6 @@
-<c:FragmentDefinition
+<core:FragmentDefinition
 	xmlns="sap.m"
-	xmlns:c="sap.ui.core"
+	xmlns:core="sap.ui.core"
     xmlns:form="sap.ui.layout.form"     
 >
 <Dialog title="{i18n>editDialogTitle}" id="dialog2" >
@@ -34,12 +34,18 @@
                         valueStateText="Geben Sie 2 oder weniger Ziffern ein"/>
 
                 <Label text="{i18n>colAUSEQUENZ}"   required="true"/>
-                <Input  id="__editCRUD4" 
+                <Select id="selectSequenz1" 
+                        forceSelection="false" >
+                    <core:Item text="1" />
+                    <core:Item text="2" />
+                    <core:Item text="3" />
+                </Select>
+                <!-- <Input  id="__editCRUD4" 
                         type="Number" 
                         placeholder="Geben Sie 1 Ziffer ein" 
                         liveChange="editValidation" 
                         valueLiveUpdate="true" 
-                        valueStateText="Geben Sie 1 Ziffer ein"/>
+                        valueStateText="Geben Sie 1 Ziffer ein"/> -->
             </form:content>							
         </form:SimpleForm>			
     </content>
@@ -50,4 +56,4 @@
         <Button text="{i18n>editDialogEndButton}"  type="Reject" press=".onCloseEditDialog"/>
     </endButton>
 </Dialog>
-</c:FragmentDefinition>
+</core:FragmentDefinition>

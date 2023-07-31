@@ -6,14 +6,14 @@
     title=""    
     confirm="handleFilterDialogConfirm">    
     <filterItems>        
-        <ViewSettingsFilterItem text="{i18n>colAUENTTYP}" key="typ" > 
+        <ViewSettingsFilterItem text="Typ der Entität" key="typ" > 
             <items>
                 <ViewSettingsItem text="D" key="typ___D"/>
                 <ViewSettingsItem text="I" key="typ___I"/>
                 <ViewSettingsItem text="S" key="typ___S"/>                
             </items>
         </ViewSettingsFilterItem>
-        <ViewSettingsFilterItem text="{i18n>colAUENT}" key="entit"> 
+        <ViewSettingsFilterItem text="Entität" key="entit"> 
             <items>
                 <ViewSettingsItem text="DATAMART" key="entit___DATAMART"/>
                 <ViewSettingsItem text="BEREICH" key="entit___BEREICH"/>

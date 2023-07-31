@@ -1,6 +1,6 @@
-<c:FragmentDefinition
+<core:FragmentDefinition
 	xmlns="sap.m"
-	xmlns:c="sap.ui.core"
+	xmlns:core="sap.ui.core"
     xmlns:form="sap.ui.layout.form"     
 >
 <Dialog title="{i18n>editDialogTitle}" id="dialog2" >
@@ -15,11 +15,12 @@
                         valueLiveUpdate="true" 
                         valueStateText="Geben Sie nicht mehr als 2 Zahlen ein"/>
                 <Label  text="{i18n>colAUENTTYP}" />
-                <Input  id="__editCRUD1" 
-                        placeholder="Geben Sie 1 Zeichen ein" 
-                        liveChange="editValidation" 
-                        valueLiveUpdate="true" 
-                        valueStateText="Nicht mehr als 1 Zeichen eingeben"/>
+                <Select id="selecttyp1" 
+                            forceSelection="false">
+                        <core:Item text="D" />
+                        <core:Item text="I" />
+                        <core:Item text="S" />                                                        
+                </Select>
                 <Label  text="{i18n>colAUENT}" />
                 <Input  id="__editCRUD2" 
                         liveChange="editValidation" 
@@ -40,4 +41,4 @@
         <Button text="{i18n>editDialogEndButton}"  type="Reject" press=".onCloseEditDialog"/>
     </endButton>
 </Dialog>
-</c:FragmentDefinition>
+</core:FragmentDefinition>

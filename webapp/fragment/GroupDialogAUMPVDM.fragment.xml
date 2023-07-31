@@ -7,8 +7,10 @@
     confirm=".handleGroupDialogConfirm2"
     reset=".resetGroupDialog2">    
     <groupItems>
-        <ViewSettingsItem selected="false" text="{i18n>colDatamart}" key="datamart" />        
-        <ViewSettingsItem selected="false" text="{i18n>colMultiproviderVsDatamart}" key="multi" />        
+        <!-- <ViewSettingsItem selected="false" text="{i18n>colDatamart}" key="datamart" />         -->
+        <ViewSettingsItem selected="false" text="Datamart" key="datamart" />        
+        <!-- <ViewSettingsItem selected="false" text="{i18n>colMultiproviderVsDatamart}" key="multi" />         -->
+        <ViewSettingsItem selected="false" text="Multiprovider" key="multi" />        
     </groupItems>    
 </ViewSettingsDialog>
 </c:FragmentDefinition>

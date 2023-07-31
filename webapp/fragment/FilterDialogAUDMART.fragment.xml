@@ -6,7 +6,7 @@
     confirm="handleFilterDialogConfirm1">    
     <filterItems>
         <ViewSettingsFilterItem 
-            multiSelect="false" text="{i18n>colDatamart}" key="datamart"> 
+            multiSelect="false" text="Datamart" key="datamart"> 
             <items>
                 <ViewSettingsItem text="DB" key="datamart___DB"/>
                 <ViewSettingsItem text="GK" key="datamart___GK"/>

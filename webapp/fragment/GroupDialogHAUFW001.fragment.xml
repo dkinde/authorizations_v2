@@ -7,10 +7,10 @@
     confirm=".handleGroupDialogConfirm"
     reset=".resetGroupDialog">    
     <groupItems>
-        <ViewSettingsItem selected="false" text="{i18n>colAUFKT}" key="funktion" />
-        <ViewSettingsItem selected="false" text="{i18n>colAUENTTYP}" key="typ" />
-        <ViewSettingsItem selected="false" text="{i18n>colAUENT}" key="entit" />
-        <ViewSettingsItem selected="false" text="{i18n>colAUWERT}" key="wert" />        
+        <ViewSettingsItem selected="false" text="Funktion für Berechtigung" key="funktion" />
+        <ViewSettingsItem selected="false" text="Typ der Entität" key="typ" />
+        <ViewSettingsItem selected="false" text="Entität" key="entit" />
+        <ViewSettingsItem selected="false" text="Wert" key="wert" />        
     </groupItems>    
 </ViewSettingsDialog>
 </c:FragmentDefinition>

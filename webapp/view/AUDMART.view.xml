@@ -79,7 +79,8 @@
                                 </headerToolbar>
                                 <columns>
                                     <Column>
-                                        <Text text="{i18n>colDatamart}" />
+                                        <Text text="Datamart" />
+                                        <!-- <Text text="{i18n>colDatamart}" /> -->
                                     </Column>
                                     <Column>
                                         <Text text="{i18n>colTxtSh}" />

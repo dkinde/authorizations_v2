@@ -293,28 +293,32 @@ sap.ui.define([
 						element[3] == this.byId("inputInfoTyp").getValue() &&
 						element[4] == this.byId("selectSequenz").getSelectedItem().getText()) {
 						throw new sap.ui.base.Exception("DupicatedKey", "Falsche Definition");
-					} if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
+					}
+					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
 						element[2] == this.byId("selectIobj").getSelectedItem().getText()) {
 						throw new sap.ui.base.Exception("DupicatedPKey", "Falsche Definition");
-					} if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
+					}
+					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
 						element[3] != this.byId("inputInfoTyp").getValue()) {
 						throw new sap.ui.base.Exception("AuthTypeError", "Falsche Definition");
-					} if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
+					}
+					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
 						element[4] == this.byId("selectSequenz").getSelectedItem().getText()) {
 						throw new sap.ui.base.Exception("SequenseError", "Falsche Definition");
-					} if (element[3] == this.byId("inputInfoTyp").getValue()) {
+					}
+					if (element[3] == this.byId("inputInfoTyp").getValue()) {
 						if (element[1] == this.byId("selectCube").getSelectedItem().getText())
 							auth_flag = true;
 						else {
 							for (var item of this.setStep2) {
 								if (item[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
-									item[2] == this.byId("selectIobj").getSelectedItem().getText() &&
-									item[4] == this.byId("selectSequenz").getSelectedItem().getText() &&
 									item[1] != this.byId("selectCube").getSelectedItem().getText() &&
-									item[3] == this.byId("inputInfoTyp").getValue()) {
+									item[2] == this.byId("selectIobj").getSelectedItem().getText() &&
+									item[3] == this.byId("inputInfoTyp").getValue() &&
+									item[4] == this.byId("selectSequenz").getSelectedItem().getText()) {
 									auth_flag = true;
 								}
 							}
@@ -372,7 +376,8 @@ sap.ui.define([
 						element[2] == this.byId("inputentit").getValue() &&
 						element[3] == this.byId("inputwert").getValue()) {
 						throw new sap.ui.base.Exception("DupicatedKey", "Falsche Definition");
-					} if (this.byId("selecttyp").getSelectedItem().getText() != "D") {
+					}
+					if (this.byId("selecttyp").getSelectedItem().getText() != "D") {
 						this.setStep3.forEach(item => {
 							if (item[0] == this.byId("inputFuntkion").getValue() &&
 								item[1] === "D") {

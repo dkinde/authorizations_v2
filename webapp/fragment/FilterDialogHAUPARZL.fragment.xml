@@ -7,7 +7,7 @@
     confirm="handleFilterDialogConfirm">    
     <filterItems>
         <ViewSettingsFilterItem 
-            multiSelect="false" text="{i18n>colAUZIEL}" key="NameCube"> 
+            multiSelect="false" text="Cube" key="NameCube"> 
             <items>
                 <ViewSettingsItem text="CO_C03" key="NameCube___CO_C03"/>
                 <ViewSettingsItem text="CO_C04" key="NameCube___CO_C04"/>
@@ -16,7 +16,7 @@
             </items>
         </ViewSettingsFilterItem>
         <ViewSettingsFilterItem 
-            multiSelect="false" text="{i18n>colAUIOBJ}" key="InfoName" > 
+            multiSelect="false" text="Typ Autorisierung IOBJ" key="InfoName" > 
             <items>
                 <ViewSettingsItem text="COKOST" key="InfoName___COKOST"/>
                 <ViewSettingsItem text="COVKOST" key="InfoName___COVKOST"/>

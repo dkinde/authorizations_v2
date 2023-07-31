@@ -6,11 +6,11 @@
     title=""
     confirm="handleSortDialogConfirm">    
     <sortItems>
-        <ViewSettingsItem selected="false" text="{i18n>colAUPARNAME}" key="InfoAuthName" />
-        <ViewSettingsItem selected="true" text="{i18n>colAUZIEL}" key="NameCube" />
-        <ViewSettingsItem selected="false" text="{i18n>colAUIOBJ}" key="InfoName" />
-        <ViewSettingsItem selected="false" text="{i18n>colAUIOBJTYP}" key="InfoTyp" />
-        <ViewSettingsItem selected="false" text="{i18n>colAUSEQUENZ}" key="Sequenz" />        
+        <ViewSettingsItem selected="false" text="Autorisierung Infoobjekt" key="InfoAuthName" />
+        <ViewSettingsItem selected="true" text="Cube" key="NameCube" />
+        <ViewSettingsItem selected="false" text="Infobjekt" key="InfoName" />
+        <ViewSettingsItem selected="false" text="Typ Autorisierung IOBJ" key="InfoTyp" />
+        <ViewSettingsItem selected="false" text="Verkettungsfolge" key="Sequenz" />        
     </sortItems>
 </ViewSettingsDialog>
 </c:FragmentDefinition>
