@@ -72,7 +72,7 @@ sap.ui.define([
         },
         onCreatePress: function () {
             var oNewEntry = {},
-                oView = this.getView(),
+                aItems = this.byId("table1").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                     var oList = this.byId("table1");
@@ -94,23 +94,40 @@ sap.ui.define([
             oNewEntry.InfoTyp = this.getView().byId("__inputCRUD3").getValue();
             oNewEntry.Sequenz = this.getView().byId("selectSequenz").getSelectedItem().getText();
 
-            // TODO: manejar la exception
-            var oContext = this.byId("table1").getBinding("items").create({
-                InfoAuthName: oNewEntry.InfoAuthName,
-                NameCube: oNewEntry.NameCube,
-                InfoTyp: oNewEntry.InfoTyp,
-                Sequenz: oNewEntry.Sequenz,
-                InfoName: oNewEntry.InfoName
-            });
+            try {
+                for (var i = 0; i < aItems.length; i++) {
+                    var oItem = aItems[i],
+                        oContext = oItem.getBindingContext(),
+                        sInfoAuthName = oContext.getProperty("InfoAuthName"),
+                        sNameCube = oContext.getProperty("NameCube"),
+                        sInfoTyp = oContext.getProperty("InfoTyp"),
+                        sSequenz = oContext.getProperty("Sequenz");
 
-            oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                if (!oError.canceled) {
-                    throw oError;
+                    if (sInfoAuthName === oNewEntry.InfoAuthName &&
+                        sNameCube === oNewEntry.NameCube &&
+                        sInfoTyp === oNewEntry.InfoTyp &&
+                        sSequenz === oNewEntry.Sequenz) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                    }
                 }
-            });
-            this._oModel.submitBatch("$auto").then(fnSucces, fnError);
-
-            this.byId("table1").getBinding("items").refresh();
+                var oContext = this.byId("table1").getBinding("items").create({
+                    InfoAuthName: oNewEntry.InfoAuthName,
+                    NameCube: oNewEntry.NameCube,
+                    InfoTyp: oNewEntry.InfoTyp,
+                    Sequenz: oNewEntry.Sequenz,
+                    InfoName: oNewEntry.InfoName
+                });
+                oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                    if (!oError.canceled) {
+                        throw oError;
+                    }
+                });
+                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                this.byId("table1").getBinding("items").refresh();
+            } catch (error) {
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("Das Element ist vorhanden");
+            }
             this.byId("__inputCRUD0").setValue("");
             this.byId("__inputCRUD1").setValue("");
             this.byId("__inputCRUD2").setValue("");
@@ -123,12 +140,10 @@ sap.ui.define([
                 sInput2 = this.byId("__inputCRUD1").getValue(),
                 sInput3 = this.byId("__inputCRUD2").getValue(),
                 iInput4 = this.byId("__inputCRUD3").getValue(),
-                //iInput5 = this.byId("__inputCRUD4").getValue(),
                 oInput1 = this.byId("__inputCRUD0"),
                 oInput2 = this.byId("__inputCRUD1"),
                 oInput3 = this.byId("__inputCRUD2"),
                 oInput4 = this.byId("__inputCRUD3")
-                //oInput5 = this.byId("__inputCRUD4")
                 ;
 
             // validation single inputs	
@@ -152,11 +167,6 @@ sap.ui.define([
             } else {
                 oInput4.setValueState(sap.ui.core.ValueState.Error);
             }
-            /* if (iInput5.length == 1) {
-                oInput5.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput5.setValueState(sap.ui.core.ValueState.Error);
-            } */
 
             // validation all inputs - next button
             if (isNaN(sInput1) && sInput1.length < 50 && isNaN(sInput2) && sInput2.length < 30 && isNaN(sInput3) && iInput4.length < 3 && iInput4.length > 0) {

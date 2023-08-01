@@ -15,7 +15,7 @@
                                 id="table1" 
                                 growing="true"
                                 growingScrollToLoad="true"
-                                growingThreshold="10"
+                                growingThreshold="30"
                                 mode="SingleSelectMaster" 
                                 selectionChange="onDatamartSelect"
                                 items="{
@@ -78,9 +78,8 @@
                                     </Toolbar>
                                 </headerToolbar>
                                 <columns>
-                                    <Column>
-                                        <Text text="Datamart" />
-                                        <!-- <Text text="{i18n>colDatamart}" /> -->
+                                    <Column>                                        
+                                        <Text text="{i18n>colDatamart}" />
                                     </Column>
                                     <Column>
                                         <Text text="{i18n>colTxtSh}" />
@@ -107,7 +106,7 @@
                                 sticky="ColumnHeaders,HeaderToolbar"
                                 growing="true"
                                 growingScrollToLoad="true"
-                                growingThreshold="10"
+                                growingThreshold="30"
                                 id="table2" 
                                 mode="SingleSelectMaster" 
                                 items="{_Datamart}">                                

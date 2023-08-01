@@ -70,7 +70,7 @@ sap.ui.define([
         },
         onCreatePress: function () {
             var oNewEntry = {},
-                oView = this.getView(),
+                aItems = this.byId("table1").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                     var oList = this.byId("table1");
@@ -91,22 +91,40 @@ sap.ui.define([
             oNewEntry.entit = this.getView().byId("__inputCRUD2").getValue();
             oNewEntry.wert = this.getView().byId("__inputCRUD3").getValue();
 
-            // TODO: manejar la exception
-            var oContext = this.byId("table1").getBinding("items").create({
-                funktion: oNewEntry.funktion,
-                typ: oNewEntry.typ,
-                entit: oNewEntry.entit,
-                wert: oNewEntry.wert
-            });
+            try {
+                for (var i = 0; i < aItems.length; i++) {
+                    var oItem = aItems[i],
+                        oContext = oItem.getBindingContext(),
+                        sTyp = oContext.getProperty("typ"),
+                        sFunktion = oContext.getProperty("funktion"),
+                        sEntit = oContext.getProperty("entit"),
+                        sWert = oContext.getProperty("wert");
 
-            oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                if (!oError.canceled) {
-                    throw oError;
+                    if (sTyp === oNewEntry.typ &&
+                        sFunktion === oNewEntry.funktion &&
+                        sEntit === oNewEntry.ent &&
+                        sWert === oNewEntry.wert) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                    }
                 }
-            });
-            this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                var oContext = this.byId("table1").getBinding("items").create({
+                    funktion: oNewEntry.funktion,
+                    typ: oNewEntry.typ,
+                    entit: oNewEntry.entit,
+                    wert: oNewEntry.wert
+                });
+                oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                    if (!oError.canceled) {
+                        throw oError;
+                    }
+                });
+                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                this.byId("table1").getBinding("items").refresh();
+            } catch (error) {
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("Das Element ist vorhanden");
+            }
 
-            this.byId("table1").getBinding("items").refresh();
             this.byId("__inputCRUD0").setValue("");
             this.byId("__inputCRUD2").setValue("");
             this.byId("__inputCRUD3").setValue("");
@@ -115,11 +133,9 @@ sap.ui.define([
         },
         createValidation: function () {
             var iInput1 = this.byId("__inputCRUD0").getValue(),
-                //sInput2 = this.byId("__inputCRUD1").getValue(),
                 sInput3 = this.byId("__inputCRUD2").getValue(),
                 sInput4 = this.byId("__inputCRUD3").getValue(),
                 oInput1 = this.byId("__inputCRUD0"),
-                //oInput2 = this.byId("__inputCRUD1"),
                 oInput3 = this.byId("__inputCRUD2"),
                 oInput4 = this.byId("__inputCRUD3");
 
@@ -129,11 +145,6 @@ sap.ui.define([
             } else {
                 oInput1.setValueState(sap.ui.core.ValueState.Error);
             }
-            /* if (isNaN(sInput2) && sInput2.length < 2) {
-                oInput2.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput2.setValueState(sap.ui.core.ValueState.Error);
-            } */
             if (isNaN(sInput3) && sInput3.length < 60) {
                 oInput3.setValueState(sap.ui.core.ValueState.None);
             } else {
@@ -154,11 +165,9 @@ sap.ui.define([
         },
         editValidation: function () {
             var iInput1 = this.byId("__editCRUD0").getValue(),
-                //sInput2 = this.byId("__editCRUD1").getValue(),
                 sInput3 = this.byId("__editCRUD2").getValue(),
                 sInput4 = this.byId("__editCRUD3").getValue(),
                 oInput1 = this.byId("__editCRUD0"),
-                //oInput2 = this.byId("__editCRUD1"),
                 oInput3 = this.byId("__editCRUD2"),
                 oInput4 = this.byId("__editCRUD3");
 
@@ -168,11 +177,6 @@ sap.ui.define([
             } else {
                 oInput1.setValueState(sap.ui.core.ValueState.Error);
             }
-            /* if (isNaN(sInput2) && sInput2.length < 3) {
-                oInput2.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput2.setValueState(sap.ui.core.ValueState.Error);
-            } */
             if (isNaN(sInput3) && sInput3.length < 61) {
                 oInput3.setValueState(sap.ui.core.ValueState.None);
             } else {

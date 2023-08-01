@@ -262,7 +262,7 @@ sap.ui.define([
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 				this.byId("selectMulti").setSelectedKey(null);
 				this.step1validation();
-				console.log(this.byId("selectCube").getItems());
+				//console.log(this.byId("selectCube").getItems());
 				// this.handleDeleteDuplicatedOnSelect("selectCube");
 				// this.handleDeleteDuplicatedOnSelect("selectIobj");
 			} catch (error) {

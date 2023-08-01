@@ -13,7 +13,7 @@
                             <Table 
                                 growing="true"
                                 growingScrollToLoad="true"
-                                growingThreshold="30"
+                                growingThreshold="200"
                                 sticky="ColumnHeaders,HeaderToolbar" 
                                 id="table1" 
                                 mode="SingleSelectMaster" 

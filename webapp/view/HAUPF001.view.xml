@@ -14,7 +14,7 @@
                                 sticky="ColumnHeaders,HeaderToolbar"
                                 growing="true"
                                 growingScrollToLoad="true"
-                                growingThreshold="30" 
+                                growingThreshold="100" 
                                 id="table1" 
                                 mode="SingleSelectMaster" 
                                 items="{

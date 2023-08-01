@@ -103,6 +103,7 @@ sap.ui.define([
         },
         onCreatePress1: function () {
             var oNewEntry = {},
+                aItems = this.byId("table1").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                     var oList = this.byId("table1");
@@ -123,21 +124,39 @@ sap.ui.define([
             oNewEntry.Txtmd = this.getView().byId("__inputCRUD2").getValue();
             oNewEntry.Txtlg = this.getView().byId("__inputCRUD3").getValue();
 
-            // TODO: manejar la exception
-            var oContext = this.byId("table1").getBinding("items").create({
-                datamart: oNewEntry.datamart,
-                Txtsh: oNewEntry.Txtsh,
-                Txtmd: oNewEntry.Txtmd,
-                Txtlg: oNewEntry.Txtlg
-            });
+            try {
+                for (var i = 0; i < aItems.length; i++) {
+                    var oItem = aItems[i],
+                        oContext = oItem.getBindingContext(),
+                        sDatamart = oContext.getProperty("datamart"),
+                        sTxtsh = oContext.getProperty("Txtsh"),
+                        sTxtmd = oContext.getProperty("Txtmd"),
+                        sTxtlg = oContext.getProperty("Txtlg");
 
-            oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                if (!oError.canceled) {
-                    throw oError;
+                    if (sDatamart === oNewEntry.datamart &&
+                        sTxtsh === oNewEntry.Txtsh &&
+                        sTxtmd === oNewEntry.Txtmd &&
+                        sTxtlg === oNewEntry.Txtlg) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                    }
                 }
-            });
-            //this._oModel.submitBatch("$auto").then(fnSucces, fnError);           
-            this.byId("table1").getBinding("items").refresh();
+                var oContext = this.byId("table1").getBinding("items").create({
+                    datamart: oNewEntry.datamart,
+                    Txtsh: oNewEntry.Txtsh,
+                    Txtmd: oNewEntry.Txtmd,
+                    Txtlg: oNewEntry.Txtlg
+                });
+                oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                    if (!oError.canceled) {
+                        throw oError;
+                    }
+                });
+                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                this.byId("table1").getBinding("items").refresh();
+            } catch (error) {
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("Das Element ist vorhanden");
+            }
 
             this.byId("dialog1").close();
             this.byId("__inputCRUD0").setValue('');
@@ -147,6 +166,7 @@ sap.ui.define([
         },
         onCreatePress2: function () {
             var oNewEntry = {},
+                aItems = this.byId("table2").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                     var oList = this.byId("table2");
@@ -165,20 +185,36 @@ sap.ui.define([
             oNewEntry.datamart = this.getView().byId("__inputCRUD4").getValue();
             oNewEntry.multi = this.getView().byId("__inputCRUD5").getValue();
 
-            // TODO: manejar la exception
-            var oContext = this.byId("table2").getBinding("items").create({
-                datamart: oNewEntry.datamart,
-                multi: oNewEntry.multi
-            });
+            try {
+                for (var i = 0; i < aItems.length; i++) {
+                    var oItem = aItems[i],
+                        oContext = oItem.getBindingContext(),
+                        sDatamart = oContext.getProperty("datamart"),
+                        sMulti = oContext.getProperty("multi");
 
-            oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                if (!oError.canceled) {
-                    throw oError;
+                    if (sDatamart === oNewEntry.datamart &&
+                        sMulti === oNewEntry.multi) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                    }
                 }
-            });
-            //this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                var oContext = this.byId("table2").getBinding("items").create({
+                    datamart: oNewEntry.datamart,
+                    multi: oNewEntry.multi
+                });
+                oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                    if (!oError.canceled) {
+                        throw oError;
+                    }
+                });
 
-            //this.byId("table2").getBinding("items").refresh();
+                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                this.byId("table2").getBinding("items").refresh();
+
+            } catch (error) {
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("Das Element ist vorhanden");
+            }
+
             this.byId("dialog2").close();
             this.byId("__inputCRUD4").setValue('');
             this.byId("__inputCRUD5").setValue('');

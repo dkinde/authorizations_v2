@@ -164,7 +164,7 @@
                                             <Select id="selectIobj"                                                                           
                                                     forceSelection="false"
                                                         items="{
-                                                        path: '/MP_CUBE_IOBJ'
+                                                        path: '/IOBJ_DIST'
                                                     }">
                                                     <core:Item key="{Iobjnm}" text="{Iobjnm}" />
                                             </Select>                                                                                                                                                                           

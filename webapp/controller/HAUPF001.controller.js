@@ -66,6 +66,7 @@ sap.ui.define([
         },
         onCreatePress: function () {
             var oNewEntry = {},
+                aItems = this.byId("table1").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                     var oList = this.byId("table1");
@@ -84,22 +85,36 @@ sap.ui.define([
             oNewEntry.personalnummer = this.getView().byId("__inputCRUD0").getValue();
             oNewEntry.funktion = this.getView().byId("__inputCRUD1").getValue();
 
-            // TODO: manejar la exception
-            var oContext = this.byId("table1").getBinding("items").create({
-                personalnummer: oNewEntry.personalnummer,
-                funktion: oNewEntry.funktion
-            });
+            try {
+                for (var i = 0; i < aItems.length; i++) {
+                    var oItem = aItems[i],
+                        oContext = oItem.getBindingContext(),
+                        sPersonalnummer = oContext.getProperty("personalnummer"),
+                        sFunktion = oContext.getProperty("funktion");
 
-            oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                if (!oError.canceled) {
-                    throw oError;
+                    if (sPersonalnummer === oNewEntry.personalnummer &&
+                        sFunktion === oNewEntry.funktion) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                    }
                 }
-            });
-            this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                var oContext = this.byId("table1").getBinding("items").create({
+                    personalnummer: oNewEntry.personalnummer,
+                    funktion: oNewEntry.funktion
+                });
+                oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                    if (!oError.canceled) {
+                        throw oError;
+                    }
+                });
+                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                this.byId("table1").getBinding("items").refresh();
+            } catch (error) {
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("Das Element ist vorhanden");
+            }
 
             this.getView().byId("__inputCRUD0").setValue("");
             this.getView().byId("__inputCRUD1").setValue("");
-            this.byId("table1").getBinding("items").refresh();
             this.byId("dialog1").close();
         },
         createValidation: function () {
