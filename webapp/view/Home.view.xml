@@ -1,12 +1,11 @@
-<mvc:View 
-    controllerName="authorization.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc" 
-    displayBlock="true"
-    xmlns="sap.m"
-    xmlns:core="sap.ui.core"
-    xmlns:layout="sap.ui.layout">
+<mvc:View   controllerName="authorization.controller.Home"
+            xmlns:mvc="sap.ui.core.mvc" 
+            displayBlock="true"
+            xmlns="sap.m"
+            xmlns:core="sap.ui.core"
+            xmlns:layout="sap.ui.layout">
     <Page id="page" title="{i18n>pageTitle}">        
-        <Toolbar height="5rem">
+        <Toolbar    height="5rem">
             <Title  titleStyle="H2" 
                     text="{i18n>homepageTitle}" 
                     class="sapUiTinyMarginBegin" 
@@ -19,14 +18,13 @@
                     width="5rem">            
             </Image>                  
         </Toolbar> 
-        <layout:VerticalLayout class="sapUiResponsiveMargin" id="layout1">                       
-            <layout:HorizontalLayout allowWrapping="true" id="layout2">
-                <GenericTile 
-                            class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"  
-                            frameType="TwoByOne"                          
-                            id="g1" 
-                            header="{i18n>homepageGenTile1Header}"                             
-                            press="onNavToBasisKonfig">                    
+        <layout:VerticalLayout  class="sapUiResponsiveMargin" id="layout1">                       
+            <layout:HorizontalLayout    allowWrapping="true" id="layout2">
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"  
+                                frameType="TwoByOne"                          
+                                id="g1" 
+                                header="{i18n>homepageGenTile1Header}"                             
+                                press="onNavToBasisKonfig">                    
                         <TileContent id="t2">
                                 <FeedContent contentText="{i18n>homepageGenTile1Content}" />                                                           
                         </TileContent>                    

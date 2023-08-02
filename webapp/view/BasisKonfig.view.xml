@@ -1,14 +1,13 @@
-<mvc:View 
-    controllerName="authorization.controller.BasisKonfig"
-    xmlns:mvc="sap.ui.core.mvc" 
-    displayBlock="true"
-    xmlns="sap.m" 
-    xmlns:layout="sap.ui.layout">
-    <Page id="page" 
-          title="{i18n>basisPageTitle}" 
-          navButtonPress=".onNavButtonPressed" 
-          showNavButton="true">
-          <Toolbar height="5rem">
+<mvc:View   controllerName="authorization.controller.BasisKonfig"
+            xmlns:mvc="sap.ui.core.mvc" 
+            displayBlock="true"
+            xmlns="sap.m" 
+            xmlns:layout="sap.ui.layout">
+    <Page   id="page" 
+            title="{i18n>basisPageTitle}" 
+            navButtonPress=".onNavButtonPressed" 
+            showNavButton="true">
+        <Toolbar height="5rem">
             <Title titleStyle="H2" 
                    text="{i18n>basisTitle}" 
                    class="sapUiTinyMarginBegin" 
@@ -23,10 +22,10 @@
         </Toolbar> 
         <layout:VerticalLayout class="sapUiResponsiveMargin" id="layout1">            
             <layout:HorizontalLayout allowWrapping="true" id="layout2">
-                <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
-                             id="g1"                                                        
-                             header="{i18n>basisGenTile1Header}"                               
-                             press="onNavToAUDMART">                    
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                                id="g1"                                                        
+                                header="{i18n>basisGenTile1Header}"                               
+                                press="onNavToAUDMART">                    
                         <TileContent id="t2">                                                        
                                 <NumericContent value="{
                                                     path: '/AUDMART/$count'
