@@ -5,7 +5,10 @@
     "type": "application",
     "i18n": {
       "bundleUrl": "i18n/i18n.properties",
-      "supportedLocales": ["en","de"],
+      "supportedLocales": [
+        "en",
+        "de"
+      ],
       "fallbackLocale": "de"
     },
     "applicationVersion": {
@@ -71,7 +74,10 @@
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "authorization.i18n.i18n",
-          "supportedLocales": ["en", "de"],
+          "supportedLocales": [
+            "en",
+            "de"
+          ],
           "fallbackLocale": "de"
         }
       },
@@ -82,8 +88,8 @@
           "synchronizationMode": "None",
           "operationMode": "Server",
           "autoExpandSelect": true,
-          "earlyRequests": true          
-        }        
+          "earlyRequests": true
+        }
       }
     },
     "resources": {
@@ -102,9 +108,11 @@
         "controlAggregation": "pages",
         "controlId": "app",
         "clearControlAggregation": false,
-        "transition":"slide",
+        "transition": "slide",
         "bypassed": {
-          "target":["TargetHome"]
+          "target": [
+            "TargetHome"
+          ]
         }
       },
       "routes": [
@@ -118,56 +126,63 @@
         {
           "name": "RouteBasisKonfig",
           "pattern": "BasisKonfig",
-          "target":[
+          "target": [
             "TargetBasisKonfig"
           ]
         },
         {
           "name": "RouteFunktion",
           "pattern": "Funktion",
-          "target":[
+          "target": [
             "TargetFunktion"
           ]
         },
         {
           "name": "RouteWizard",
           "pattern": "Wizard",
-          "target":[
+          "target": [
             "TargetWizard"
+          ]
+        },
+        {
+          "name": "RouteKontroll",
+          "pattern": "Kontroll",
+          "target": [
+            "TargetKontroll"
           ]
         },
         {
           "name": "RouteAUDMART",
           "pattern": "BasisKonfig/AUDMART",
-          "target":[
+          "target": [
             "TargetAUDMART"
           ]
         },
         {
           "name": "RouteAUMPVDM",
           "pattern": "BasisKonfig/AUMPVDM",
-          "target":[
+          "target": [
             "TargetAUMPVDM"
           ]
         },
         {
           "name": "RouteHAUPARZL",
           "pattern": "BasisKonfig/HAUPARZL",
-          "target":[
+          "target": [
             "TargetHAUPARZL"
           ]
         },
         {
           "name": "RouteHAUPF001",
           "pattern": "Funktion/HAUPF001",
-          "target":[
+          "target": [
             "TargetHAUPF001"
           ]
         },
         {
           "name": "RouteHAUFW001",
           "pattern": "Funktion/HAUFW001",
-          "target":[
+          "target": [
             "TargetHAUFW001"
           ]
         }
@@ -183,59 +198,66 @@
         },
         "TargetBasisKonfig": {
           "viewType": "XML",
-          "transition": "slide",          
+          "transition": "slide",
           "viewId": "BasisKonfig",
           "viewName": "BasisKonfig",
           "viewLevel": 1
         },
         "TargetFunktion": {
           "viewType": "XML",
-          "transition": "slide",          
+          "transition": "slide",
           "viewId": "Funktion",
           "viewName": "Funktion",
           "viewLevel": 1
         },
         "TargetWizard": {
           "viewType": "XML",
-          "transition": "slide",          
+          "transition": "slide",
           "viewId": "Wizard",
           "viewName": "Wizard",
           "viewLevel": 1
         },
-        "TargetAUDMART":{
+        "TargetKontroll": {
           "viewType": "XML",
-          "viewId": "AUDMART",          
+          "transition": "slide",
+          "viewId": "HAUKB001",
+          "viewName": "HAUKB001",
+          "viewLevel": 1
+        },
+        "TargetAUDMART": {
+          "viewType": "XML",
+          "viewId": "AUDMART",
           "viewName": "AUDMART",
           "viewLevel": 2,
-          "transition":"slide"
+          "transition": "slide"
         },
-        "TargetAUMPVDM":{
+        "TargetAUMPVDM": {
           "viewType": "XML",
           "viewId": "AUMPVDM",
-          "viewName": "AUMPVDM",          
+          "viewName": "AUMPVDM",
           "viewLevel": 2,
-          "transition":"slide"
+          "transition": "slide"
         },
-        "TargetHAUPARZL":{
+        "TargetHAUPARZL": {
           "viewType": "XML",
           "viewId": "HAUPARZL",
-          "viewName": "HAUPARZL",          
+          "viewName": "HAUPARZL",
           "viewLevel": 2,
-          "transition":"slide"
+          "transition": "slide"
         },
-        "TargetHAUPF001":{
+        "TargetHAUPF001": {
           "viewType": "XML",
           "viewId": "HAUPF001",
           "viewName": "HAUPF001",
           "viewLevel": 2,
-          "transition":"slide"
+          "transition": "slide"
         },
-        "TargetHAUFW001":{
+        "TargetHAUFW001": {
           "viewType": "XML",
           "viewId": "HAUFW001",
           "viewName": "HAUFW001",
           "viewLevel": 2,
-          "transition":"slide"
+          "transition": "slide"
         }
       }
     },

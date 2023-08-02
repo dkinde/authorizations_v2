@@ -314,7 +314,6 @@ sap.ui.define([
             oUpdateEntry.Txtmd = this.getView().byId("__editCRUD2").getValue();
             oUpdateEntry.Txtlg = this.getView().byId("__editCRUD3").getValue();
 
-
             oContext.setProperty("Sequenz", oUpdateEntry.Sequenz);
             this._oModel.submitChanges();
 
@@ -326,9 +325,6 @@ sap.ui.define([
                 oContext.refresh();
                 this.byId("dialog2").close();
             }
-
-            //this._oModel.resetChanges();                                    
-            //var oContext = this.byId("table1").getBinding("items").update();
 
         },
         onUpdateEditPress2: function () {

@@ -1,0 +1,117 @@
+<mvc:View   xmlns:mvc="sap.ui.core.mvc"         
+            xmlns="sap.m"
+            xmlns:l="sap.ui.layout"
+            controllerName="authorization.controller.HAUKB001">
+    <Page   title="{i18n>table6PageTitle}"
+            showNavButton="true"
+            navButtonPress=".onNavButtonPressed"
+            backgroundDesign="Solid">    
+        <content>
+        <l:Grid defaultSpan="L12 M12 S12" class="sapUiResponsiveMargin" vSpacing="0" hSpacing="0">            
+            <Table  sticky="ColumnHeaders,HeaderToolbar" 
+                    growing="true"
+                    growingScrollToLoad="true"
+                    growingThreshold="100"
+                    id="table1" 
+                    mode="SingleSelectMaster" 
+                    items="{
+                        path: '/HAUKB001',
+                        parameters: {
+                            $count: true                                    
+                        }    
+                    }">
+                <headerToolbar>
+                    <Toolbar>
+                        <content>
+                            <Button 
+                                icon="sap-icon://add" 
+                                text="{i18n>tableToolbarButtonAdd}" 
+                                press="onOpenDialog"
+                                type="Accept"/>
+                            <Button 
+                                icon="sap-icon://edit"
+                                text="{i18n>tableToolbarButtonEdit}" 
+                                press="onUpdatePress"/>                                                
+                            <Button 
+                                icon="sap-icon://delete" 
+                                type="Reject" 
+                                text="{i18n>tableToolbarButtonDelete}" 
+                                press="onDeletePress"/>
+                            <ToolbarSpacer/>
+                            <SearchField
+                                id="searchField"
+                                width="20%"
+                                liveChange=".onSearch"
+                                placeholder="{i18n>searchFieldPlaceholder}"/>
+                            <Button
+                                id="sortUsersButton"
+                                icon="sap-icon://sort"
+                                tooltip="{i18n>sortButtonText}"
+                                press="handleSortButtonPressed"/> 
+                            <Button                                                
+                                icon="sap-icon://filter"
+                                tooltip="{i18n>filterButtonText}"
+                                press="handleFilterButtonPressed"/>
+                            <Button                                                
+                                icon="sap-icon://group-2"
+                                tooltip="{i18n>groupButtonText}"
+                                press="handleGroupButtonPressed"/>
+                            <Button 
+                                icon="sap-icon://excel-attachment"
+                                tooltip="{i18n>excelButtonText}" 
+                                press="onExport"/>                                               
+                        </content>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="{i18n>colPIPEPERID}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colDatamart}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colAUFKT}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colAUOE}" />
+                    </Column>                                                                        
+                    <Column>
+                        <Text text="{i18n>colAUENTTYP}" />
+                    </Column>  
+                    <Column>
+                        <Text text="{i18n>colAUENT}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colAUIOBJK}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colAUWERTK}" />
+                    </Column>                                  
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectNumber number="{personalnummer}" />
+                            <ObjectIdentifier text="{datamart}" />
+                            <ObjectNumber number="{funktion}" />
+                            <ObjectIdentifier text="{oe}" />                                            
+                            <ObjectIdentifier text="{typ}" />
+                            <ObjectIdentifier text="{entit}" />
+                            <ObjectIdentifier text="{infoobjectkontroll}" />                                                                                    
+                            <ObjectIdentifier text="{wertkontroll}" />    
+                        </cells>                                        
+                    </ColumnListItem>
+                </items>
+            </Table>                                        
+        </l:Grid>  
+        </content> 
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button id="saveButton" text="Save" type="Accept" press="onSave" visible="false" />
+                <Button id="cancelButton" text="Cancel" type="Reject" press="onCancel" visible="false" />
+            </OverflowToolbar>
+        </footer>                                               
+    </Page>
+</mvc:View>

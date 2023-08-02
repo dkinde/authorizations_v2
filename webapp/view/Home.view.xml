@@ -5,27 +5,10 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:layout="sap.ui.layout">
-    <Page id="page" title="{i18n>pageTitle}">
-        <!-- <core:Icon
-            activeBackgroundColor=""
-            activeColor=""
-            alt=""
-            backgroundColor=""
-            color=""
-            decorative="true"
-            height=""
-            hoverBackgroundColor=""
-            hoverColor=""
-            noTabStop="false"
-            size="2rem"
-            src="/src/DVZ_icon.png"
-            useIconTooltip="true"
-            width=""
-        >            
-        </core:Icon> -->
+    <Page id="page" title="{i18n>pageTitle}">        
         <Toolbar height="5rem">
             <Title  titleStyle="H2" 
-                    text="{i18n>startpageTitle}" 
+                    text="{i18n>homepageTitle}" 
                     class="sapUiTinyMarginBegin" 
                     id="t1"/>
             <ToolbarSpacer/>
@@ -42,40 +25,49 @@
                             class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"  
                             frameType="TwoByOne"                          
                             id="g1" 
-                            header="{i18n>startpageGenTile1Header}"                             
+                            header="{i18n>homepageGenTile1Header}"                             
                             press="onNavToBasisKonfig">                    
                         <TileContent id="t2">
-                                <FeedContent contentText="{i18n>startpageGenTile1Content}" />                           
-                                <!--<NumericContent value="{
-                                                    path: '/HAUPARZL/$count'
-                                                }" indicator="None" valueColor="Neutral"  id="n1" /> -->                           
+                                <FeedContent contentText="{i18n>homepageGenTile1Content}" />                                                           
                         </TileContent>                    
                 </GenericTile>
                 <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
                                 id="g2" 
                                 frameType="TwoByOne"                          
-                                header="{i18n>startpageGenTile2Header}"                                 
+                                header="{i18n>homepageGenTile2Header}"                                 
                                 press="onNavToFunktion">                    
                         <TileContent id="t3">                              
-                            <FeedContent    contentText="{i18n>startpageGenTile2Content}" />                        
-                                <!-- <NumericContent value="{
-                                                    path: '/HAUPARZL/$count'
-                                                }" indicator="None" valueColor="Neutral" id="n2" />-->                            
+                            <FeedContent    contentText="{i18n>homepageGenTile2Content}" />                                                                                    
                         </TileContent>                    
                 </GenericTile>                
             </layout:HorizontalLayout>            
             <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
-                                id="g3" 
-                                frameType="TwoByOne"                          
-                                header="{i18n>startpageGenTile3Header}"                                 
-                                press="onNavToWizard">                    
-                        <TileContent id="t4">                            
-                            <FeedContent    contentText="{i18n>startpageGenTile3Content}" />
-                                <!-- <NumericContent value="{
-                                                    path: '/HAUPARZL/$count'
-                                                }" indicator="None" valueColor="Neutral" id="n3" />-->                            
+                            id="g4" 
+                            frameType="TwoByOne"                          
+                            header="{i18n>homepageGenTile4Header}" 
+                            subheader="{i18n>homepageGenTile4Content}"                                
+                            press="onNavToKontroll">                    
+                        <TileContent id="t5">                            
+                            <!-- <FeedContent    contentText="{i18n>homepageGenTile4Content}" 
+                                            value="{
+                                                path: '/HAUKB001/$count'
+                                            }" /> -->  
+                            <NumericContent value="{
+                                                path: '/HAUKB001/$count'
+                                            }" 
+                                            icon="sap-icon://menu2" 
+                                            withMargin="false" />   
                         </TileContent>                    
-                </GenericTile>
+            </GenericTile>
+            <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                            id="g3" 
+                            frameType="TwoByOne"                          
+                            header="{i18n>homepageGenTile3Header}"                                 
+                            press="onNavToWizard">                    
+                        <TileContent id="t4">                            
+                            <FeedContent    contentText="{i18n>homepageGenTile3Content}" />                                                           
+                        </TileContent>                    
+            </GenericTile>
         </layout:VerticalLayout>
         <content />
     </Page>
