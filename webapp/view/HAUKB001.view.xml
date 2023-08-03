@@ -95,11 +95,11 @@
                             <ObjectNumber number="{personalnummer}" />
                             <ObjectIdentifier text="{datamart}" />
                             <ObjectNumber number="{funktion}" />
-                            <ObjectIdentifier text="{oe}" />                                            
+                            <ObjectIdentifier text="{org_einh}" />                                            
                             <ObjectIdentifier text="{typ}" />
                             <ObjectIdentifier text="{entit}" />
-                            <ObjectIdentifier text="{infoobjectkontroll}" />                                                                                    
-                            <ObjectIdentifier text="{wertkontroll}" />    
+                            <ObjectIdentifier text="{infoobjectkontrolle}" />                                                                                    
+                            <ObjectIdentifier text="{wertkontrolle}" />    
                         </cells>                                        
                     </ColumnListItem>
                 </items>
