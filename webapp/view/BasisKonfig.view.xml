@@ -24,18 +24,18 @@
             <layout:HorizontalLayout allowWrapping="true" id="layout2">
                 <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
                                 id="g1"                                                        
-                                header="{i18n>basisGenTile1Header}"                               
+                                header="{i18n>basisGenTile1Header}"                                     
                                 press="onNavToAUDMART">                    
                         <TileContent id="t2">                                                        
-                                <NumericContent value="{ }"                                                 
+                                <NumericContent value=""                                                 
                                                 scale="Einträge"
-                                                id="n1" 
+                                                id="numericCont1" 
                                                 icon="sap-icon://menu2"/>                                                               
                         </TileContent>                    
                 </GenericTile>                
                 <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
                                 id="g3" 
-                                header="{i18n>basisGenTile3Header}"                                 
+                                header="{i18n>basisGenTile3Header}"                                                                
                                 press="onNavToHAUPARZL">                    
                         <TileContent id="t4">                            
                                 <NumericContent value="{
