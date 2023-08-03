@@ -53,6 +53,7 @@
                             <NumericContent value="{
                                                 path: '/HAUKB001/$count'
                                             }" 
+                                            scale="Einträge"
                                             icon="sap-icon://menu2" 
                                             withMargin="false" />   
                         </TileContent>                    

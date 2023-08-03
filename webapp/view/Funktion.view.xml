@@ -33,6 +33,7 @@
                                             path: '/HAUFW001/$count'
                                         }"                                                                                          
                                         id="n1" 
+                                        scale="Einträge"
                                         icon="sap-icon://menu2"/>                            
                     </TileContent>                    
                 </GenericTile>
@@ -43,7 +44,8 @@
                     <TileContent id="t3">                            
                         <NumericContent value="{
                                             path: '/HAUPF001/$count'
-                                        }"                                        
+                                        }"                 
+                                        scale="Einträge"                       
                                         id="n2" 
                                         icon="sap-icon://menu2"/>                            
                     </TileContent>                    

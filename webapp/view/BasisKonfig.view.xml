@@ -27,11 +27,8 @@
                                 header="{i18n>basisGenTile1Header}"                               
                                 press="onNavToAUDMART">                    
                         <TileContent id="t2">                                                        
-                                <NumericContent value="{
-                                                    path: '/AUDMART/$count'
-                                                }"                                                 
-                                                indicator="None"
-                                                valueColor="Neutral" 
+                                <NumericContent value="{ }"                                                 
+                                                scale="Einträge"
                                                 id="n1" 
                                                 icon="sap-icon://menu2"/>                                                               
                         </TileContent>                    
@@ -44,7 +41,7 @@
                                 <NumericContent value="{
                                                     path: '/HAUPARZL/$count'
                                                 }"                                                                                                 
-                                                valueColor="Neutral" 
+                                                scale="Einträge" 
                                                 id="n3" 
                                                 icon="sap-icon://menu2"/>                            
                         </TileContent>                    
