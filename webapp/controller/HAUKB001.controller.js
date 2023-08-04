@@ -45,7 +45,10 @@ sap.ui.define([
             this.byId("__inputCRUD1").setValue("");
             this.byId("__inputCRUD2").setValue("");
             this.byId("__inputCRUD3").setValue("");
-            this.byId("selectSequenz").setSelectedKey(null);
+            this.byId("__inputCRUD4").setValue("");
+            this.byId("__inputCRUD5").setValue("");
+            this.byId("__inputCRUD6").setValue("");
+            this.byId("selectTyp").setSelectedKey(null);
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -55,13 +58,16 @@ sap.ui.define([
             this.byId("__editCRUD1").setValue("");
             this.byId("__editCRUD2").setValue("");
             this.byId("__editCRUD3").setValue("");
-            this.byId("selectSequenz1").setSelectedKey(null);
+            this.byId("__editCRUD4").setValue("");
+            this.byId("__editCRUD5").setValue("");
+            this.byId("__editCRUD6").setValue("");
+            this.byId("selectTyp").setSelectedKey(null);
             this.oDialogEdit.close();
         },
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsHAUPARZL",
+                    name: "authorization.fragment.InputFieldsHAUKB001",
                     controller: this
                 });
             }
@@ -88,34 +94,48 @@ sap.ui.define([
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
-            oNewEntry.InfoAuthName = this.getView().byId("__inputCRUD0").getValue();
-            oNewEntry.NameCube = this.getView().byId("__inputCRUD1").getValue();
-            oNewEntry.InfoName = this.getView().byId("__inputCRUD2").getValue();
-            oNewEntry.InfoTyp = this.getView().byId("__inputCRUD3").getValue();
-            oNewEntry.Sequenz = this.getView().byId("selectSequenz").getSelectedItem().getText();
+            oNewEntry.personalnummer = this.getView().byId("__inputCRUD0").getValue();
+            oNewEntry.datamart = this.getView().byId("__inputCRUD1").getValue();
+            oNewEntry.funktion = this.getView().byId("__inputCRUD2").getValue();
+            oNewEntry.org_einh = this.getView().byId("__inputCRUD3").getValue();
+            oNewEntry.entit = this.getView().byId("__inputCRUD4").getValue();
+            oNewEntry.infoobjectkontrolle = this.getView().byId("__inputCRUD5").getValue();
+            oNewEntry.wertkontrolle = this.getView().byId("__inputCRUD6").getValue();
+            oNewEntry.typ = this.getView().byId("selectTyp").getSelectedItem().getText();
 
             try {
                 for (var i = 0; i < aItems.length; i++) {
                     var oItem = aItems[i],
                         oContext = oItem.getBindingContext(),
-                        sInfoAuthName = oContext.getProperty("InfoAuthName"),
-                        sNameCube = oContext.getProperty("NameCube"),
-                        sInfoTyp = oContext.getProperty("InfoTyp"),
-                        sSequenz = oContext.getProperty("Sequenz");
+                        sPersonalnummer = oContext.getProperty("personalnummer"),
+                        sDatamart = oContext.getProperty("datamart"),
+                        sFunktion = oContext.getProperty("funktion"),
+                        sOrg_einh = oContext.getProperty("org_einh"),
+                        sEntit = oContext.getProperty("entit"),
+                        sInfoobjectkontrolle = oContext.getProperty("infoobjectkontrolle"),
+                        sWertkontrolle = oContext.getProperty("wertkontrolle"),
+                        sTyp = oContext.getProperty("typ");
 
-                    if (sInfoAuthName === oNewEntry.InfoAuthName &&
-                        sNameCube === oNewEntry.NameCube &&
-                        sInfoTyp === oNewEntry.InfoTyp &&
-                        sSequenz === oNewEntry.Sequenz) {
+                    if (sPersonalnummer === oNewEntry.personalnummer &&
+                        sDatamart === oNewEntry.datamart &&
+                        sFunktion === oNewEntry.funktion &&
+                        sOrg_einh === oNewEntry.org_einh &&
+                        sEntit === oNewEntry.entit &&
+                        sInfoobjectkontrolle === oNewEntry.infoobjectkontrolle &&
+                        sWertkontrolle === oNewEntry.wertkontrolle &&
+                        sTyp === oNewEntry.typ) {
                         throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
                     }
                 }
                 var oContext = this.byId("table1").getBinding("items").create({
-                    InfoAuthName: oNewEntry.InfoAuthName,
-                    NameCube: oNewEntry.NameCube,
-                    InfoTyp: oNewEntry.InfoTyp,
-                    Sequenz: oNewEntry.Sequenz,
-                    InfoName: oNewEntry.InfoName
+                    personalnummer: oNewEntry.personalnummer,
+                    datamart: oNewEntry.datamart,
+                    funktion: oNewEntry.funktion,
+                    org_einh: oNewEntry.org_einh,
+                    typ: oNewEntry.typ,
+                    entit: oNewEntry.entit,
+                    infoobjectkontrolle: oNewEntry.infoobjectkontrolle,
+                    wertkontrolle: oNewEntry.wertkontrolle
                 });
                 oContext.created().then(fnSucces, fnError).catch(function (oError) {
                     if (!oError.canceled) {
@@ -132,44 +152,73 @@ sap.ui.define([
             this.byId("__inputCRUD1").setValue("");
             this.byId("__inputCRUD2").setValue("");
             this.byId("__inputCRUD3").setValue("");
-            this.byId("selectSequenz").setSelectedKey(null);
+            this.byId("__inputCRUD4").setValue("");
+            this.byId("__inputCRUD5").setValue("");
+            this.byId("__inputCRUD6").setValue("");
+            this.byId("selectTyp").setSelectedKey(null);
             this.byId("dialog1").close();
         },
         createValidation: function () {
-            var sInput1 = this.byId("__inputCRUD0").getValue(),
+            var iInput1 = this.byId("__inputCRUD0").getValue(),
                 sInput2 = this.byId("__inputCRUD1").getValue(),
-                sInput3 = this.byId("__inputCRUD2").getValue(),
-                iInput4 = this.byId("__inputCRUD3").getValue(),
+                iInput3 = this.byId("__inputCRUD2").getValue(),
+                sInput4 = this.byId("__inputCRUD3").getValue(),
+                sInput5 = this.byId("__inputCRUD4").getValue(),
+                sInput6 = this.byId("__inputCRUD5").getValue(),
+                sInput7 = this.byId("__inputCRUD6").getValue(),
                 oInput1 = this.byId("__inputCRUD0"),
                 oInput2 = this.byId("__inputCRUD1"),
                 oInput3 = this.byId("__inputCRUD2"),
-                oInput4 = this.byId("__inputCRUD3")
-                ;
+                oInput4 = this.byId("__inputCRUD3"),
+                oInput5 = this.byId("__inputCRUD4"),
+                oInput6 = this.byId("__inputCRUD5"),
+                oInput7 = this.byId("__inputCRUD6");
 
             // validation single inputs	
-            if (isNaN(sInput1) && sInput1.length < 50) {
+            if (iInput1.length < 6 && iInput1.length > 0) {
                 oInput1.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput1.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (isNaN(sInput2) && sInput2.length < 30) {
+            if (isNaN(sInput2) && sInput2.length < 3) {
                 oInput2.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput2.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (isNaN(sInput3) && sInput3.length < 30) {
+            if (iInput3.length < 3 && iInput3.length > 0) {
                 oInput3.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput3.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (iInput4.length < 3 && iInput4.length > 0) {
+            if (isNaN(sInput4) && sInput4.length < 3) {
                 oInput4.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput4.setValueState(sap.ui.core.ValueState.Error);
             }
+            if (isNaN(sInput5) && sInput5.length < 61) {
+                oInput5.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oInput5.setValueState(sap.ui.core.ValueState.Error);
+            }
+            if (isNaN(sInput6) && sInput6.length < 31) {
+                oInput6.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oInput6.setValueState(sap.ui.core.ValueState.Error);
+            }
+            if (sInput7.length > 0 && sInput7.length < 61) {
+                oInput7.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oInput7.setValueState(sap.ui.core.ValueState.Error);
+            }
 
             // validation all inputs - next button
-            if (isNaN(sInput1) && sInput1.length < 50 && isNaN(sInput2) && sInput2.length < 30 && isNaN(sInput3) && iInput4.length < 3 && iInput4.length > 0) {
+            if (iInput1.length < 6 && iInput1.length > 0 &&
+                isNaN(sInput2) && sInput2.length < 3 &&
+                iInput3.length < 3 && iInput3.length > 0 &&
+                isNaN(sInput4) && sInput4.length < 3 &&
+                isNaN(sInput5) && sInput5.length < 61 &&
+                isNaN(sInput6) && sInput6.length < 31 &&
+                sInput7.length > 0 && sInput7.length < 61) {
                 this.byId("createButton").setVisible(true);
             } else {
                 this.byId("createButton").setVisible(false);
@@ -177,47 +226,66 @@ sap.ui.define([
 
         },
         editValidation: function () {
-            var sInput1 = this.byId("__editCRUD0").getValue(),
+            var iInput1 = this.byId("__editCRUD0").getValue(),
                 sInput2 = this.byId("__editCRUD1").getValue(),
-                sInput3 = this.byId("__editCRUD2").getValue(),
-                iInput4 = this.byId("__editCRUD3").getValue(),
-                //iInput5 = this.byId("__editCRUD4").getValue(),
+                iInput3 = this.byId("__editCRUD2").getValue(),
+                sInput4 = this.byId("__editCRUD3").getValue(),
+                sInput5 = this.byId("__editCRUD4").getValue(),
+                sInput6 = this.byId("__editCRUD5").getValue(),
+                sInput7 = this.byId("__editCRUD6").getValue(),
                 oInput1 = this.byId("__editCRUD0"),
                 oInput2 = this.byId("__editCRUD1"),
                 oInput3 = this.byId("__editCRUD2"),
-                oInput4 = this.byId("__editCRUD3")
-                //oInput5 = this.byId("__editCRUD4")
-                ;
+                oInput4 = this.byId("__editCRUD3"),
+                oInput5 = this.byId("__editCRUD4"),
+                oInput6 = this.byId("__editCRUD5"),
+                oInput7 = this.byId("__editCRUD6");
 
             // validation single inputs	
-            if (isNaN(sInput1) && sInput1.length < 50) {
+            if (iInput1.length < 6 && iInput1.length > 0) {
                 oInput1.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput1.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (isNaN(sInput2) && sInput2.length < 30) {
+            if (isNaN(sInput2) && sInput2.length < 3) {
                 oInput2.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput2.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (isNaN(sInput3) && sInput3.length < 30) {
+            if (iInput3.length < 3 && iInput3.length > 0) {
                 oInput3.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput3.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (iInput4.length < 3 && iInput4.length > 0) {
+            if (isNaN(sInput4) && sInput4.length < 3) {
                 oInput4.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput4.setValueState(sap.ui.core.ValueState.Error);
             }
-            /* if (iInput5.length == 1) {
+            if (isNaN(sInput5) && sInput5.length < 61) {
                 oInput5.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput5.setValueState(sap.ui.core.ValueState.Error);
-            } */
+            }
+            if (isNaN(sInput6) && sInput6.length < 31) {
+                oInput6.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oInput6.setValueState(sap.ui.core.ValueState.Error);
+            }
+            if (sInput7.length > 0 && sInput7.length < 61) {
+                oInput7.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oInput7.setValueState(sap.ui.core.ValueState.Error);
+            }
 
             // validation all inputs - next button
-            if (isNaN(sInput1) && sInput1.length < 50 && isNaN(sInput2) && sInput2.length < 30 && isNaN(sInput3) && iInput4.length < 3 && iInput4.length > 0) {
+            if (iInput1.length < 6 && iInput1.length > 0 &&
+                isNaN(sInput2) && sInput2.length < 3 &&
+                iInput3.length < 3 && iInput3.length > 0 &&
+                isNaN(sInput4) && sInput4.length < 3 &&
+                isNaN(sInput5) && sInput5.length < 61 &&
+                isNaN(sInput6) && sInput6.length < 31 &&
+                sInput7.length > 0 && sInput7.length < 61) {
                 this.byId("editButton").setVisible(true);
             } else {
                 this.byId("editButton").setVisible(false);
@@ -247,11 +315,14 @@ sap.ui.define([
                 }.bind(this),
                 iIndex = oContext.getIndex();
 
-            oUpdateEntry.InfoAuthName = this.getView().byId("__editCRUD0").getValue();
-            oUpdateEntry.NameCube = this.getView().byId("__editCRUD1").getValue();
-            oUpdateEntry.InfoName = this.getView().byId("__editCRUD2").getValue();
-            oUpdateEntry.InfoTyp = this.getView().byId("__editCRUD3").getValue();
-            oUpdateEntry.Sequenz = this.getView().byId("selectSequenz1").getSelectedItem().getText();
+            oUpdateEntry.personalnummer = this.getView().byId("__editCRUD0").getValue();
+            oUpdateEntry.datamart = this.getView().byId("__editCRUD1").getValue();
+            oUpdateEntry.funktion = this.getView().byId("__editCRUD2").getValue();
+            oUpdateEntry.org_einh = this.getView().byId("__editCRUD3").getValue();
+            oUpdateEntry.entit = this.getView().byId("__editCRUD4").getValue();
+            oUpdateEntry.infoobjectkontrolle = this.getView().byId("__editCRUD5").getValue();
+            oUpdateEntry.wertkontrolle = this.getView().byId("__editCRUD6").getValue();
+            oUpdateEntry.typ = this.getView().byId("selectTyp").getSelectedItem().getText();
 
             //this._setBusy(true);
 
@@ -288,14 +359,13 @@ sap.ui.define([
         },
         onUpdatePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem();
-
             if (oSelectedItem) {
                 var oView = this.getView(),
                     oContext = oSelectedItem.getBindingContext(),
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit) {
                     this._oDialogEdit = this.loadFragment({
-                        name: "authorization.fragment.EditDialogHAUPARZL",
+                        name: "authorization.fragment.EditDialogHAUKB001",
                         controller: this
                     });
                 }
@@ -303,17 +373,19 @@ sap.ui.define([
                     this.oDialogEdit = oDialog;
                     oView.addDependent(this.oDialogEdit);
                     this.oDialogEdit.bindElement({
-                        path: '/HAUPARZL'
+                        path: '/HAUKB001'
                     });
                     this.oDialogEdit.open();
-
-                    this.byId("__editCRUD0").setValue(oEntry.InfoAuthName);
-                    this.byId("__editCRUD1").setValue(oEntry.NameCube);
-                    this.byId("__editCRUD2").setValue(oEntry.InfoName);
-                    this.byId("__editCRUD3").setValue(oEntry.InfoTyp);
-
+                    this.byId("__editCRUD0").setValue(oEntry.personalnummer);
+                    this.byId("__editCRUD1").setValue(oEntry.datamart);
+                    this.byId("__editCRUD2").setValue(oEntry.funktion);
+                    this.byId("__editCRUD3").setValue(oEntry.org_einh);
+                    this.byId("__editCRUD4").setValue(oEntry.entit);
+                    this.byId("__editCRUD5").setValue(oEntry.infoobjectkontrolle);
+                    this.byId("__editCRUD6").setValue(oEntry.wertkontrolle);
+                    //this.byId("selectTyp").setSelectedItem(oEntry.typ).setText();
+                    //console.log(oEntry.typ);
                 }.bind(this));
-
             } else {
                 sap.m.MessageBox.warning("Es wurde kein Element zur Aktualisierung ausgewählt");
             }
@@ -321,18 +393,16 @@ sap.ui.define([
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 fnSucces = function () {
-                    sap.m.MessageToast.show("Element (" + sInfoAuthName + ") erfolgreich gelöscht");
+                    sap.m.MessageToast.show("Element (" + sPersonalnummer + ") erfolgreich gelöscht");
                 },
                 fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
                 };
-
             if (oSelectedItem) {
                 var oContext = oSelectedItem.getBindingContext(),
-                    sInfoAuthName = oContext.getProperty("InfoAuthName");
+                    sPersonalnummer = oContext.getProperty("personalnummer");
 
                 oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
-
             } else {
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
             }
@@ -343,8 +413,14 @@ sap.ui.define([
 
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
-                    new sap.ui.model.Filter("NameCube", sap.ui.model.FilterOperator.Contains, sQuery),
-                    new sap.ui.model.Filter("InfoName", sap.ui.model.FilterOperator.Contains, sQuery)
+                    new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("org_einh", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("typ", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("entit", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("infoobjectkontrolle", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("wertkontrolle", sap.ui.model.FilterOperator.Contains, sQuery)
                 ], false);
                 aFilters.push(filter);
             }
@@ -369,19 +445,19 @@ sap.ui.define([
             this.groupReset = true;
         },
         handleSortButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogHAUPARZL")
+            this.getViewSettingsDialog("authorization.fragment.SortDialogHAUKB001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUPARZL")
+            this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUKB001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUPARZL")
+            this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUKB001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
@@ -445,7 +521,7 @@ sap.ui.define([
                 type: sap.ui.export.EdmType.Number
             });
             aCols.push({
-                property: 'oe',
+                property: 'org_einh',
                 type: sap.ui.export.EdmType.String
             });
             aCols.push({
@@ -457,11 +533,11 @@ sap.ui.define([
                 type: sap.ui.export.EdmType.String
             });
             aCols.push({
-                property: 'infoobjectkontroll',
+                property: 'infoobjectkontrolle',
                 type: sap.ui.export.EdmType.String
             });
             aCols.push({
-                property: 'wertkontroll',
+                property: 'wertkontrolle',
                 type: sap.ui.export.EdmType.String
             });
 

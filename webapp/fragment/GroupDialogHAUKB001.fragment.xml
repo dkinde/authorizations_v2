@@ -1,0 +1,17 @@
+<core:FragmentDefinition    xmlns="sap.m"
+	                        xmlns:core="sap.ui.core">
+<ViewSettingsDialog title=""
+                    confirm=".handleGroupDialogConfirm"
+                    reset=".resetGroupDialog">    
+    <groupItems>
+        <ViewSettingsItem selected="false" text="Personalnummer" key="personalnummer" />
+        <ViewSettingsItem selected="false" text="Datamart" key="datamart" />
+        <ViewSettingsItem selected="false" text="Funktion" key="funktion" />
+        <ViewSettingsItem selected="false" text="Org. einh.(Abt./Sg.)" key="org_einh" />
+        <ViewSettingsItem selected="false" text="Typ Autorisierung IOBJ" key="typ" />        
+        <ViewSettingsItem selected="false" text="Entität" key="entit" />
+        <ViewSettingsItem selected="false" text="InfoObjekt Kontrolle" key="infoobjectkontrolle" />
+        <ViewSettingsItem selected="false" text="Wert Kontrolle" key="wertkontrolle" />
+    </groupItems>
+</ViewSettingsDialog>
+</core:FragmentDefinition>
