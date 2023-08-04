@@ -534,12 +534,20 @@ sap.ui.define([
                 sQuery = oEvent.getSource().getValue();
 
             if (sQuery && sQuery.length > 0) {
+
                 var filter = new sap.ui.model.Filter([
-                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sQuery)
+                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1]),
+                    new sap.ui.model.Filter("Txtsh", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("Txtmd", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("Txtlg", sap.ui.model.FilterOperator.Contains, sQuery)
                 ], false);
                 aFilters.push(filter);
+                console.log(aFilters);
+                this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
+            } else {
+                this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
             }
-            this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
+
 
         },
         onSearch2: function (oEvent) {
@@ -548,7 +556,8 @@ sap.ui.define([
 
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
-                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sQuery)
+                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1]),
+                    new sap.ui.model.Filter("multi", sap.ui.model.FilterOperator.Contains, sQuery)
                 ], false);
                 aFilters.push(filter);
             }

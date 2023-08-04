@@ -413,11 +413,11 @@ sap.ui.define([
 
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
-                    new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery),
-                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sQuery),
-                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sQuery),
-                    new sap.ui.model.Filter("org_einh", sap.ui.model.FilterOperator.Contains, sQuery),
-                    new sap.ui.model.Filter("typ", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1] + sQuery[2] + sQuery[3] + sQuery[4] + sQuery[5]),
+                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1]),
+                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1]),
+                    new sap.ui.model.Filter("org_einh", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1] + sQuery[2] + sQuery[3]),
+                    new sap.ui.model.Filter("typ", sap.ui.model.FilterOperator.Contains, sQuery[0]),
                     new sap.ui.model.Filter("entit", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("infoobjectkontrolle", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("wertkontrolle", sap.ui.model.FilterOperator.Contains, sQuery)
