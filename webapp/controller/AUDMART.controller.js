@@ -548,6 +548,21 @@ sap.ui.define([
                 this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
             }
 
+            /* function _createSearchFilters(sSearch) {
+                if (sSearch) {
+                    var aPaths = ["name", "range", "parent_mountain", "countries"];
+                    var aFilters = aPaths.map(function (sPath) {
+                        return new Filter({
+                            path: sPath,
+                            operator: FilterOperator.Contains,
+                            value1: sSearch
+                        });
+                    });
+
+                    return [new Filter(aFilters, false)];
+                }
+                return [];
+            } */
 
         },
         onSearch2: function (oEvent) {

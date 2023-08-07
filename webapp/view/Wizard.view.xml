@@ -7,12 +7,18 @@
     <Page   title="{i18n>wizardPageTitle}"  
             id="wizardContentPage"        
             navButtonPress=".onNavButtonPressed" 
-            showNavButton="true">
+            showNavButton="true"
+            floatingFooter="true"
+            class=" sapUiResponsivePadding--header 
+                    sapUiResponsivePadding--content 
+                    sapUiResponsivePadding--footer 
+                    sapUiResponsivePadding--floatingFooter" >
         <content>                      
         <Wizard id="createWizard"
-                class="sapUiResponsivePadding--header sapUiResponsivePadding--content"                                                                     
+                class=" sapUiResponsivePadding--header 
+                        sapUiResponsivePadding--content"                                                                     
                 complete="wizardCompleteHandler"
-                finishButtonText="Erstellen aller neuen Berechtigungselemente">
+                finishButtonText="Speichern Berechtigungskonfiguration">
             <WizardStep id="step1" 
                         title="{i18n>wizardTitleStep1}" 
                         activate="step1validation" 
