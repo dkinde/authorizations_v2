@@ -103,7 +103,40 @@
             <WizardStep id="step2" 
                         title="{i18n>wizardTitleStep2}" 
                         activate="step2validation" 
-                        validated="false">                        
+                        validated="false">                           
+                <Table  id="table5" >
+                    <headerToolbar>
+                        <Toolbar>
+                            <content>
+                                <Title text="Vorschau"></Title>
+                            </content>
+                        </Toolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>colAUPARNAME}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUZIEL}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUIOBJ}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUIOBJTYP}" />
+                        </Column>                                                                        
+                        <Column>
+                            <Text text="{i18n>colAUSEQUENZ}" />
+                        </Column>                                    
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                                                                                                      
+                            </cells>                                        
+                        </ColumnListItem>
+                    </items>
+                </Table>
                 <Table  id="table2" 
                         mode="SingleSelectMaster" >
                     <headerToolbar>
@@ -150,20 +183,17 @@
                                 </Select>                                                                                        
                                 <Select id="selectCube"                                                                             
                                         forceSelection="false"
-                                        items="{
-                                            path: '/CUBE_DIST'
-                                        }">
-                                        <core:Item  key="{Partcube}" 
-                                                    text="{Partcube}" />
+                                        items="{}"
+                                        change="filterIobj">
+                                        <core:Item  key="" 
+                                                    text="" />
                                         
                                     </Select> 
                                 <Select id="selectIobj"                                                                           
                                         forceSelection="false"
-                                            items="{
-                                            path: '/IOBJ_DIST'
-                                        }">
-                                        <core:Item  key="{Iobjnm}" 
-                                                    text="{Iobjnm}" />
+                                        items="{}">
+                                        <core:Item  key="" 
+                                                    text="" />
                                 </Select>                                                                                                                                                                           
                                 <Input  id="inputInfoTyp"                                            
                                         placeholder="Geben Sie 2 Ziffern ein" 

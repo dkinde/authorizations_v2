@@ -554,7 +554,8 @@ sap.ui.define([
                     var aFilters = aPaths.map(function (sPath) {
                         return new Filter({
                             path: sPath,
-                            operator: FilterOperator.Contains,
+                            operator: 
+                            ilterOperator.Contains,
                             value1: sSearch
                         });
                     });

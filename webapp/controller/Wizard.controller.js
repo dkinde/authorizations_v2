@@ -44,6 +44,62 @@ sap.ui.define([
 			this.setStep3 = [];
 			this.setStep4 = [];
 			this.setFunction = [];
+			this.aValores = [];
+			this.aProvider = [];
+
+			var sUrl1 = this.getOwnerComponent().getModel().sServiceUrl + "/MP_CUBE_IOBJ";
+
+			var that = this;
+			var iSkip = 0;
+
+			function getData() {
+				$.ajax({
+					url: that.getOwnerComponent().getModel().sServiceUrl + "/MP_CUBE_IOBJ" + "?$top=100" + "&$skip=" + iSkip,
+					method: "GET",
+					success: function (data) {
+						if (data && data.value) {
+							that.aValores = that.aValores.concat(data.value.map(function (item) {
+								return item;
+							}));
+						}
+						if (data.value.length === 100) {
+							iSkip += 100;
+							getData();
+						} else {
+							return;
+						}
+					}.bind(this),
+					error: function (errorEntit1) {
+						console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+					}
+				});
+			}
+			getData();
+
+			function getProvider() {
+				$.ajax({
+					url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPARZL" + "?$top=100" + "&$skip=" + iSkip,
+					method: "GET",
+					success: function (data) {
+						if (data && data.value) {
+							that.aProvider = that.aProvider.concat(data.value.map(function (item) {
+								return item;
+							}));
+						}
+						if (data.value.length === 100) {
+							iSkip += 100;
+							getProvider();
+						} else {
+							return;
+						}
+					}.bind(this),
+					error: function (errorEntit1) {
+						console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+					}
+				});
+			}
+			getProvider();
+
 		},
 		onNavButtonPressed: function () {
 			var oRouter = UIComponent.getRouterFor(this);
@@ -178,22 +234,38 @@ sap.ui.define([
 		// 	this.aFiltersCube = aFilters;
 		// },
 
-		handleDeleteDuplicatedOnSelect: function (selectId) {
-			var oSelect = this.getView().byId(selectId);
-
-			var aItems = oSelect.getItems();
-			var aUniqueItems = aItems.reduce(function (acc, item) {
-				var key = item.getKey();
-				if (!acc.some(function (accItem) { return accItem.getKey() === key; })) {
-					acc.push(item);
-				}
-				return acc;
-			}, []);
-
-			oSelect.removeAllItems();
-			aUniqueItems.forEach(function (item) {
-				oSelect.addItem(item);
+		filterIobj: function () {
+			var sCube = [this.byId("selectCube").getSelectedItem().getText()],
+				aItems = this.filterCube(this.aValores, sCube, 2),
+				oSelectCube = this.getView().byId("selectIobj");
+			oSelectCube.removeAllItems();
+			for (var i = 0; i < aItems.length; i++) {
+				oSelectCube.addItem(new sap.ui.core.Item({
+					key: i.toString(), // Puedes utilizar un índice como clave
+					text: aItems[i].Iobjnm
+				}));
+			}
+		},
+		filterCube: function (aValue, aFilter, aColumn) {
+			var aCube = [],
+				uniqueCube = new Set();
+			aFilter.forEach(element => {
+				aValue.forEach(item => {
+					if (aColumn == 1) {
+						if (item.Infocube === element && !uniqueCube.has(item.Partcube)) {
+							uniqueCube.add(item.Partcube);
+							aCube.push(item);
+						}
+					}
+					if (aColumn == 2) {
+						if (item.Partcube === element && !uniqueCube.has(item.Iobjnm)) {
+							uniqueCube.add(item.Iobjnm);
+							aCube.push(item);
+						}
+					}
+				});
 			});
+			return aCube;
 		},
 
 		handleSearch: function (oEvent) {
@@ -236,6 +308,23 @@ sap.ui.define([
 				});
 			oSelect.addItem(oItem);
 		},
+		updPrev: function (aValue, oItem) {
+			var oTable = this.byId("table5");
+			aValue.forEach(item => {
+				if (item.NameCube === oItem) {
+					var oTemplate = new sap.m.ColumnListItem({
+						cells: [
+							new sap.m.Text({ text: item.InfoAuthName }),
+							new sap.m.Text({ text: item.NameCube }),
+							new sap.m.Text({ text: item.InfoTyp }),
+							new sap.m.Text({ text: item.Sequenz }),
+							new sap.m.Text({ text: item.InfoName })
+						]
+					});
+					oTable.addItem(oTemplate);
+				}
+			})
+		},
 		onAddPress1: function () {
 			try {
 				var oTable = this.byId("table1"),
@@ -262,9 +351,19 @@ sap.ui.define([
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 				this.byId("selectMulti").setSelectedKey(null);
 				this.step1validation();
-				//console.log(this.byId("selectCube").getItems());
-				// this.handleDeleteDuplicatedOnSelect("selectCube");
-				// this.handleDeleteDuplicatedOnSelect("selectIobj");
+
+				var aItems = this.filterCube(this.aValores, this.aDatamart, 1),
+					oSelectCube = this.getView().byId("selectCube");
+				oSelectCube.removeAllItems();
+				this.byId("table5").removeAllItems();
+				for (var i = 0; i < aItems.length; i++) {
+					oSelectCube.addItem(new sap.ui.core.Item({
+						key: i.toString(), // Puedes utilizar un índice como clave
+						text: aItems[i].Partcube
+					}));
+					this.updPrev(this.aProvider, aItems[i].Partcube);
+				}
+
 			} catch (error) {
 				if (error.message == "EmptyFieldException")
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
@@ -330,6 +429,11 @@ sap.ui.define([
 						throw new sap.ui.base.Exception("SameTypeError", "Falsche Definition");
 					}
 				});
+				this.aProvider.forEach(item => {
+					if (item.InfoAuthName === this.byId("selectInfoAuthName").getSelectedItem().getText() &&
+						item.NameCube === this.byId("selectCube").getSelectedItem().getText())
+						throw new sap.ui.base.Exception("AuthException", "Falsche Definition");
+				});
 				oTable.addItem(oTemplate);
 				this.setStep2.push([this.byId("selectInfoAuthName").getSelectedItem().getText(),
 				this.byId("selectCube").getSelectedItem().getText(),
@@ -346,6 +450,8 @@ sap.ui.define([
 			} catch (error) {
 				if (error.message == "DupicatedKey")
 					sap.m.MessageBox.warning("Das Element ist vorhanden");
+				if (error.message == "AuthException")
+					sap.m.MessageBox.warning("Für diese IOBJ existiert bereits eine Berechtigung in diesem Cube");
 				if (error.message == "DupicatedPKey")
 					sap.m.MessageBox.warning("Für dieses Cube-Infobjekt existiert bereits eine Berechtigung");
 				if (error.message == "AuthTypeError")
@@ -453,6 +559,19 @@ sap.ui.define([
 					iIndex -= 1;
 					this.aDatamart.splice(iIndex, 1);
 					this.setStep1.splice(iIndex, 1);
+
+					var aItems = this.filterCube(this.aValores, this.aDatamart, 1),
+						oSelectCube = this.getView().byId("selectCube");
+					oSelectCube.removeAllItems();
+					this.byId("table5").removeAllItems();
+					for (var i = 0; i < aItems.length; i++) {
+						oSelectCube.addItem(new sap.ui.core.Item({
+							key: i.toString(), // Puedes utilizar un índice como clave
+							text: aItems[i].Partcube
+						}));
+						this.updPrev(this.aProvider, aItems[i].Partcube);
+					}
+
 					oSelectedItem.destroy();
 					sap.m.MessageToast.show("Element erfolgreich gelöscht");
 				}
@@ -585,7 +704,11 @@ sap.ui.define([
 		step2validation: function () {
 			var oInputInfoTyp = this.byId("inputInfoTyp"),
 				iInputInfoTyp = oInputInfoTyp.getValue(),
-				iItems = this.byId("table2").getItems();
+				iItems = this.byId("table2").getItems(),
+				oItemsCube = this.getView().byId("selectCube").getItems(),
+				oTable = this.byId("table5").getItems(),
+				oTableItems = [],
+				aText = [];
 
 			// validation single input		
 			if (iInputInfoTyp.length > 0 && iInputInfoTyp.length == 2)
@@ -598,6 +721,23 @@ sap.ui.define([
 				oInputInfoTyp.setValueState(sap.ui.core.ValueState.None);
 			}
 
+			oItemsCube.forEach(function (oElement) {
+				aText.push(oElement.getText());
+			});
+
+			if (oTable.length > 0) {
+				oTable.forEach(function (oElement) {
+					oTableItems.push(oElement.getCells()[1].getText());
+				});
+			}
+
+			var oTable1 = this.byId("table2").getItems();
+			if (oTable1.length > 1) {
+				oTable1.forEach(function (oElement) {
+					oTableItems.push(oElement.getCells()[1].getText());
+				});
+			}
+			console.log(oTableItems);
 			// validation inputs & next button		
 			if (iItems.length > 1) {
 				this._oWizard.validateStep(this.byId("step2"));
