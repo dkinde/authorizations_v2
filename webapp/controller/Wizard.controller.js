@@ -37,7 +37,6 @@ sap.ui.define([
 			sap.ui.getCore().getConfiguration().setLanguage("de");
 			this._oWizard = this.byId("createWizard");
 			this.aDatamart = [];
-			//  this.aFunktion = [];
 			this.aFiltersCube = [];
 			this.setStep1 = [];
 			this.setStep2 = [];
@@ -46,11 +45,16 @@ sap.ui.define([
 			this.setFunction = [];
 			this.aValores = [];
 			this.aProvider = [];
+			this.aEntit = [];
+			this.maxTyp = 1;
 
-			var sUrl1 = this.getOwnerComponent().getModel().sServiceUrl + "/MP_CUBE_IOBJ";
+			var that = this,
+				iSkip = 0,
+				iSkip1 = 0;
 
-			var that = this;
-			var iSkip = 0;
+			for (let i = 1; i <= 4; i++) {
+				this.getView().byId("table" + i).addStyleClass("firstRow");
+			}
 
 			function getData() {
 				$.ajax({
@@ -78,7 +82,7 @@ sap.ui.define([
 
 			function getProvider() {
 				$.ajax({
-					url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPARZL" + "?$top=100" + "&$skip=" + iSkip,
+					url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPARZL" + "?$top=100" + "&$skip=" + iSkip1,
 					method: "GET",
 					success: function (data) {
 						if (data && data.value) {
@@ -87,7 +91,7 @@ sap.ui.define([
 							}));
 						}
 						if (data.value.length === 100) {
-							iSkip += 100;
+							iSkip1 += 100;
 							getProvider();
 						} else {
 							return;
@@ -99,6 +103,27 @@ sap.ui.define([
 				});
 			}
 			getProvider();
+
+			function getEntit() {
+				$.ajax({
+					url: that.getOwnerComponent().getModel().sServiceUrl + "/ENTITAT",
+					method: "GET",
+					success: function (data) {
+						if (data && data.value) {
+							that.aEntit = that.aEntit.concat(data.value.map(function (item) {
+								return item;
+							}));
+						}
+					}.bind(this),
+					error: function (errorEntit1) {
+						console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+					}
+				});
+			}
+			getEntit();
+
+			this.getMaxTyp();
+			this.byId("step1").setVisible(true);
 
 		},
 		onNavButtonPressed: function () {
@@ -114,7 +139,12 @@ sap.ui.define([
 				oTable3 = this.getView().byId("table3"),
 				aItems3 = oTable3.getItems(),
 				oTable4 = this.getView().byId("table4"),
-				aItems4 = oTable4.getItems();
+				aItems4 = oTable4.getItems(),
+				oTable5 = this.getView().byId("table5"),
+				aItems5 = oTable5.getItems();
+
+			this.aValores = [];
+			this.aProvider = [];
 
 			aSteps.forEach(function (oStep) {
 				oStep.setValidated(false);
@@ -132,26 +162,34 @@ sap.ui.define([
 			for (var i = aItems4.length - 1; i > 0; i--) {
 				oTable4.removeItem(aItems4[i]);
 			}
+			for (var i = 0; i < aItems5.length; i++) {
+				oTable5.removeItem(aItems5[i]);
+			}
+
+			// clean step 1
 			this.byId("inputTxtSh").setValue("");
-			this.byId("inputTxtMd").setValue("");
 			this.byId("inputTxtLg").setValue("");
 			this.byId("datamartText").setText("");
 			this.byId("inputDatamart").setValue("");
 			this.byId("selectMulti").setSelectedKey(null);
 
+			// clean step 2
 			this.byId("selectInfoAuthName").setSelectedKey(null);
 			this.byId("selectCube").setSelectedKey(null);
 			this.byId("selectIobj").setSelectedKey(null);
 			this.byId("inputInfoTyp").setValue("");
 			this.byId("selectSequenz").setSelectedKey(null);
 
+			// clean step 3
 			this.byId("inputFuntkion").setValue("");
 			this.byId("selecttyp").setSelectedKey(null);
-			this.byId("inputentit").setValue("");
+			this.byId("selectentit").setSelectedKey(null);
 			this.byId("inputwert").setValue("");
 
+			// clean step 4
 			this.byId("selectpersonalnummer").setSelectedKey(null);
 			this.byId("selectfunktion").setSelectedKey(null);
+
 			this.setStep1 = [];
 			this.setStep2 = [];
 			this.setStep3 = [];
@@ -168,9 +206,10 @@ sap.ui.define([
 			return this.getOwnerComponent().getRouter();
 		},
 		selectDatamartValidation: function () {
-			var sInput1 = this.byId("inputDatamart").getValue();
-			if (sInput1.length == 2)
-				this.byId("datamartText").setText(sInput1);
+			var sInputDatamart = this.byId("inputDatamart").getValue().toUpperCase();
+			this.byId("inputDatamart").setValue(sInputDatamart);
+			if (sInputDatamart.length == 2)
+				this.byId("datamartText").setText(sInputDatamart);
 		},
 		wizardCompleteHandler: function () {
 			var sMessage = "Sind Sie sicher, dass Sie diese Elemente erstellen wollen?";
@@ -206,34 +245,6 @@ sap.ui.define([
 			});
 		},
 
-		// onSelectIobjAuthChange: function () {
-
-		// 	var selectAuthIOBJ = this.byId("selectInfoAuthName").getSelectedItem().getText(),
-		// 		filterAuthIOBJ = new sap.ui.model.Filter("Iobjnm", sap.ui.model.FilterOperator.EQ, selectAuthIOBJ);
-
-
-		// 	var aFilters = this.aDatamart.map(function (sValue) {
-		// 		return new sap.ui.model.Filter("Iobjnm", sap.ui.model.FilterOperator.EQ, sValue);
-		// 	});
-
-		// 	aFilters.push(filterAuthIOBJ);
-
-		// 	if (!this._oCubeSelect) {
-		// 		this._oCubeSelect = this.loadFragment({
-		// 			name: "authorization.fragment.SelectCube",
-		// 			controller: this
-		// 		});
-		// 	}
-		// 	this._oCubeSelect.then(function (oCube) {
-		// 		this.oCubeSelect = oCube;
-		// 		this.getView().addDependent(this.oCubeSelect);
-		// 		this.byId("myTable").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
-		// 		// this.oCubeSelect.open();
-
-		// 	}.bind(this));
-		// 	this.aFiltersCube = aFilters;
-		// },
-
 		filterIobj: function () {
 			var sCube = [this.byId("selectCube").getSelectedItem().getText()],
 				aItems = this.filterCube(this.aValores, sCube, 2),
@@ -241,7 +252,7 @@ sap.ui.define([
 			oSelectCube.removeAllItems();
 			for (var i = 0; i < aItems.length; i++) {
 				oSelectCube.addItem(new sap.ui.core.Item({
-					key: i.toString(), // Puedes utilizar un índice como clave
+					key: i.toString(),
 					text: aItems[i].Iobjnm
 				}));
 			}
@@ -267,7 +278,26 @@ sap.ui.define([
 			});
 			return aCube;
 		},
+		filterTyp: function () {
+			var selTyp = this.byId("selecttyp").getSelectedItem().getText(),
+				selEnt = this.byId("selectentit");
 
+			selEnt.removeAllItems();
+			this.aEntit.forEach(item => {
+				if (item.typ == selTyp) {
+					selEnt.addItem(new sap.ui.core.Item({
+						text: item.entit
+					}));
+				}
+			});
+
+			if (selTyp == "D") {
+				selEnt.setSelectedItem(selEnt.getItems()[0]);
+				this.byId("inputwert").setValue(this.byId("datamartText").getText());
+			} else
+				this.byId("inputwert").setValue("");
+
+		},
 		handleSearch: function (oEvent) {
 			var aFilters = [],
 				aFilters2 = [],
@@ -297,6 +327,34 @@ sap.ui.define([
 
 			oBinding.filter([]);
 		},
+
+		updateTextLg: function () {
+			var sInputTxtSh = this.byId("inputTxtSh").getValue(),
+				oInputTxtLg = this.byId("inputTxtLg");
+
+			oInputTxtLg.setValue(sInputTxtSh);
+			this.step1validation();
+		},
+
+		getMaxTyp: function () {
+			this.maxTyp = 1;
+			var iItems = this.byId("table2").getItems();
+
+			if (iItems.length > 1) {
+				for (let i = 1; i < iItems.length; i++) {
+					var typ = iItems[i].getCells()[4].getText();
+					if (typ >= this.maxTyp)
+						this.maxTyp = parseInt(typ, 10) + 1;
+				}
+			} else {
+				this.aProvider.forEach(item => {
+					if (item.InfoTyp >= this.maxTyp)
+						this.maxTyp = parseInt(item.InfoTyp, 10) + 1;
+				});
+			}
+			this.byId("inputInfoTyp").setValue(this.maxTyp.toString());
+		},
+
 		selectFunktion: function (sFunktion) {
 			if (this.setFunction.includes(sFunktion)) {
 				return
@@ -310,20 +368,21 @@ sap.ui.define([
 		},
 		updPrev: function (aValue, oItem) {
 			var oTable = this.byId("table5");
+
 			aValue.forEach(item => {
 				if (item.NameCube === oItem) {
 					var oTemplate = new sap.m.ColumnListItem({
 						cells: [
 							new sap.m.Text({ text: item.InfoAuthName }),
 							new sap.m.Text({ text: item.NameCube }),
-							new sap.m.Text({ text: item.InfoTyp }),
+							new sap.m.Text({ text: item.InfoName }),
 							new sap.m.Text({ text: item.Sequenz }),
-							new sap.m.Text({ text: item.InfoName })
+							new sap.m.Text({ text: item.InfoTyp })
 						]
 					});
 					oTable.addItem(oTemplate);
 				}
-			})
+			});
 		},
 		onAddPress1: function () {
 			try {
@@ -333,12 +392,9 @@ sap.ui.define([
 						new sap.m.Text({ text: this.byId("selectMulti").getSelectedItem().getText() })]
 					});
 				if (this.byId("inputDatamart").getValueState() != sap.ui.core.ValueState.None ||
-					this.byId("inputTxtMd").getValueState() != sap.ui.core.ValueState.None)
-					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
-				if (this.byId("inputTxtSh").getValueState() != sap.ui.core.ValueState.None ||
-					this.byId("inputTxtMd").getValueState() != sap.ui.core.ValueState.None ||
+					this.byId("inputTxtSh").getValueState() != sap.ui.core.ValueState.None ||
 					this.byId("inputTxtLg").getValueState() != sap.ui.core.ValueState.None)
-					throw new sap.ui.base.Exception("TextFieldException", "Falsche Definition");
+					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
 				this.setStep1.forEach(element => {
 					if (element[0] == this.byId("inputDatamart").getValue() &&
 						element[1] == this.byId("selectMulti").getSelectedItem().getText()) {
@@ -346,11 +402,11 @@ sap.ui.define([
 					}
 				});
 				oTable.addItem(oTemplate);
-				this.setStep1.push([this.byId("inputDatamart").getValue(), this.byId("selectMulti").getSelectedItem().getText()]);
+				this.setStep1.push([this.byId("inputDatamart").getValue(),
+				this.byId("selectMulti").getSelectedItem().getText()]);
 				this.aDatamart.push(this.byId("selectMulti").getSelectedItem().getText());
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 				this.byId("selectMulti").setSelectedKey(null);
-				this.step1validation();
 
 				var aItems = this.filterCube(this.aValores, this.aDatamart, 1),
 					oSelectCube = this.getView().byId("selectCube");
@@ -358,12 +414,13 @@ sap.ui.define([
 				this.byId("table5").removeAllItems();
 				for (var i = 0; i < aItems.length; i++) {
 					oSelectCube.addItem(new sap.ui.core.Item({
-						key: i.toString(), // Puedes utilizar un índice como clave
+						key: i.toString(),
 						text: aItems[i].Partcube
 					}));
 					this.updPrev(this.aProvider, aItems[i].Partcube);
 				}
-
+				this.getMaxTyp();
+				this.step1validation();
 			} catch (error) {
 				if (error.message == "EmptyFieldException")
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
@@ -383,15 +440,15 @@ sap.ui.define([
 						cells: [new sap.m.Text({ text: this.byId("selectInfoAuthName").getSelectedItem().getText() }),
 						new sap.m.Text({ text: this.byId("selectCube").getSelectedItem().getText() }),
 						new sap.m.Text({ text: this.byId("selectIobj").getSelectedItem().getText() }),
-						new sap.m.Text({ text: this.byId("inputInfoTyp").getValue() }),
-						new sap.m.Text({ text: this.byId("selectSequenz").getSelectedItem().getText() })]
+						new sap.m.Text({ text: this.byId("selectSequenz").getSelectedItem().getText() }),
+						new sap.m.Text({ text: this.maxTyp.toString() })]
 					});
 				this.setStep2.forEach(element => {
 					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
 						element[2] == this.byId("selectIobj").getSelectedItem().getText() &&
-						element[3] == this.byId("inputInfoTyp").getValue() &&
-						element[4] == this.byId("selectSequenz").getSelectedItem().getText()) {
+						element[4] == this.byId("inputInfoTyp").getValue() &&
+						element[3] == this.byId("selectSequenz").getSelectedItem().getText()) {
 						throw new sap.ui.base.Exception("DupicatedKey", "Falsche Definition");
 					}
 					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
@@ -401,15 +458,15 @@ sap.ui.define([
 					}
 					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
-						element[3] != this.byId("inputInfoTyp").getValue()) {
+						element[4] != this.byId("inputInfoTyp").getValue()) {
 						throw new sap.ui.base.Exception("AuthTypeError", "Falsche Definition");
 					}
 					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
-						element[4] == this.byId("selectSequenz").getSelectedItem().getText()) {
+						element[3] == this.byId("selectSequenz").getSelectedItem().getText()) {
 						throw new sap.ui.base.Exception("SequenseError", "Falsche Definition");
 					}
-					if (element[3] == this.byId("inputInfoTyp").getValue()) {
+					if (element[4] == this.byId("inputInfoTyp").getValue()) {
 						if (element[1] == this.byId("selectCube").getSelectedItem().getText())
 							auth_flag = true;
 						else {
@@ -417,8 +474,8 @@ sap.ui.define([
 								if (item[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 									item[1] != this.byId("selectCube").getSelectedItem().getText() &&
 									item[2] == this.byId("selectIobj").getSelectedItem().getText() &&
-									item[3] == this.byId("inputInfoTyp").getValue() &&
-									item[4] == this.byId("selectSequenz").getSelectedItem().getText()) {
+									item[4] == this.byId("inputInfoTyp").getValue() &&
+									item[3] == this.byId("selectSequenz").getSelectedItem().getText()) {
 									auth_flag = true;
 								}
 							}
@@ -434,6 +491,7 @@ sap.ui.define([
 						item.NameCube === this.byId("selectCube").getSelectedItem().getText())
 						throw new sap.ui.base.Exception("AuthException", "Falsche Definition");
 				});
+
 				oTable.addItem(oTemplate);
 				this.setStep2.push([this.byId("selectInfoAuthName").getSelectedItem().getText(),
 				this.byId("selectCube").getSelectedItem().getText(),
@@ -441,12 +499,13 @@ sap.ui.define([
 				this.byId("inputInfoTyp").getValue(),
 				this.byId("selectSequenz").getSelectedItem().getText()]);
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
-				this.step2validation();
+				this.getMaxTyp();
 				this.byId("selectInfoAuthName").setSelectedKey(null);
 				this.byId("selectCube").setSelectedKey(null);
 				this.byId("selectIobj").setSelectedKey(null);
-				this.byId("inputInfoTyp").setValue("");
+				//this.byId("inputInfoTyp").setValue(this.maxTyp.toString());
 				this.byId("selectSequenz").setSelectedKey(null);
+				this.step2validation();
 			} catch (error) {
 				if (error.message == "DupicatedKey")
 					sap.m.MessageBox.warning("Das Element ist vorhanden");
@@ -461,7 +520,8 @@ sap.ui.define([
 				if (error.message == "SameTypeError")
 					sap.m.MessageBox.warning("Bei einem vorhandenen Typ muss die Konfiguration in den verschiedenen Würfeln gleich sein.");
 				if (error instanceof TypeError)
-					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+					console.log(error);
+				// sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
 			}
 		},
 		onAddPress3: function () {
@@ -471,16 +531,16 @@ sap.ui.define([
 					oTemplate = new sap.m.ColumnListItem({
 						cells: [new sap.m.Text({ text: this.byId("inputFuntkion").getValue() }),
 						new sap.m.Text({ text: this.byId("selecttyp").getSelectedItem().getText() }),
-						new sap.m.Text({ text: this.byId("inputentit").getValue() }),
+						new sap.m.Text({ text: this.byId("selectentit").getSelectedItem().getText() }),
 						new sap.m.Text({ text: this.byId("inputwert").getValue() })]
 					});
 				if (this.byId("inputFuntkion").getValue() == "" || this.byId("selecttyp").getSelectedKey() == null ||
-					this.byId("inputentit").getValue() == "" || this.byId("inputwert").getValue() == "")
+					this.byId("selectentit").getSelectedKey() == null || this.byId("inputwert").getValue() == "")
 					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
 				this.setStep3.forEach(element => {
 					if (element[0] == this.byId("inputFuntkion").getValue() &&
 						element[1] == this.byId("selecttyp").getSelectedItem().getText() &&
-						element[2] == this.byId("inputentit").getValue() &&
+						element[2] == this.byId("selectentit").getSelectedItem().getText() &&
 						element[3] == this.byId("inputwert").getValue()) {
 						throw new sap.ui.base.Exception("DupicatedKey", "Falsche Definition");
 					}
@@ -497,17 +557,21 @@ sap.ui.define([
 				});
 				if (!auth_flag && this.byId("selecttyp").getSelectedItem().getText() != "D")
 					throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
+
 				oTable.addItem(oTemplate);
+
 				this.setStep3.push([this.byId("inputFuntkion").getValue(),
 				this.byId("selecttyp").getSelectedItem().getText(),
-				this.byId("inputentit").getValue(),
+				this.byId("selectentit").getSelectedItem().getText(),
 				this.byId("inputwert").getValue()]);
+
 				this.selectFunktion(this.byId("inputFuntkion").getValue());
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
+
 				this.step3validation();
 				this.byId("inputFuntkion").setValue("");
 				this.byId("selecttyp").setSelectedKey(null);
-				this.byId("inputentit").setValue("");
+				this.byId("selectentit").setSelectedKey(null);
 				this.byId("inputwert").setValue("");
 			} catch (error) {
 				if (error.message == "EmptyFieldException")
@@ -591,6 +655,7 @@ sap.ui.define([
 				else {
 					this.setStep2.splice(iIndex - 1, 1);
 					oSelectedItem.destroy();
+					this.getMaxTyp();
 					sap.m.MessageToast.show("Element erfolgreich gelöscht");
 				}
 			} else {
@@ -603,8 +668,6 @@ sap.ui.define([
 				iIndex = this.byId("table3").indexOfItem(oSelectedItem),
 				oSelect = this.getView().byId("selectfunktion"),
 				aItems = oSelect.getItems();
-			// aCells = oSelectedItem.getCells(),
-			// sTextValue = aCells[0].getText();
 
 			if (oSelectedItem) {
 				if (iIndex == 0) {
@@ -650,11 +713,9 @@ sap.ui.define([
 		},
 		step1validation: function () {
 			var sInputTxtSh = this.byId("inputTxtSh").getValue(),
-				sInputTxtMd = this.byId("inputTxtMd").getValue(),
 				sInputTxtLg = this.byId("inputTxtLg").getValue(),
 				sInputDatamart = this.byId("inputDatamart").getValue(),
 				oInputTxtSh = this.byId("inputTxtSh"),
-				oInputTxtMd = this.byId("inputTxtMd"),
 				oInputTxtLg = this.byId("inputTxtLg"),
 				oInputDatamart = this.byId("inputDatamart"),
 				iItems = this.byId("table1").getItems();
@@ -670,11 +731,6 @@ sap.ui.define([
 			} else {
 				oInputTxtSh.setValueState(sap.ui.core.ValueState.Error);
 			}
-			if (isNaN(sInputTxtMd) && sInputTxtMd.length < 41) {
-				oInputTxtMd.setValueState(sap.ui.core.ValueState.None);
-			} else {
-				oInputTxtMd.setValueState(sap.ui.core.ValueState.Error);
-			}
 			if (isNaN(sInputTxtLg) && sInputTxtLg.length < 61) {
 				oInputTxtLg.setValueState(sap.ui.core.ValueState.None);
 			} else {
@@ -689,17 +745,27 @@ sap.ui.define([
 				oInputTxtLg.setValueState(sap.ui.core.ValueState.None);
 			}
 
+			if (this.byId("step2").getVisible())
+				this.step2validation();
+
 			// validation all inputs & next button
 			if (iItems.length > 1 && oInputDatamart.getValueState() == sap.ui.core.ValueState.None &&
 				oInputTxtSh.getValueState() == sap.ui.core.ValueState.None &&
-				oInputTxtMd.getValueState() == sap.ui.core.ValueState.None &&
 				oInputTxtLg.getValueState() == sap.ui.core.ValueState.None) {
+				this.byId("inputDatamart").setEditable(false);
+				this.byId("inputTxtSh").setEditable(false);
+				this.byId("inputTxtLg").setEditable(false);
 				this._oWizard.validateStep(this.byId("step1"));
+				this.byId("step2").setVisible(true);
 				this._oWizard.setShowNextButton(true);
 			} else {
 				this._oWizard.invalidateStep(this.byId("step1"));
 				this._oWizard.setShowNextButton(false);
+				this.byId("inputDatamart").setEditable(true);
+				this.byId("inputTxtSh").setEditable(true);
+				this.byId("inputTxtLg").setEditable(true);
 			}
+
 		},
 		step2validation: function () {
 			var oInputInfoTyp = this.byId("inputInfoTyp"),
@@ -707,6 +773,7 @@ sap.ui.define([
 				iItems = this.byId("table2").getItems(),
 				oItemsCube = this.getView().byId("selectCube").getItems(),
 				oTable = this.byId("table5").getItems(),
+				flag = true,
 				oTableItems = [],
 				aText = [];
 
@@ -721,39 +788,46 @@ sap.ui.define([
 				oInputInfoTyp.setValueState(sap.ui.core.ValueState.None);
 			}
 
+			//all items selectcube
 			oItemsCube.forEach(function (oElement) {
 				aText.push(oElement.getText());
 			});
 
+			//all items table preview - table 5
 			if (oTable.length > 0) {
 				oTable.forEach(function (oElement) {
 					oTableItems.push(oElement.getCells()[1].getText());
 				});
 			}
 
-			var oTable1 = this.byId("table2").getItems();
-			if (oTable1.length > 1) {
-				oTable1.forEach(function (oElement) {
-					oTableItems.push(oElement.getCells()[1].getText());
-				});
-			}
-			console.log(oTableItems);
-			// validation inputs & next button		
+			//all new items - table 2
 			if (iItems.length > 1) {
+				for (let i = 1; i < iItems.length; i++) {
+					oTableItems.push(iItems[i].getCells()[1].getText());
+				}
+			}
+
+			aText.forEach(item => {
+				if (!oTableItems.includes(item)) {
+					flag = false;
+				}
+			});
+
+			// validation inputs & next button			
+			if (oTableItems.length > 0 && flag) {
 				this._oWizard.validateStep(this.byId("step2"));
 				this._oWizard.setShowNextButton(true);
 			} else {
 				this._oWizard.invalidateStep(this.byId("step2"));
 				this._oWizard.setShowNextButton(false);
 			}
-			this.step1validation();
 		},
 		step3validation: function () {
 			var iInputFunktion = this.byId("inputFuntkion").getValue(),
-				sInputEntit = this.byId("inputentit").getValue(),
+				// sInputEntit = this.byId("inputentit").getValue(),
 				sInputWert = this.byId("inputwert").getValue(),
 				oInputFunktion = this.byId("inputFuntkion"),
-				oInputEntit = this.byId("inputentit"),
+				// oInputEntit = this.byId("inputentit"),
 				oInputWert = this.byId("inputwert"),
 				iItems = this.byId("table3").getItems();
 
@@ -763,11 +837,11 @@ sap.ui.define([
 			} else {
 				oInputFunktion.setValueState(sap.ui.core.ValueState.Error);
 			}
-			if (isNaN(sInputEntit) && sInputEntit.length > 0 && sInputEntit.length < 61) {
+			/* if (isNaN(sInputEntit) && sInputEntit.length > 0 && sInputEntit.length < 61) {
 				oInputEntit.setValueState(sap.ui.core.ValueState.None);
 			} else {
 				oInputEntit.setValueState(sap.ui.core.ValueState.Error);
-			}
+			} */
 			if (isNaN(sInputWert) && sInputWert.length > 0 && sInputWert.length < 61) {
 				oInputWert.setValueState(sap.ui.core.ValueState.None);
 			} else {
@@ -778,22 +852,25 @@ sap.ui.define([
 			if (iInputFunktion == '') {
 				oInputFunktion.setValueState(sap.ui.core.ValueState.None);
 			}
-			if (sInputEntit == '') {
+			/* if (sInputEntit == '') {
 				oInputEntit.setValueState(sap.ui.core.ValueState.None);
-			}
+			} */
 			if (sInputWert == '') {
 				oInputWert.setValueState(sap.ui.core.ValueState.None);
 			}
+
+			/* if (this.byId("step4").getVisible())
+				this.step4validation(); */
 
 			// validation all inputs & next button
 			if (iItems.length > 1) {
 				this._oWizard.validateStep(this.byId("step3"));
 				this._oWizard.setShowNextButton(true);
+				/* this.byId("step4").setVisible(true); */
 			} else {
 				this._oWizard.invalidateStep(this.byId("step3"));
 				this._oWizard.setShowNextButton(false);
 			}
-			this.step2validation();
 		},
 		step4validation: function () {
 			var iItems = this.byId("table4").getItems();
@@ -806,7 +883,6 @@ sap.ui.define([
 				this._oWizard.invalidateStep(this.byId("step4"));
 				this._oWizard.setShowNextButton(false);
 			}
-			this.step3validation();
 		},
 		handleWizardSubmit: function () {
 			var fnSucces = function () {

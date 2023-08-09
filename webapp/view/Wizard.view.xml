@@ -22,7 +22,8 @@
             <WizardStep id="step1" 
                         title="{i18n>wizardTitleStep1}" 
                         activate="step1validation" 
-                        validated="false">
+                        validated="false"
+                        visible="false">
             <VBox   class="sapUiSmallMargin">
                 <Title  text="Datamart Texts"/>                                
                 <form:SimpleForm    editable="true" 
@@ -35,18 +36,12 @@
                                 valueLiveUpdate="true" 
                                 change="selectDatamartValidation"
                                 valueStateText="Geben Sie nicht mehr als 2 Zeichen ein"/>                                
-                        <Label  text="{i18n>colTxtSh}" />
+                        <Label  text="{i18n>colTxtSh}" required="true"/>
                         <Input  id="inputTxtSh"                                         
-                                liveChange="step1validation" 
+                                liveChange="updateTextLg"
                                 valueLiveUpdate="true" 
                                 valueStateText="Geben Sie nicht mehr als 20 Zeichen ein"/>
-                        <Label  required="true" 
-                                text="{i18n>colTxtMd}" />                            
-                        <Input  id="inputTxtMd" 
-                                liveChange="step1validation" 
-                                valueLiveUpdate="true" 
-                                valueStateText="Geben Sie nicht mehr als 40 Zeichen ein"/>
-                        <Label  text="{i18n>colTxtLg}" />
+                        <Label  text="{i18n>colTxtLg}" required="true"/>
                         <Input  id="inputTxtLg" 
                                 liveChange="step1validation" 
                                 valueLiveUpdate="true" 
@@ -103,7 +98,8 @@
             <WizardStep id="step2" 
                         title="{i18n>wizardTitleStep2}" 
                         activate="step2validation" 
-                        validated="false">                           
+                        validated="false"
+                        visible="false">                           
                 <Table  id="table5" >
                     <headerToolbar>
                         <Toolbar>
@@ -123,16 +119,20 @@
                             <Text text="{i18n>colAUIOBJ}" />
                         </Column>
                         <Column>
-                            <Text text="{i18n>colAUIOBJTYP}" />
-                        </Column>                                                                        
-                        <Column>
                             <Text text="{i18n>colAUSEQUENZ}" />
-                        </Column>                                    
+                        </Column>  
+                        <Column>
+                            <Text text="{i18n>colAUIOBJTYP}" />
+                        </Column>                                                            
                     </columns>
                     <items>
                         <ColumnListItem>
-                            <cells>
-                                                                                                                      
+                            <cells>  
+                                <Text text="" />
+                                <Text text="" />
+                                <Text text="" />
+                                <Text text="" />
+                                <Text text="" />
                             </cells>                                        
                         </ColumnListItem>
                     </items>
@@ -164,11 +164,11 @@
                             <Text text="{i18n>colAUIOBJ}" />
                         </Column>
                         <Column>
-                            <Text text="{i18n>colAUIOBJTYP}" />
-                        </Column>                                                                        
-                        <Column>
                             <Text text="{i18n>colAUSEQUENZ}" />
-                        </Column>                                    
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUIOBJTYP}" />
+                        </Column>                                                              
                     </columns>
                     <items>
                         <ColumnListItem>
@@ -194,19 +194,16 @@
                                         items="{}">
                                         <core:Item  key="" 
                                                     text="" />
-                                </Select>                                                                                                                                                                           
-                                <Input  id="inputInfoTyp"                                            
-                                        placeholder="Geben Sie 2 Ziffern ein" 
-                                        type="Number" 
-                                        liveChange="step2validation" 
-                                        valueLiveUpdate="true" 
-                                        valueStateText="Geben Sie nicht mehr als 2 Zahlen ein"/>
+                                </Select>                                   
                                 <Select id="selectSequenz" 
                                         forceSelection="false" >
                                     <core:Item text="1" />
                                     <core:Item text="2" />
                                     <core:Item text="3" />
-                                </Select>                                                                                      
+                                </Select>                                                                                                                                                                       
+                                <Input  id="inputInfoTyp" 
+                                        editable="false"/>
+                                                                                                                    
                             </cells>                                        
                         </ColumnListItem>
                     </items>
@@ -252,19 +249,30 @@
                                 <Input  id="inputFuntkion" 
                                         placeholder="Geben Sie 2 Ziffern ein" 
                                         type="Number" 
-                                        liveChange="step3validation" 
-                                        valueLiveUpdate="true"                                                         
-                                        valueStateText="Geben Sie nicht mehr als 2 Zahlen ein"/>
+                                        liveChange="step3validation"                                         
+                                        valueLiveUpdate="true"    
+                                        showSuggestion="true"
+                                        suggestionItems="{/FUNKTION}"                                                     
+                                        valueStateText="Geben Sie nicht mehr als 2 Zahlen ein">
+                                        <suggestionItems>
+                                            <core:Item text="{funktion}"/>
+                                        </suggestionItems>                                        
+                                        </Input>                                    
                                 <Select id="selecttyp" 
+                                        change="filterTyp"
                                         forceSelection="false">
                                     <core:Item text="D" />
                                     <core:Item text="I" />
                                     <core:Item text="S" />                                                        
                                 </Select>
-                                <Input  id="inputentit" 
+                                <Select id="selectentit" 
+                                        forceSelection="false">
+                                    <core:Item key="" text=""/>                                                                                           
+                                </Select>
+                                <!-- <Input  id="inputentit" 
                                         liveChange="step3validation" 
                                         valueLiveUpdate="true" 
-                                        valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>
+                                        valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/> -->
                                 <Input  id="inputwert" 
                                         liveChange="step3validation" 
                                         valueLiveUpdate="true" 
