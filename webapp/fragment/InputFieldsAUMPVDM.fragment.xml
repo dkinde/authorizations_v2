@@ -7,15 +7,29 @@
 		<content>
 			<form:SimpleForm editable="true">
 				<Label text="{i18n>colDatamart}" required="true"/>
-                <Input id="__inputCRUD4" 
+				<Text 	id="__textDatamart" 										
+						text=""	/>									
+                <!-- <Input id="__inputCRUD4" 
 						liveChange="createValidation2" 
 						valueLiveUpdate="true" 
-						valueStateText="Geben Sie nicht mehr als 2 Zeichen ein"/>                
+						valueStateText="Geben Sie nicht mehr als 2 Zeichen ein"/>   -->              
                 <Label text="{i18n>colMultiproviderVsDatamart}" required="true"/>
-                <Input id="__inputCRUD5" 
+				<Select id="selectMulti"
+                        forceSelection="false" 
+                    	change="createValidation2"                                                                                                                                                      
+                        items="{
+                            path: '/CUBE',                                    
+                            parameters: {
+                                $select: 'Infocube'
+                            }
+                        }">
+                        <core:Item  key="{Infocube}" 
+                                    text="{Infocube}" />
+                </Select> 
+                <!-- <Input id="__inputCRUD5" 
 						liveChange="createValidation2" 
 						valueLiveUpdate="true" 
-						valueStateText="Geben Sie nicht mehr als 30 Zeichen ein"/>                            															
+						valueStateText="Geben Sie nicht mehr als 30 Zeichen ein"/>  -->                           															
 			</form:SimpleForm>			
 		</content>
 		<beginButton>

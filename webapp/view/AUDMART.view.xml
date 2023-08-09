@@ -73,7 +73,7 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <ObjectIdentifier text="{datamart}" />
+                            <Text id="textDatamart1" text="{datamart}" />
                             <ObjectIdentifier text="{Txtsh}" />
                             <ObjectIdentifier text="{Txtmd}" />
                             <ObjectIdentifier text="{Txtlg}" />                                           
@@ -94,6 +94,7 @@
                                 <Button id="buttonAddTable2"
                                         icon="sap-icon://add" 
                                         text="{i18n>tableToolbarButtonAdd}" 
+                                        enabled="false"
                                         press="onOpenDialog2"
                                         type="Accept"/>                                                                                
                                 <Button id="buttonDelTable2"

@@ -313,7 +313,7 @@ sap.ui.define([
 
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
-                    new sap.ui.model.Filter("typ", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("typ", sap.ui.model.FilterOperator.Contains, sQuery[0]),
                     new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("wert", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("entit", sap.ui.model.FilterOperator.Contains, sQuery)

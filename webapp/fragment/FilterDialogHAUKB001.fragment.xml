@@ -1,9 +1,10 @@
 <core:FragmentDefinition    xmlns="sap.m"
 	                        xmlns:core="sap.ui.core">
 <ViewSettingsDialog title=""    
-                    confirm="handleFilterDialogConfirm">    
+                    confirm="handleFilterDialogConfirm"
+                    >    
     <filterItems>
-        <ViewSettingsFilterItem multiSelect="false" text="Datamart" key="datamart"> 
+        <ViewSettingsFilterItem multiSelect="true" text="Datamart" key="datamart"> 
             <items>
                 <ViewSettingsItem text="DB" key="datamart___DB"/>
                 <ViewSettingsItem text="GK" key="datamart___GK"/>
@@ -17,7 +18,7 @@
             </items>
         </ViewSettingsFilterItem>
         <ViewSettingsFilterItem 
-            multiSelect="false" text="Funktion für Berechtigung" key="funktion" > 
+            multiSelect="true" text="Funktion für Berechtigung" key="funktion" > 
             <items>
                 <ViewSettingsItem text="1" key="funktion___1"/>
                 <ViewSettingsItem text="2" key="funktion___2"/>
@@ -48,7 +49,7 @@
                 <ViewSettingsItem text="51" key="funktion___51"/>                               
             </items>
         </ViewSettingsFilterItem>
-        <ViewSettingsFilterItem text="Org. einh.(Abt./Sg.)" key="org_einh" > 
+        <ViewSettingsFilterItem multiSelect="true" text="Org. einh.(Abt./Sg.)" key="org_einh" > 
             <items>                
                 <ViewSettingsItem text="AP" key="org_einh___AP"/>
                 <ViewSettingsItem text="BV" key="org_einh___BV"/>
@@ -62,13 +63,13 @@
 
             </items>
         </ViewSettingsFilterItem>
-        <ViewSettingsFilterItem text="Typ der Entität" key="typ" > 
+        <ViewSettingsFilterItem multiSelect="true" text="Typ der Entität" key="typ" > 
             <items>                
                 <ViewSettingsItem text="I" key="typ___I"/>
                 <ViewSettingsItem text="S" key="typ___S"/>                
             </items>
         </ViewSettingsFilterItem>
-        <ViewSettingsFilterItem multiSelect="false" text="Entität" key="entit" > 
+        <ViewSettingsFilterItem multiSelect="true" text="Entität" key="entit" > 
             <items>
                 <ViewSettingsItem text="COKOST" key="entit___COKOST"/>
                 <ViewSettingsItem text="BEREICH" key="entit___BEREICH"/>
@@ -77,7 +78,7 @@
                 <ViewSettingsItem text="OEM" key="entit___OEM"/>
             </items>
         </ViewSettingsFilterItem>
-        <ViewSettingsFilterItem multiSelect="false" text="InfoObjekt Kontrolle" key="infoobjectkontrolle" > 
+        <ViewSettingsFilterItem multiSelect="true" text="InfoObjekt Kontrolle" key="infoobjectkontrolle" > 
             <items>
                 <ViewSettingsItem text="AUABT" key="infoobjectkontrolle___AUABT"/>
                 <ViewSettingsItem text="AUSGB" key="infoobjectkontrolle___AUSGB"/>

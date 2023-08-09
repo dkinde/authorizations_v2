@@ -35,9 +35,34 @@ sap.ui.define([
             this._mViewSettingsDialogs = {};
             this.mGroupFunctions = {};
             sap.ui.getCore().getConfiguration().setLanguage("de");
+
+            var oTable2 = this.byId("table2");
+            oTable2.bindItems({
+                path: "/AUMPVDM",
+                template: oTable2.getBindingInfo("items").template
+            });
         },
         onDatamartSelect: function (oEvent) {
+            var oTable2 = this.byId("table2"),
+                oSelectedItem = oEvent.getParameter("listItem"),
+                oBindingContext = oSelectedItem.getBindingContext(),
+                sPath = oBindingContext.getPath();
+
+            if (oBindingContext) {
+                this.byId("buttonAddTable2").setEnabled(true);
+                oTable2.bindItems({
+                    path: sPath + "/_Datamart",
+                    template: oTable2.getBindingInfo("items").template
+                });
+            } else {
+                this.byId("buttonAddTable2").setEnabled(false);
+                oTable2.bindItems({
+                    path: "/AUMPVDM",
+                    template: oTable2.getBindingInfo("items").template
+                });
+            }
             this.byId("table2").setBindingContext(oEvent.getParameters().listItem.getBindingContext());
+
         },
         onNavButtonPressed: function () {
             var oRouter = UIComponent.getRouterFor(this);
@@ -55,8 +80,8 @@ sap.ui.define([
         onCloseViewDialog2: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
-            this.byId("__inputCRUD4").setValue('');
-            this.byId("__inputCRUD5").setValue('');
+            this.byId("__textDatamart").setText('');
+            this.byId("selectMulti").setSelectedKey(null);
             this.byId("dialog2").close();
         },
         onCloseEditDialog1: function () {
@@ -89,6 +114,8 @@ sap.ui.define([
             }.bind(this));
         },
         onOpenDialog2: function () {
+            var oEntry = this.byId("table1").getSelectedItem().getBindingContext().getObject();
+
             if (!this._oDialogCRUD2) {
                 this._oDialogCRUD2 = this.loadFragment({
                     name: "authorization.fragment.InputFieldsAUMPVDM",
@@ -96,6 +123,7 @@ sap.ui.define([
                 });
             }
             this._oDialogCRUD2.then(function (oDialog) {
+                this.byId("__textDatamart").setText(oEntry.datamart);
                 this.oDialogCRUD2 = oDialog;
                 this.getView().addDependent(this.oDialogCRUD2);
                 this.oDialogCRUD2.open();
@@ -166,6 +194,9 @@ sap.ui.define([
         },
         onCreatePress2: function () {
             var oNewEntry = {},
+                oSelectedItem = this.byId("table1").getSelectedItem(),
+                oContext = oSelectedItem.getBindingContext(),
+                oEntry = oContext.getObject(),
                 aItems = this.byId("table2").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
@@ -182,8 +213,10 @@ sap.ui.define([
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
-            oNewEntry.datamart = this.getView().byId("__inputCRUD4").getValue();
-            oNewEntry.multi = this.getView().byId("__inputCRUD5").getValue();
+            oNewEntry.datamart = oEntry.datamart;
+            oNewEntry.multi = this.getView().byId("selectMulti").getSelectedItem().getText();
+
+            console.log(oNewEntry);
 
             try {
                 for (var i = 0; i < aItems.length; i++) {
@@ -216,8 +249,8 @@ sap.ui.define([
             }
 
             this.byId("dialog2").close();
-            this.byId("__inputCRUD4").setValue('');
-            this.byId("__inputCRUD5").setValue('');
+            this.byId("__textDatamart").setText('');
+            this.byId("selectMulti").setSelectedKey(null);
         },
         createValidation1: function () {
             var sInput1 = this.byId("__inputCRUD0").getValue(),
@@ -260,25 +293,8 @@ sap.ui.define([
 
         },
         createValidation2: function () {
-            var sInput1 = this.byId("__inputCRUD4").getValue(),
-                sInput2 = this.byId("__inputCRUD5").getValue(),
-                oInput1 = this.byId("__inputCRUD4"),
-                oInput2 = this.byId("__inputCRUD5");
-
-            // validation single inputs	
-            if (isNaN(sInput1) && sInput1.length < 3 && sInput1.length > 0) {
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput2) && sInput2.length < 31 && sInput2.length > 0) {
-                oInput2.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput2.setValueState(sap.ui.core.ValueState.Error);
-            }
-
             // validation all inputs - next button
-            if (isNaN(sInput1) && sInput1.length < 3 && sInput1.length > 0 && isNaN(sInput2) && sInput2.length < 31 && sInput2.length > 0) {
+            if (this.byId("selectMulti").getSelectedItem()) {
                 this.byId("createButton2").setVisible(true);
             } else {
                 this.byId("createButton2").setVisible(false);

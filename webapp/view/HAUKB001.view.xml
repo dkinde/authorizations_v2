@@ -33,7 +33,7 @@
                                 icon="sap-icon://sort"
                                 tooltip="{i18n>sortButtonText}"
                                 press="handleSortButtonPressed"/> 
-                            <Button                                                
+                            <Button id="filterButton"                                                
                                 icon="sap-icon://filter"
                                 tooltip="{i18n>filterButtonText}"
                                 press="handleFilterButtonPressed"/>

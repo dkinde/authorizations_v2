@@ -344,8 +344,11 @@ sap.ui.define([
 
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
+                    new sap.ui.model.Filter("InfoAuthName", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("NameCube", sap.ui.model.FilterOperator.Contains, sQuery),
-                    new sap.ui.model.Filter("InfoName", sap.ui.model.FilterOperator.Contains, sQuery)
+                    new sap.ui.model.Filter("InfoName", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("InfoTyp", sap.ui.model.FilterOperator.EQ, sQuery[0] + sQuery[1]),
+                    new sap.ui.model.Filter("Sequenz", sap.ui.model.FilterOperator.Contains, sQuery)
                 ], false);
                 aFilters.push(filter);
             }

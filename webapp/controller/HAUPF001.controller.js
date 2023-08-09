@@ -302,8 +302,8 @@ sap.ui.define([
 
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
-                    new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1] + sQuery[2] + sQuery[3] + sQuery[4] + sQuery[5]),
-                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sQuery[0] + sQuery[1])
+                    new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery),
+                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.EQ, sQuery)
                 ], false);
                 aFilters.push(filter);
             }
