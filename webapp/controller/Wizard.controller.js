@@ -737,14 +737,6 @@ sap.ui.define([
 				oInputTxtLg.setValueState(sap.ui.core.ValueState.Error);
 			}
 
-			// Default None state
-			if (sInputTxtSh == '') {
-				oInputTxtSh.setValueState(sap.ui.core.ValueState.None);
-			}
-			if (sInputTxtLg == '') {
-				oInputTxtLg.setValueState(sap.ui.core.ValueState.None);
-			}
-
 			if (this.byId("step2").getVisible())
 				this.step2validation();
 
