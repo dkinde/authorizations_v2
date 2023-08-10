@@ -443,6 +443,7 @@ sap.ui.define([
             return pDialog;
         },
         resetGroupDialog: function (oEvent) {
+            console.log("reset");
             this.groupReset = true;
         },
         handleSortButtonPressed: function () {
@@ -465,12 +466,20 @@ sap.ui.define([
         },
         handleSortDialogConfirm: function (oEvent) {
             var mParams = oEvent.getParameters(),
-                sPath = mParams.sortItem.getKey(),
-                bDescending = mParams.sortDescending,
+                sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
 
-            aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+            if (sort) {
+                var sPath = mParams.sortItem.getKey(),
+                    bDescending = mParams.sortDescending;
+
+                aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+                this.byId("sortUsersButton").setType("Emphasized");
+            } else
+                this.byId("sortUsersButton").setType("Default");
+
             this.byId("table1").getBinding("items").sort(aSorters);
+
         },
         handleFilterDialogConfirm: function (oEvent) {
             var mParams = oEvent.getParameters(),
@@ -513,6 +522,7 @@ sap.ui.define([
                 this.byId("table1").getBinding("items").sort();
                 this.groupReset = false;
             }
+            console.log(mParams);
         },
         createColumnConfig: function () {
             var aCols = [];

@@ -47,7 +47,8 @@
                                     icon="sap-icon://filter"
                                     tooltip="{i18n>filterButtonText}"
                                     press="handleFilterButtonPressed"/>
-                            <Button icon="sap-icon://group-2"
+                            <Button id="groupButton"
+                                    icon="sap-icon://group-2"
                                     tooltip="{i18n>groupButtonText}"
                                     press="handleGroupButtonPressed"/>
                             <Button icon="sap-icon://excel-attachment"
