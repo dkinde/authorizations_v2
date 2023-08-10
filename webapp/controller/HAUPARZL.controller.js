@@ -412,6 +412,13 @@ sap.ui.define([
             });
             this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
 
+            var filters = oEvent.getParameter("filterItems");
+
+            if (filters.length > 0)
+                this.byId("filterButton").setType("Emphasized");
+            else
+                this.byId("filterButton").setType("Default");
+
         },
         handleGroupDialogConfirm: function (oEvent) {
             var mParams = oEvent.getParameters(),

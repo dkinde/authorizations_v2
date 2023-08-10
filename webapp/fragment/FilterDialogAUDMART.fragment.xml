@@ -1,12 +1,9 @@
-<c:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:c="sap.ui.core">
-<ViewSettingsDialog    
-    title=""    
-    confirm="handleFilterDialogConfirm1">    
+<c:FragmentDefinition   xmlns="sap.m"
+	                    xmlns:c="sap.ui.core">
+<ViewSettingsDialog title=""    
+                    confirm="handleFilterDialogConfirm1">    
     <filterItems>
-        <ViewSettingsFilterItem 
-            multiSelect="false" text="Datamart" key="datamart"> 
+        <ViewSettingsFilterItem text="Datamart" key="datamart"> 
             <items>
                 <ViewSettingsItem text="DB" key="datamart___DB"/>
                 <ViewSettingsItem text="GK" key="datamart___GK"/>

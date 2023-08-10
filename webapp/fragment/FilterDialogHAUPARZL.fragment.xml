@@ -1,13 +1,9 @@
-<c:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:c="sap.ui.core"
->
-<ViewSettingsDialog    
-    title=""    
-    confirm="handleFilterDialogConfirm">    
+<c:FragmentDefinition	xmlns="sap.m"
+	                    xmlns:c="sap.ui.core">
+<ViewSettingsDialog title=""    
+                    confirm="handleFilterDialogConfirm">    
     <filterItems>
-        <ViewSettingsFilterItem 
-            multiSelect="false" text="Cube" key="NameCube"> 
+        <ViewSettingsFilterItem text="Cube" key="NameCube"> 
             <items>
                 <ViewSettingsItem text="CO_C03" key="NameCube___CO_C03"/>
                 <ViewSettingsItem text="CO_C04" key="NameCube___CO_C04"/>
@@ -15,8 +11,7 @@
                 <ViewSettingsItem text="CO_C05" key="NameCube___CO_C05"/>
             </items>
         </ViewSettingsFilterItem>
-        <ViewSettingsFilterItem 
-            multiSelect="false" text="Typ Autorisierung IOBJ" key="InfoName" > 
+        <ViewSettingsFilterItem text="Typ Autorisierung IOBJ" key="InfoName" > 
             <items>
                 <ViewSettingsItem text="COKOST" key="InfoName___COKOST"/>
                 <ViewSettingsItem text="COVKOST" key="InfoName___COVKOST"/>

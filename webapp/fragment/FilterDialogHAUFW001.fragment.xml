@@ -1,19 +1,18 @@
-<c:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:c="sap.ui.core"
->
-<ViewSettingsDialog    
-    title=""    
-    confirm="handleFilterDialogConfirm">    
+<c:FragmentDefinition   xmlns="sap.m"
+	                    xmlns:c="sap.ui.core">
+<ViewSettingsDialog title=""    
+                    confirm="handleFilterDialogConfirm">    
     <filterItems>        
-        <ViewSettingsFilterItem text="Typ der Entität" key="typ" > 
+        <ViewSettingsFilterItem text="Typ der Entität" 
+                                key="typ" > 
             <items>
                 <ViewSettingsItem text="D" key="typ___D"/>
                 <ViewSettingsItem text="I" key="typ___I"/>
                 <ViewSettingsItem text="S" key="typ___S"/>                
             </items>
         </ViewSettingsFilterItem>
-        <ViewSettingsFilterItem text="Entität" key="entit"> 
+        <ViewSettingsFilterItem text="Entität" 
+                                key="entit"> 
             <items>
                 <ViewSettingsItem text="DATAMART" key="entit___DATAMART"/>
                 <ViewSettingsItem text="BEREICH" key="entit___BEREICH"/>

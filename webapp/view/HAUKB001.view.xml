@@ -7,7 +7,10 @@
             navButtonPress=".onNavButtonPressed"
             backgroundDesign="Solid">    
         <content>
-        <l:Grid defaultSpan="L12 M12 S12" class="sapUiResponsiveMargin" vSpacing="0" hSpacing="0">            
+        <l:Grid defaultSpan="L12 M12 S12" 
+                class="sapUiResponsiveMargin" 
+                vSpacing="0" 
+                hSpacing="0">            
             <Table  sticky="ColumnHeaders,HeaderToolbar" 
                     growing="true"
                     growingScrollToLoad="true"
@@ -23,28 +26,24 @@
                 <headerToolbar>
                     <Toolbar>
                         <content>                            
-                            <SearchField
-                                id="searchField"
-                                width="20%"
-                                liveChange=".onSearch"
-                                placeholder="{i18n>searchFieldPlaceholder}"/>
-                            <Button
-                                id="sortUsersButton"
-                                icon="sap-icon://sort"
-                                tooltip="{i18n>sortButtonText}"
-                                press="handleSortButtonPressed"/> 
+                            <SearchField    id="searchField"
+                                            width="20%"
+                                            liveChange=".onSearch"
+                                            placeholder="{i18n>searchFieldPlaceholder}"/>
+                            <Button id="sortUsersButton"
+                                    icon="sap-icon://sort"
+                                    tooltip="{i18n>sortButtonText}"
+                                    press="handleSortButtonPressed"/> 
                             <Button id="filterButton"                                                
-                                icon="sap-icon://filter"
-                                tooltip="{i18n>filterButtonText}"
-                                press="handleFilterButtonPressed"/>
-                            <Button                                                
-                                icon="sap-icon://group-2"
-                                tooltip="{i18n>groupButtonText}"
-                                press="handleGroupButtonPressed"/>
-                            <Button 
-                                icon="sap-icon://excel-attachment"
-                                tooltip="{i18n>excelButtonText}" 
-                                press="onExport"/>                                               
+                                    icon="sap-icon://filter"
+                                    tooltip="{i18n>filterButtonText}"
+                                    press="handleFilterButtonPressed"/>
+                            <Button icon="sap-icon://group-2"
+                                    tooltip="{i18n>groupButtonText}"
+                                    press="handleGroupButtonPressed"/>
+                            <Button icon="sap-icon://excel-attachment"
+                                    tooltip="{i18n>excelButtonText}" 
+                                    press="onExport"/>                                               
                         </content>
                     </Toolbar>
                 </headerToolbar>
@@ -94,8 +93,16 @@
         <footer>
             <OverflowToolbar>
                 <ToolbarSpacer />
-                <Button id="saveButton" text="Save" type="Accept" press="onSave" visible="false" />
-                <Button id="cancelButton" text="Cancel" type="Reject" press="onCancel" visible="false" />
+                <Button id="saveButton" 
+                        text="Save" 
+                        type="Accept" 
+                        press="onSave" 
+                        visible="false" />
+                <Button id="cancelButton" 
+                        text="Cancel" 
+                        type="Reject" 
+                        press="onCancel" 
+                        visible="false" />
             </OverflowToolbar>
         </footer>                                               
     </Page>

@@ -683,6 +683,13 @@ sap.ui.define([
             });
             this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
 
+            var filters = oEvent.getParameter("filterItems");
+
+            if (filters.length > 0)
+                this.byId("filterTable1").setType("Emphasized");
+            else
+                this.byId("filterTable1").setType("Default");
+
         },
         handleFilterDialogConfirm2: function (oEvent) {
             var mParams = oEvent.getParameters(),
@@ -696,6 +703,13 @@ sap.ui.define([
                 aFilters.push(oFilter);
             });
             this.byId("table2").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
+
+            var filters = oEvent.getParameter("filterItems");
+
+            if (filters.length > 0)
+                this.byId("filterTable2").setType("Emphasized");
+            else
+                this.byId("filterTable2").setType("Default");
 
         },
         handleGroupDialogConfirm1: function (oEvent) {
