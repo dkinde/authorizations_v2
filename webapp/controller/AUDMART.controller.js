@@ -654,20 +654,34 @@ sap.ui.define([
         },
         handleSortDialogConfirm1: function (oEvent) {
             var mParams = oEvent.getParameters(),
-                sPath = mParams.sortItem.getKey(),
-                bDescending = mParams.sortDescending,
+                sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
 
-            aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+            if (sort) {
+                var sPath = mParams.sortItem.getKey(),
+                    bDescending = mParams.sortDescending;
+
+                aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+                this.byId("sortTable1").setType("Emphasized");
+            } else
+                this.byId("sortTable1").setType("Default");
+
             this.byId("table1").getBinding("items").sort(aSorters);
         },
         handleSortDialogConfirm2: function (oEvent) {
             var mParams = oEvent.getParameters(),
-                sPath = mParams.sortItem.getKey(),
-                bDescending = mParams.sortDescending,
+                sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
 
-            aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+            if (sort) {
+                var sPath = mParams.sortItem.getKey(),
+                    bDescending = mParams.sortDescending;
+
+                aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+                this.byId("sortTable2").setType("Emphasized");
+            } else
+                this.byId("sortTable2").setType("Default");
+
             this.byId("table2").getBinding("items").sort(aSorters);
         },
         handleFilterDialogConfirm1: function (oEvent) {
@@ -725,8 +739,10 @@ sap.ui.define([
                 vGroup = this.mGroupFunctions[sPath];
                 aGroups.push(new sap.ui.model.Sorter(sPath, bDescending, vGroup));
                 this.byId("table1").getBinding("items").sort(aGroups);
+                this.byId("groupTable1").setType("Emphasized");
             } else if (this.groupReset) {
                 this.byId("table1").getBinding("items").sort();
+                this.byId("groupTable1").setType("Default");
                 this.groupReset = false;
             }
         },
@@ -743,8 +759,10 @@ sap.ui.define([
                 vGroup = this.mGroupFunctions[sPath];
                 aGroups.push(new sap.ui.model.Sorter(sPath, bDescending, vGroup));
                 this.byId("table2").getBinding("items").sort(aGroups);
+                this.byId("groupTable2").setType("Emphasized");
             } else if (this.groupReset) {
                 this.byId("table2").getBinding("items").sort();
+                this.byId("groupTable2").setType("Default");
                 this.groupReset = false;
             }
         },

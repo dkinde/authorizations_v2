@@ -347,11 +347,18 @@ sap.ui.define([
         },
         handleSortDialogConfirm: function (oEvent) {
             var mParams = oEvent.getParameters(),
-                sPath = mParams.sortItem.getKey(),
-                bDescending = mParams.sortDescending,
+                sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
 
-            aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+            if (sort) {
+                var sPath = mParams.sortItem.getKey(),
+                    bDescending = mParams.sortDescending;
+
+                aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+                this.byId("sortUsersButton").setType("Emphasized");
+            } else
+                this.byId("sortUsersButton").setType("Default");
+
             this.byId("table1").getBinding("items").sort(aSorters);
         },
         handleFilterDialogConfirm: function (oEvent) {
@@ -389,9 +396,11 @@ sap.ui.define([
                 aGroups.push(new sap.ui.model.Sorter(sPath, bDescending, vGroup));
 
                 this.byId("table1").getBinding("items").sort(aGroups);
+                this.byId("groupButton").setType("Emphasized");
 
             } else if (this.groupReset) {
                 this.byId("table1").getBinding("items").sort();
+                this.byId("groupButton").setType("Default");
                 this.groupReset = false;
             }
         },

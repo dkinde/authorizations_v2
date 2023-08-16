@@ -516,13 +516,15 @@ sap.ui.define([
                 vGroup = this.mGroupFunctions[sPath];
                 aGroups.push(new sap.ui.model.Sorter(sPath, bDescending, vGroup));
 
+                this.byId("groupButton").setType("Emphasized");
+
                 this.byId("table1").getBinding("items").sort(aGroups);
 
             } else if (this.groupReset) {
                 this.byId("table1").getBinding("items").sort();
+                this.byId("groupButton").setType("Default");
                 this.groupReset = false;
             }
-            console.log(mParams);
         },
         createColumnConfig: function () {
             var aCols = [];
