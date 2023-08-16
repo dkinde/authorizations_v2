@@ -143,8 +143,9 @@ sap.ui.define([
 				oTable5 = this.getView().byId("table5"),
 				aItems5 = oTable5.getItems();
 
-			this.aValores = [];
+			/* this.aValores = [];
 			this.aProvider = [];
+			this.aEntit = []; */
 
 			aSteps.forEach(function (oStep) {
 				oStep.setValidated(false);
@@ -167,6 +168,9 @@ sap.ui.define([
 			}
 
 			// clean step 1
+			this.byId("inputDatamart").setEditable(true);
+			this.byId("inputTxtSh").setEditable(true);
+			this.byId("inputTxtLg").setEditable(true);
 			this.byId("inputTxtSh").setValue("");
 			this.byId("inputTxtLg").setValue("");
 			this.byId("datamartText").setText("");
@@ -528,15 +532,21 @@ sap.ui.define([
 			try {
 				var auth_flag = false;
 				var oTable = this.byId("table3"),
+					funktionValue = this.byId("inputFuntkion").getValue(),
 					oTemplate = new sap.m.ColumnListItem({
-						cells: [new sap.m.Text({ text: this.byId("inputFuntkion").getValue() }),
+						cells: [new sap.m.Text({ text: funktionValue }),
 						new sap.m.Text({ text: this.byId("selecttyp").getSelectedItem().getText() }),
 						new sap.m.Text({ text: this.byId("selectentit").getSelectedItem().getText() }),
 						new sap.m.Text({ text: this.byId("inputwert").getValue() })]
 					});
+
 				if (this.byId("inputFuntkion").getValue() == "" || this.byId("selecttyp").getSelectedKey() == null ||
 					this.byId("selectentit").getSelectedKey() == null || this.byId("inputwert").getValue() == "")
 					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
+
+				if (funktionValue.length >= 2)
+					throw new sap.ui.base.Exception("FunktionLengthException", "Falsche Definition");
+
 				this.setStep3.forEach(element => {
 					if (element[0] == this.byId("inputFuntkion").getValue() &&
 						element[1] == this.byId("selecttyp").getSelectedItem().getText() &&
@@ -555,6 +565,7 @@ sap.ui.define([
 						auth_flag = true;
 					}
 				});
+
 				if (!auth_flag && this.byId("selecttyp").getSelectedItem().getText() != "D")
 					throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
 
@@ -574,6 +585,8 @@ sap.ui.define([
 				this.byId("selectentit").setSelectedKey(null);
 				this.byId("inputwert").setValue("");
 			} catch (error) {
+				if (error.message == "FunktionLengthException")
+					sap.m.MessageBox.warning("Die Funktion darf nicht mehr als zwei Ziffern lang sein");
 				if (error.message == "EmptyFieldException")
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
 				if (error.message == "DupicatedKey")
@@ -630,7 +643,7 @@ sap.ui.define([
 					this.byId("table5").removeAllItems();
 					for (var i = 0; i < aItems.length; i++) {
 						oSelectCube.addItem(new sap.ui.core.Item({
-							key: i.toString(), // Puedes utilizar un índice como clave
+							key: i.toString(),
 							text: aItems[i].Partcube
 						}));
 						this.updPrev(this.aProvider, aItems[i].Partcube);
@@ -816,10 +829,8 @@ sap.ui.define([
 		},
 		step3validation: function () {
 			var iInputFunktion = this.byId("inputFuntkion").getValue(),
-				// sInputEntit = this.byId("inputentit").getValue(),
 				sInputWert = this.byId("inputwert").getValue(),
 				oInputFunktion = this.byId("inputFuntkion"),
-				// oInputEntit = this.byId("inputentit"),
 				oInputWert = this.byId("inputwert"),
 				iItems = this.byId("table3").getItems();
 
@@ -829,11 +840,6 @@ sap.ui.define([
 			} else {
 				oInputFunktion.setValueState(sap.ui.core.ValueState.Error);
 			}
-			/* if (isNaN(sInputEntit) && sInputEntit.length > 0 && sInputEntit.length < 61) {
-				oInputEntit.setValueState(sap.ui.core.ValueState.None);
-			} else {
-				oInputEntit.setValueState(sap.ui.core.ValueState.Error);
-			} */
 			if (isNaN(sInputWert) && sInputWert.length > 0 && sInputWert.length < 61) {
 				oInputWert.setValueState(sap.ui.core.ValueState.None);
 			} else {
@@ -844,21 +850,14 @@ sap.ui.define([
 			if (iInputFunktion == '') {
 				oInputFunktion.setValueState(sap.ui.core.ValueState.None);
 			}
-			/* if (sInputEntit == '') {
-				oInputEntit.setValueState(sap.ui.core.ValueState.None);
-			} */
 			if (sInputWert == '') {
 				oInputWert.setValueState(sap.ui.core.ValueState.None);
 			}
-
-			/* if (this.byId("step4").getVisible())
-				this.step4validation(); */
 
 			// validation all inputs & next button
 			if (iItems.length > 1) {
 				this._oWizard.validateStep(this.byId("step3"));
 				this._oWizard.setShowNextButton(true);
-				/* this.byId("step4").setVisible(true); */
 			} else {
 				this._oWizard.invalidateStep(this.byId("step3"));
 				this._oWizard.setShowNextButton(false);

@@ -8,28 +8,46 @@
 			<form:SimpleForm				
 				editable="true">
 				<form:content>
-					<Label text="{i18n>colPIPEPERID}" required="true"/>
-                    <Input id="__inputCRUD0" 
-							placeholder="Geben Sie 5 Ziffern ein" 
-							type="Number" 
-							liveChange="createValidation" 
-							valueLiveUpdate="true" 
-							valueStateText="Geben Sie nicht mehr als 5 Zahlen ein"/>
+					<Label text="{i18n>colPIPEPERID}" required="true"/>                    
+					<Select id="selectpersonalnummer"
+                        	forceSelection="false"							
+							change="createValidation"
+                            items="{
+                                path: '/PIPEPERID',
+                                sorter: { 
+                                    path: 'personalnummer' 
+                                }
+                            }">
+                        <core:Item  key="{personalnummer}" 
+						            text="{personalnummer}" />
+                    </Select>
                     <Label text="{i18n>colAUFKT}" required="true"/>
-                    <Input id="__inputCRUD1" 
-							placeholder="Geben Sie 2 Ziffern ein" 
-							type="Number" 
-							liveChange="createValidation" 
-							valueLiveUpdate="true" 
-							valueStateText="Geben Sie nicht mehr als 2 Zahlen ein"/>
+					<Select id="selectfunktion"					
+							change="createValidation"
+                        	forceSelection="false"
+                            items="{
+                                path: '/FUNKTION',
+                                sorter: { 
+                                    path: 'funktion' 
+                                }
+                            }">
+                        <core:Item  key="{funktion}" 
+						            text="{funktion}" />
+                    </Select>                    
 				</form:content>							
 			</form:SimpleForm>			
 		</content>
 		<beginButton>
-			<Button id="createButton" text="{i18n>inputFieldDialogBeginButton}" type="Accept"  press=".onCreatePress" visible="false" />
+			<Button id="createButton" 
+					text="{i18n>inputFieldDialogBeginButton}" 
+					type="Accept"  
+					press=".onCreatePress" 
+					visible="false" />
 		</beginButton>
 		<endButton>
-			<Button text="{i18n>inputFieldDialogEndButton}"  type="Reject" press=".onCloseViewDialog"/>
+			<Button text="{i18n>inputFieldDialogEndButton}"  
+					type="Reject" 
+					press=".onCloseViewDialog"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

@@ -32,6 +32,30 @@ sap.ui.define([
             this._oModel = this.getOwnerComponent().getModel();
             this._mViewSettingsDialogs = {};
             this.mGroupFunctions = {};
+            this.aEntit = [];
+
+            var that = this,
+                iSkip = 0,
+                iSkip1 = 0;
+
+            function getEntit() {
+                $.ajax({
+                    url: that.getOwnerComponent().getModel().sServiceUrl + "/ENTITAT",
+                    method: "GET",
+                    success: function (data) {
+                        if (data && data.value) {
+                            that.aEntit = that.aEntit.concat(data.value.map(function (item) {
+                                return item;
+                            }));
+                        }
+                    }.bind(this),
+                    error: function (errorEntit1) {
+                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+                    }
+                });
+            }
+            getEntit();
+
             sap.ui.getCore().getConfiguration().setLanguage("de");
         },
         onNavButtonPressed: function () {
@@ -42,9 +66,9 @@ sap.ui.define([
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
             this.byId("__inputCRUD0").setValue("");
-            this.byId("__inputCRUD2").setValue("");
             this.byId("__inputCRUD3").setValue("");
             this.byId("selecttyp").setSelectedKey(null);
+            this.byId("selectentit").setSelectedKey(null);
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -55,6 +79,35 @@ sap.ui.define([
             this.byId("__editCRUD3").setValue("");
             this.byId("selecttyp1").setSelectedKey(null);
             this.oDialogEdit.close();
+        },
+        filterTyp: function () {
+            var selTyp = this.byId("selecttyp").getSelectedItem().getText(),
+                selEnt = this.byId("selectentit");
+
+            selEnt.removeAllItems();
+            this.aEntit.forEach(item => {
+                if (item.typ == selTyp) {
+                    selEnt.addItem(new sap.ui.core.Item({
+                        key: item.entit,
+                        text: item.entit
+                    }));
+                }
+            });
+
+            /* if (selTyp == "D") {
+                selEnt.setSelectedItem(selEnt.getItems()[0]);
+
+                 selEnt.addItem(new sap.ui.core.Item({
+                    text: "DATAMART"
+                })); 
+
+                //this.byId("inputwert").setValue(this.byId("datamartText").getText());
+            } */
+
+            this.createValidation();
+            /* else
+                this.byId("inputwert").setValue(""); */
+
         },
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
@@ -86,12 +139,12 @@ sap.ui.define([
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
-            oNewEntry.funktion = this.getView().byId("__inputCRUD0").getValue();
-            oNewEntry.typ = this.getView().byId("selecttyp").getSelectedItem().getText();
-            oNewEntry.entit = this.getView().byId("__inputCRUD2").getValue();
-            oNewEntry.wert = this.getView().byId("__inputCRUD3").getValue();
-
             try {
+                oNewEntry.funktion = this.getView().byId("__inputCRUD0").getValue();
+                oNewEntry.typ = this.getView().byId("selecttyp").getSelectedItem().getText();
+                oNewEntry.entit = this.getView().byId("selectentit").getSelectedItem().getText();
+                oNewEntry.wert = this.getView().byId("__inputCRUD3").getValue();
+
                 for (var i = 0; i < aItems.length; i++) {
                     var oItem = aItems[i],
                         oContext = oItem.getBindingContext(),
@@ -121,43 +174,54 @@ sap.ui.define([
                 this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
+                if (error instanceof TypeError)
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 if (error.message == "DuplicatedKey")
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
 
             this.byId("__inputCRUD0").setValue("");
-            this.byId("__inputCRUD2").setValue("");
             this.byId("__inputCRUD3").setValue("");
             this.byId("selecttyp").setSelectedKey(null);
+            this.byId("selectentit").setSelectedKey(null);
             this.byId("dialog1").close();
         },
         createValidation: function () {
             var iInput1 = this.byId("__inputCRUD0").getValue(),
-                sInput3 = this.byId("__inputCRUD2").getValue(),
                 sInput4 = this.byId("__inputCRUD3").getValue(),
+                sTyp = this.getView().byId("selecttyp").getSelectedKey(),
+                sEntit = this.getView().byId("selectentit").getSelectedKey(),
                 oInput1 = this.byId("__inputCRUD0"),
-                oInput3 = this.byId("__inputCRUD2"),
                 oInput4 = this.byId("__inputCRUD3");
 
+            console.log("validate");
+            console.log(sTyp);
+            console.log(sEntit);
+            console.log(iInput1);
+            console.log(sInput4);
+
             // validation single inputs	
-            if (iInput1.length < 3 && iInput1.length > 0) {
+            if (iInput1.length > 0 && iInput1.length < 3) {
                 oInput1.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput1.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (isNaN(sInput3) && sInput3.length < 60) {
-                oInput3.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput3.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput4) && sInput4.length < 60) {
+            if (isNaN(sInput4) && sInput4.length > 0 && sInput4.length < 61) {
                 oInput4.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput4.setValueState(sap.ui.core.ValueState.Error);
             }
 
-            // validation all inputs - next button
-            if (iInput1.length < 3 && iInput1.length > 0 && isNaN(sInput3) && sInput3.length < 60 && isNaN(sInput4) && sInput4.length < 60) {
+            if (iInput1 == '') {
+                oInput1.setValueState(sap.ui.core.ValueState.None);
+            }
+            if (sInput4 == '') {
+                oInput4.setValueState(sap.ui.core.ValueState.None);
+            }
+            // validation all inputs - create button
+            if (iInput1.length < 3 && iInput1.length > 0 &&
+                sTyp && sEntit && isNaN(sInput4) &&
+                sInput4.length > 0 && sInput4.length < 61) {
                 this.byId("createButton").setVisible(true);
             } else {
                 this.byId("createButton").setVisible(false);

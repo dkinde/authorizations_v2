@@ -254,10 +254,10 @@
                                         showSuggestion="true"
                                         suggestionItems="{/FUNKTION}"                                                     
                                         valueStateText="Geben Sie nicht mehr als 2 Zahlen ein">
-                                        <suggestionItems>
-                                            <core:Item text="{funktion}"/>
-                                        </suggestionItems>                                        
-                                        </Input>                                    
+                                    <suggestionItems>
+                                        <core:Item text="{funktion}"/>
+                                    </suggestionItems>                                        
+                                </Input>                                    
                                 <Select id="selecttyp" 
                                         change="filterTyp"
                                         forceSelection="false">

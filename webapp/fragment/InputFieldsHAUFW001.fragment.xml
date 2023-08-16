@@ -1,6 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" 
-                         xmlns:core="sap.ui.core"                          
-                         xmlns:html="http://www.w3.org/1999/xhtml"                          
+                         xmlns:core="sap.ui.core"                                                   
 						 xmlns:form="sap.ui.layout.form" 
                          width="100%">
     <Dialog title="{i18n>inputFieldDialogTitle}" id="dialog1">
@@ -8,30 +7,33 @@
 			<form:SimpleForm				
 				editable="true">
 				<form:content>
-					<Label text="{i18n>colAUFKT}" id="text9" required="true"/>
+					<Label text="{i18n>colAUFKT}" id="text9" required="true"/>					
 					<Input  id="__inputCRUD0" 
-							type="Number" 
-							placeholder="Geben Sie 2 Ziffern ein" 
-							liveChange="createValidation" 
-							valueLiveUpdate="true" 
-							valueStateText="Geben Sie nicht mehr als 2 Zahlen ein"/>
+                            placeholder="Geben Sie 2 Ziffern ein" 
+                            type="Number" 
+                            liveChange="createValidation"                                         
+                            valueLiveUpdate="true"    
+                            showSuggestion="true"
+                            suggestionItems="{/FUNKTION}"                                                     
+                            valueStateText="Geben Sie nicht mehr als 2 Zahlen ein">
+                        <suggestionItems>
+                            <core:Item text="{funktion}"/>
+                        </suggestionItems>                                        
+                    </Input>
 					<Label text="{i18n>colAUENTTYP}"  id="text10" />
 					<Select id="selecttyp" 
+							change="filterTyp"
                             forceSelection="false">
-                        <core:Item text="D" />
-                        <core:Item text="I" />
-                        <core:Item text="S" />                                                        
+                        <core:Item key="D" text="D" />
+                        <core:Item key="I" text="I" />
+                        <core:Item key="S" text="S" />                                                        
+                    </Select>					
+					<Label text="{i18n>colAUENT}"  id="text11" />					
+					<Select id="selectentit" 
+							change="createValidation" 
+                            forceSelection="false">
+                        <core:Item key="" text=""/>                                                                                           
                     </Select>
-					<!-- <Input  id="__inputCRUD1" 
-							placeholder="Geben Sie 1 Zeichen ein" 
-							liveChange="createValidation" 
-							valueLiveUpdate="true" 
-							valueStateText="Nicht mehr als 1 Zeichen eingeben"/> -->
-					<Label text="{i18n>colAUENT}"  id="text11" />
-					<Input  id="__inputCRUD2"  
-							liveChange="createValidation" 
-							valueLiveUpdate="true" 
-							valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>
 					<Label  text="{i18n>colAUWERT}" id="text12" />
 					<Input  id="__inputCRUD3" 
 							liveChange="createValidation" 
@@ -41,10 +43,16 @@
 			</form:SimpleForm>			
 		</content>
 		<beginButton>
-			<Button id="createButton" text="{i18n>inputFieldDialogBeginButton}" type="Accept"  press=".onCreatePress" visible="false" />
+			<Button id="createButton" 
+					text="{i18n>inputFieldDialogBeginButton}" 
+					type="Accept"  
+					press=".onCreatePress" 
+					visible="false" />
 		</beginButton>
 		<endButton>
-			<Button text="{i18n>inputFieldDialogEndButton}"  type="Reject" press=".onCloseViewDialog"/>
+			<Button text="{i18n>inputFieldDialogEndButton}"  
+					type="Reject" 
+					press=".onCloseViewDialog"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

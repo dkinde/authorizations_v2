@@ -41,8 +41,8 @@ sap.ui.define([
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
-            this.getView().byId("__inputCRUD0").setValue("");
-            this.getView().byId("__inputCRUD1").setValue("");
+            this.getView().byId("selectpersonalnummer").setSelectedKey(null);
+            this.getView().byId("selectfunktion").setSelectedKey(null);
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -82,10 +82,10 @@ sap.ui.define([
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
-            oNewEntry.personalnummer = this.getView().byId("__inputCRUD0").getValue();
-            oNewEntry.funktion = this.getView().byId("__inputCRUD1").getValue();
-
             try {
+                oNewEntry.personalnummer = this.getView().byId("selectpersonalnummer").getSelectedItem().getText();
+                oNewEntry.funktion = this.getView().byId("selectfunktion").getSelectedItem().getText();
+
                 for (var i = 0; i < aItems.length; i++) {
                     var oItem = aItems[i],
                         oContext = oItem.getBindingContext(),
@@ -109,35 +109,22 @@ sap.ui.define([
                 this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
+                if (error instanceof TypeError)
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 if (error.message == "DuplicatedKey")
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
 
-            this.getView().byId("__inputCRUD0").setValue("");
-            this.getView().byId("__inputCRUD1").setValue("");
+            this.getView().byId("selectpersonalnummer").setSelectedKey(null);
+            this.getView().byId("selectfunktion").setSelectedKey(null);
             this.byId("dialog1").close();
         },
         createValidation: function () {
-            var iInput1 = this.byId("__inputCRUD0").getValue(),
-                iInput2 = this.byId("__inputCRUD1").getValue(),
-                oInput1 = this.byId("__inputCRUD0"),
-                oInput2 = this.byId("__inputCRUD1");
+            var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
+                sFunktion = this.getView().byId("selectfunktion").getSelectedKey();
 
-            // validation single inputs	
-            if (iInput1.length < 6) {
-                //this._oWizard.setCurrentStep(this.byId("step1"));				                
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (iInput2.length < 3) {
-                oInput2.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput2.setValueState(sap.ui.core.ValueState.Error);
-            }
-
-            // validation all inputs - next button
-            if (iInput1.length < 6 && iInput2.length < 3) {
+            // validation create button
+            if (sPersonalNummer && sFunktion) {
                 this.byId("createButton").setVisible(true);
             } else {
                 this.byId("createButton").setVisible(false);
