@@ -194,10 +194,9 @@ sap.ui.define([
                 oInput1 = this.byId("__inputCRUD0"),
                 oInput4 = this.byId("__inputCRUD3");
 
-            console.log("validate");
+            console.log(iInput1);
             console.log(sTyp);
             console.log(sEntit);
-            console.log(iInput1);
             console.log(sInput4);
 
             // validation single inputs	
