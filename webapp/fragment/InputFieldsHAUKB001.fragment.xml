@@ -57,10 +57,16 @@
 			</form:SimpleForm>			
 		</content>
 		<beginButton>
-			<Button id="createButton" text="{i18n>inputFieldDialogBeginButton}" type="Accept"  press=".onCreatePress" visible="false" />
+			<Button id="createButton" 
+					text="{i18n>inputFieldDialogBeginButton}" 
+					type="Accept"  
+					press=".onCreatePress" 
+					visible="false" />
 		</beginButton>
 		<endButton>
-			<Button text="{i18n>inputFieldDialogEndButton}"  type="Reject" press=".onCloseViewDialog"/>
+			<Button text="{i18n>inputFieldDialogEndButton}"  
+					type="Reject" 
+					press=".onCloseViewDialog"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

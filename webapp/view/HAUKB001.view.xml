@@ -11,11 +11,11 @@
                 class="sapUiResponsiveMargin" 
                 vSpacing="0" 
                 hSpacing="0">            
-            <Table  sticky="ColumnHeaders,HeaderToolbar" 
+            <Table  sticky="ColumnHeaders,HeaderToolbar"                                         
+                    id="table1" 
                     growing="true"
                     growingScrollToLoad="true"
-                    growingThreshold="100"
-                    id="table1" 
+                    growingThreshold="500"
                     mode="SingleSelectMaster" 
                     items="{
                         path: '/HAUKB001',
@@ -44,7 +44,13 @@
                                     press="handleGroupButtonPressed"/>
                             <Button icon="sap-icon://excel-attachment"
                                     tooltip="{i18n>excelButtonText}" 
-                                    press="onExport"/>                                               
+                                    press="onExport"/>  
+                            <ToolbarSpacer width="8rem"/>                                             
+                            <Button id="cleanEntryFilter"
+                                    text="Anfangsfilter entfernen"
+                                    type="Emphasized"
+                                    visible="false"                                     
+                                    press="onCleanEntryFilterPress"/>  
                         </content>
                     </Toolbar>
                 </headerToolbar>
@@ -77,9 +83,9 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <ObjectNumber number="{personalnummer}" />
+                            <ObjectIdentifier text="{personalnummer}" />
                             <ObjectIdentifier text="{datamart}" />
-                            <ObjectNumber number="{funktion}" />
+                            <ObjectIdentifier text="{funktion}" />
                             <ObjectIdentifier text="{org_einh}" />                                            
                             <ObjectIdentifier text="{typ}" />
                             <ObjectIdentifier text="{entit}" />

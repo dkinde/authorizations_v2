@@ -33,11 +33,30 @@ sap.ui.define([
             this._mViewSettingsDialogs = {};
             this.mGroupFunctions = {};
             sap.ui.getCore().getConfiguration().setLanguage("de");
-
+        },
+        onAfterShow: function () {
+            this.onOpenEntryDialog();
         },
         onNavButtonPressed: function () {
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteHome");
+        },
+        onCancelEntryDialog: function () {
+            this._oModel.resetChanges();
+            sap.m.MessageToast.show("Aktion abgebrochen");
+            this.byId("cleanEntryFilter").setVisible(false);
+            this.byId("entryPersonal").setValue("");
+            this.byId("entryDatamart").setValue("");
+            this.byId("entryFunktion").setValue("");
+            this.oDialog.close();
+        },
+        onCleanEntryFilterPress: function () {
+            var aFilters = [];
+
+            this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
+            this.byId("cleanEntryFilter").setVisible(false);
+            sap.m.MessageToast.show("Initialfilter entfernt");
+
         },
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
@@ -65,6 +84,18 @@ sap.ui.define([
             this.byId("selectTyp").setSelectedKey(null);
             this.oDialogEdit.close();
         },
+        onOpenEntryDialog: function () {
+            if (!this._oDialogEntry) {
+                this._oDialogEntry = this.loadFragment({
+                    name: "authorization.fragment.EntryDialogHAUKB001",
+                    controller: this
+                });
+            }
+            this._oDialogEntry.then(function (oDialog) {
+                this.oDialog = oDialog;
+                this.oDialog.open();
+            }.bind(this));
+        },
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
@@ -76,6 +107,59 @@ sap.ui.define([
                 this.oDialog = oDialog;
                 this.oDialog.open();
             }.bind(this));
+        },
+        onEntryFilterPress: function () {
+            var aFilters = [],
+                iPersonalnummer = this.byId("entryPersonal").getValue().toString(),
+                sDatamart = this.byId("entryDatamart").getValue(),
+                iFunktion = this.byId("entryFunktion").getValue().toString(),
+                fPersonalnummer = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, iPersonalnummer),
+                fDatamart = new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sDatamart),
+                fFunktion = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, iFunktion);
+
+            if (iPersonalnummer) {
+                aFilters.push(fPersonalnummer);
+            }
+            if (sDatamart) {
+                aFilters.push(fDatamart);
+            }
+            if (iFunktion) {
+                aFilters.push(fFunktion);
+            }
+
+            if (aFilters.length > 0) {
+                var combFilter = new sap.ui.model.Filter({
+                    filters: aFilters,
+                    and: true
+                });
+                this.byId("table1").getBinding("items").filter(combFilter, sap.ui.model.FilterType.Application);
+                this.byId("cleanEntryFilter").setVisible(true);
+                console.log(combFilter);
+            }
+
+            /* if (iPersonalnummer || sDatamart || iFunktion) {
+                var filter = new sap.ui.model.Filter([
+                    new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, iPersonalnummer),
+                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sDatamart),
+                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, iFunktion)
+                ], false);                
+                aFilters.push(filter);
+            }  */
+
+            // this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
+
+            console.log(aFilters);
+            console.log(iPersonalnummer);
+            console.log(sDatamart);
+            console.log(iFunktion);
+
+            sap.m.MessageToast.show("Filter einschalten");
+            this.byId("entryPersonal").setValue("");
+            this.byId("entryDatamart").setValue("");
+            this.byId("entryFunktion").setValue("");
+            this.oDialog.close();
+
+
         },
         onCreatePress: function () {
             var oNewEntry = {},
@@ -225,6 +309,65 @@ sap.ui.define([
                 this.byId("createButton").setVisible(false);
             }
 
+        },
+        entryValidation: function () {
+            var iPersonalnummer = this.byId("entryPersonal").getValue(),
+                sDatamart = this.byId("entryDatamart").getValue(),
+                iFunktion = this.byId("entryFunktion").getValue(),
+                oPersonalnummer = this.byId("entryPersonal"),
+                oDatamart = this.byId("entryDatamart"),
+                oFunktion = this.byId("entryFunktion"),
+                flag = false;
+
+
+            function isValid(input) {
+                return isNaN(input) && input.length <= 2;
+            }
+
+            if (iPersonalnummer.length > 0 || sDatamart.length > 0 || iFunktion.length > 0) {
+                flag = true;
+            } else {
+                flag = false;
+            }
+
+            console.log(flag);
+            // validation single inputs
+            if (iPersonalnummer.length < 6 && iPersonalnummer.length > 0) {
+                oPersonalnummer.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oPersonalnummer.setValueState(sap.ui.core.ValueState.Error);
+            }
+            if (isNaN(sDatamart) && sDatamart.length < 3) {
+                oDatamart.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oDatamart.setValueState(sap.ui.core.ValueState.Error);
+            }
+            if (iFunktion.length < 3 && iFunktion.length > 0) {
+                oFunktion.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oFunktion.setValueState(sap.ui.core.ValueState.Error);
+            }
+
+            // Default None state
+            if (iPersonalnummer == '') {
+                oPersonalnummer.setValueState(sap.ui.core.ValueState.None);
+            }
+            if (sDatamart == '') {
+                oDatamart.setValueState(sap.ui.core.ValueState.None);
+            }
+            if (iFunktion == '') {
+                oFunktion.setValueState(sap.ui.core.ValueState.None);
+            }
+
+            // validation all inputs & filter button
+            if (flag &&
+                ((iPersonalnummer.length <= 5 || !iPersonalnummer) &&
+                    (isValid(sDatamart) || !sDatamart) &&
+                    (iFunktion.length <= 2 || !iFunktion))) {
+                this.byId("entryButton").setType("Emphasized");
+            } else {
+                this.byId("entryButton").setType("Default");
+            }
         },
         editValidation: function () {
             var iInput1 = this.byId("__editCRUD0").getValue(),

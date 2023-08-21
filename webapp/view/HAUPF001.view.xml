@@ -68,8 +68,8 @@
                 <items>
                     <ColumnListItem>
                         <cells>                                                                                        
-                            <ObjectNumber number="{personalnummer}" />
-                            <ObjectNumber number="{funktion}" />                                                                                       
+                            <ObjectIdentifier text="{personalnummer}" />
+                            <ObjectIdentifier text="{funktion}" />                                                                                       
                         </cells>                                        
                     </ColumnListItem>
                 </items>
