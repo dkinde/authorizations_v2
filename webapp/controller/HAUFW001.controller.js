@@ -93,21 +93,8 @@ sap.ui.define([
                     }));
                 }
             });
-
-            /* if (selTyp == "D") {
-                selEnt.setSelectedItem(selEnt.getItems()[0]);
-
-                 selEnt.addItem(new sap.ui.core.Item({
-                    text: "DATAMART"
-                })); 
-
-                //this.byId("inputwert").setValue(this.byId("datamartText").getText());
-            } */
-
+            this.getView().byId("selectentit").setSelectedKey(null);
             this.createValidation();
-            /* else
-                this.byId("inputwert").setValue(""); */
-
         },
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
@@ -194,11 +181,6 @@ sap.ui.define([
                 oInput1 = this.byId("__inputCRUD0"),
                 oInput4 = this.byId("__inputCRUD3");
 
-            console.log(iInput1);
-            console.log(sTyp);
-            console.log(sEntit);
-            console.log(sInput4);
-
             // validation single inputs	
             if (iInput1.length > 0 && iInput1.length < 3) {
                 oInput1.setValueState(sap.ui.core.ValueState.None);
@@ -260,9 +242,7 @@ sap.ui.define([
         },
         onUpdateEditPress: function () {
             var oUpdateEntry = {},
-                oModel = this.getView().getModel(),
                 oContext = this.byId("table1").getSelectedItem().getBindingContext(),
-                sPath = oContext.getPath(),
                 fnSucces = function () {
                     this._setBusy(false);
                     sap.m.MessageToast.show("Objekt erfolgreich aktualisiert");
@@ -426,6 +406,7 @@ sap.ui.define([
                 sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
 
+            console.log(sort);
             if (sort) {
                 var sPath = mParams.sortItem.getKey(),
                     bDescending = mParams.sortDescending;
