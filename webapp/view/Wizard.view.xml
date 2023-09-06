@@ -35,7 +35,7 @@
                                 liveChange="step1validation" 
                                 valueLiveUpdate="true" 
                                 change="selectDatamartValidation"
-                                valueStateText="Geben Sie nicht mehr als 2 Zeichen ein"/>                                
+                                valueStateText="Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben"/>                                
                         <Label  text="{i18n>colTxtSh}" required="true"/>
                         <Input  id="inputTxtSh"                                         
                                 liveChange="updateTextLg"
@@ -268,11 +268,7 @@
                                 <Select id="selectentit" 
                                         forceSelection="false">
                                     <core:Item key="" text=""/>                                                                                           
-                                </Select>
-                                <!-- <Input  id="inputentit" 
-                                        liveChange="step3validation" 
-                                        valueLiveUpdate="true" 
-                                        valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/> -->
+                                </Select>                                
                                 <Input  id="inputwert" 
                                         liveChange="step3validation" 
                                         valueLiveUpdate="true" 

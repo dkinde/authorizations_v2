@@ -298,9 +298,11 @@ sap.ui.define([
 			if (selTyp == "D") {
 				selEnt.setSelectedItem(selEnt.getItems()[0]);
 				this.byId("inputwert").setValue(this.byId("datamartText").getText());
-			} else
+				this.byId("inputwert").setEditable(false);
+			} else {
 				this.byId("inputwert").setValue("");
-
+				this.byId("inputwert").setEditable(true);
+			}
 		},
 		handleSearch: function (oEvent) {
 			var aFilters = [],
@@ -409,7 +411,7 @@ sap.ui.define([
 				this.setStep1.forEach(element => {
 					if (element[0] == this.byId("inputDatamart").getValue() &&
 						element[1] == this.byId("selectMulti").getSelectedItem().getText()) {
-						throw new sap.ui.base.Exception("DupicatedKey", "Das Element ist vorhanden");
+						throw new sap.ui.base.Exception("DuplicatedKey", "Das Element ist vorhanden");
 					}
 				});
 				oTable.addItem(oTemplate);
@@ -439,7 +441,7 @@ sap.ui.define([
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
 				if (error.message == "TextFieldException")
 					sap.m.MessageBox.warning("Problem mit Textbeschreibungen");
-				if (error.message == "DupicatedKey")
+				if (error.message == "DuplicatedKey")
 					sap.m.MessageBox.warning("Das Element ist vorhanden");
 				if (error instanceof TypeError)
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
@@ -462,12 +464,12 @@ sap.ui.define([
 						element[2] == this.byId("selectIobj").getSelectedItem().getText() &&
 						element[4] == this.byId("inputInfoTyp").getValue() &&
 						element[3] == this.byId("selectSequenz").getSelectedItem().getText()) {
-						throw new sap.ui.base.Exception("DupicatedKey", "Falsche Definition");
+						throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
 					}
 					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
 						element[2] == this.byId("selectIobj").getSelectedItem().getText()) {
-						throw new sap.ui.base.Exception("DupicatedPKey", "Falsche Definition");
+						throw new sap.ui.base.Exception("DuplicatedPKey", "Falsche Definition");
 					}
 					if (element[0] == this.byId("selectInfoAuthName").getSelectedItem().getText() &&
 						element[1] == this.byId("selectCube").getSelectedItem().getText() &&
@@ -520,11 +522,11 @@ sap.ui.define([
 				this.byId("selectSequenz").setSelectedKey(null);
 				this.step2validation();
 			} catch (error) {
-				if (error.message == "DupicatedKey")
+				if (error.message == "DuplicatedKey")
 					sap.m.MessageBox.warning("Das Element ist vorhanden");
 				if (error.message == "AuthException")
 					sap.m.MessageBox.warning("Für diese IOBJ existiert bereits eine Berechtigung in diesem Cube");
-				if (error.message == "DupicatedPKey")
+				if (error.message == "DuplicatedPKey")
 					sap.m.MessageBox.warning("Für dieses Cube-Infobjekt existiert bereits eine Berechtigung");
 				if (error.message == "AuthTypeError")
 					sap.m.MessageBox.warning("Für diese Genehmigung gibt es bereits einen Typ");
@@ -533,8 +535,7 @@ sap.ui.define([
 				if (error.message == "SameTypeError")
 					sap.m.MessageBox.warning("Bei einem vorhandenen Typ muss die Konfiguration in den verschiedenen Würfeln gleich sein.");
 				if (error instanceof TypeError)
-					console.log(error);
-				// sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
 			}
 		},
 		onAddPress3: function () {
@@ -561,7 +562,7 @@ sap.ui.define([
 						element[1] == this.byId("selecttyp").getSelectedItem().getText() &&
 						element[2] == this.byId("selectentit").getSelectedItem().getText() &&
 						element[3] == this.byId("inputwert").getValue()) {
-						throw new sap.ui.base.Exception("DupicatedKey", "Falsche Definition");
+						throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
 					}
 					if (this.byId("selecttyp").getSelectedItem().getText() != "D") {
 						this.setStep3.forEach(item => {
@@ -598,7 +599,7 @@ sap.ui.define([
 					sap.m.MessageBox.warning("Die Funktion darf nicht mehr als zwei Ziffern lang sein");
 				if (error.message == "EmptyFieldException")
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
-				if (error.message == "DupicatedKey")
+				if (error.message == "DuplicatedKey")
 					sap.m.MessageBox.warning("Das Element ist vorhanden");
 				if (error.message == "NoDatamartException")
 					sap.m.MessageBox.warning("Die Funktion, die Sie erstellen möchten, hat keinen Datamart (D)-Typ, der mit ihr verbunden ist");
@@ -616,7 +617,7 @@ sap.ui.define([
 				this.setStep4.forEach(element => {
 					if (element[0] == this.byId("selectpersonalnummer").getSelectedItem().getText() &&
 						element[1] == this.byId("selectfunktion").getSelectedItem().getText()) {
-						throw new sap.ui.base.Exception("DupicatedKey", "Das Element ist vorhanden");
+						throw new sap.ui.base.Exception("DuplicatedKey", "Das Element ist vorhanden");
 					}
 				});
 				oTable.addItem(oTemplate);
@@ -629,7 +630,7 @@ sap.ui.define([
 				if (error instanceof TypeError) {
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
 				}
-				if (error.message == "DupicatedKey") {
+				if (error.message == "DuplicatedKey") {
 					sap.m.MessageBox.warning("Das Element ist vorhanden");
 				}
 			}
@@ -755,8 +756,11 @@ sap.ui.define([
 				oInputDatamart = this.byId("inputDatamart"),
 				iItems = this.byId("table1").getItems();
 
+			function isString(str) {
+				return /^[a-zA-Z]+$/.test(str);
+			}
 			// validation single inputs	
-			if (isNaN(sInputDatamart) && sInputDatamart.length == 2) {
+			if (isNaN(sInputDatamart) && sInputDatamart.length == 2 && isString(sInputDatamart)) {
 				oInputDatamart.setValueState(sap.ui.core.ValueState.None);
 			} else {
 				oInputDatamart.setValueState(sap.ui.core.ValueState.Error);
