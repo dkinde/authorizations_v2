@@ -104,7 +104,7 @@
                     <headerToolbar>
                         <Toolbar>
                             <content>
-                                <Title text="Vorschau"></Title>
+                                <Title text="Vorschau (vorhandene Daten)"></Title>
                             </content>
                         </Toolbar>
                     </headerToolbar>

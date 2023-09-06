@@ -33,6 +33,7 @@ sap.ui.define([
             this._mViewSettingsDialogs = {};
             this.mGroupFunctions = {};
             sap.ui.getCore().getConfiguration().setLanguage("de");
+
         },
         onNavButtonPressed: function () {
             var oRouter = UIComponent.getRouterFor(this);

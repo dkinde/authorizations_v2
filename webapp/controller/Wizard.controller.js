@@ -390,15 +390,22 @@ sap.ui.define([
 		},
 		onAddPress1: function () {
 			try {
+				if (this.byId("inputDatamart").getValue() == '' ||
+					this.byId("inputTxtSh").getValue() == '' ||
+					this.byId("inputTxtLg").getValue() == '')
+					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
+
 				var oTable = this.byId("table1"),
 					oTemplate = new sap.m.ColumnListItem({
 						cells: [new sap.m.Text({ text: this.byId("inputDatamart").getValue() }),
 						new sap.m.Text({ text: this.byId("selectMulti").getSelectedItem().getText() })]
 					});
+
 				if (this.byId("inputDatamart").getValueState() != sap.ui.core.ValueState.None ||
 					this.byId("inputTxtSh").getValueState() != sap.ui.core.ValueState.None ||
 					this.byId("inputTxtLg").getValueState() != sap.ui.core.ValueState.None)
 					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
+
 				this.setStep1.forEach(element => {
 					if (element[0] == this.byId("inputDatamart").getValue() &&
 						element[1] == this.byId("selectMulti").getSelectedItem().getText()) {
@@ -406,8 +413,10 @@ sap.ui.define([
 					}
 				});
 				oTable.addItem(oTemplate);
+
 				this.setStep1.push([this.byId("inputDatamart").getValue(),
 				this.byId("selectMulti").getSelectedItem().getText()]);
+
 				this.aDatamart.push(this.byId("selectMulti").getSelectedItem().getText());
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 				this.byId("selectMulti").setSelectedKey(null);
@@ -544,7 +553,7 @@ sap.ui.define([
 					this.byId("selectentit").getSelectedKey() == null || this.byId("inputwert").getValue() == "")
 					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
 
-				if (funktionValue.length >= 2)
+				if (funktionValue.length > 2)
 					throw new sap.ui.base.Exception("FunktionLengthException", "Falsche Definition");
 
 				this.setStep3.forEach(element => {
@@ -688,6 +697,7 @@ sap.ui.define([
 				}
 				else {
 					iIndex -= 1;
+					var iFunktion = this.setStep3[iIndex][0];
 					this.setStep3.splice(iIndex, 1);
 
 					if (iIndex >= 0 && iIndex < aItems.length) {
@@ -701,6 +711,18 @@ sap.ui.define([
 					this.setStep3.forEach(item => {
 						this.selectFunktion(item[0]);
 					});
+
+					//TODO: eliminate in the step 4 if exists an element with the same function
+
+					if (this.setStep4 != '') {
+						this.setStep4.forEach((item, index) => {
+							if (item[1] == iFunktion) {
+								var aItems = this.byId("table4").getItems();
+								this.setStep4.splice(index, 1);
+								aItems[index + 1].destroy();
+							}
+						});
+					}
 				}
 			} else {
 				sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
@@ -748,6 +770,17 @@ sap.ui.define([
 				oInputTxtLg.setValueState(sap.ui.core.ValueState.None);
 			} else {
 				oInputTxtLg.setValueState(sap.ui.core.ValueState.Error);
+			}
+
+			// Default None state
+			if (sInputTxtSh == '') {
+				oInputTxtSh.setValueState(sap.ui.core.ValueState.None);
+			}
+			if (sInputTxtLg == '') {
+				oInputTxtLg.setValueState(sap.ui.core.ValueState.None);
+			}
+			if (sInputDatamart == '') {
+				oInputDatamart.setValueState(sap.ui.core.ValueState.None);
 			}
 
 			if (this.byId("step2").getVisible())
@@ -835,12 +868,12 @@ sap.ui.define([
 				iItems = this.byId("table3").getItems();
 
 			// validation single inputs	
-			if (iInputFunktion.length > 0 && iInputFunktion.length == 2) {
+			if (iInputFunktion.length > 0 && iInputFunktion.length < 3) {
 				oInputFunktion.setValueState(sap.ui.core.ValueState.None);
 			} else {
 				oInputFunktion.setValueState(sap.ui.core.ValueState.Error);
 			}
-			if (isNaN(sInputWert) && sInputWert.length > 0 && sInputWert.length < 61) {
+			if (sInputWert.length > 0 && sInputWert.length < 61) {
 				oInputWert.setValueState(sap.ui.core.ValueState.None);
 			} else {
 				oInputWert.setValueState(sap.ui.core.ValueState.Error);
