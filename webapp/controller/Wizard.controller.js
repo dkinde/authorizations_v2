@@ -36,6 +36,7 @@ sap.ui.define([
 			this._oModel = this.getOwnerComponent().getModel();
 			sap.ui.getCore().getConfiguration().setLanguage("de");
 			this._oWizard = this.byId("createWizard");
+			this.sDatamart = "";
 			this.aDatamart = [];
 			this.aFiltersCube = [];
 			this.setStep1 = [];
@@ -297,7 +298,7 @@ sap.ui.define([
 
 			if (selTyp == "D") {
 				selEnt.setSelectedItem(selEnt.getItems()[0]);
-				this.byId("inputwert").setValue(this.byId("datamartText").getText());
+				this.byId("inputwert").setValue(this.sDatamart);
 				this.byId("inputwert").setEditable(false);
 			} else {
 				this.byId("inputwert").setValue("");
@@ -435,6 +436,7 @@ sap.ui.define([
 					this.updPrev(this.aProvider, aItems[i].Partcube);
 				}
 				this.getMaxTyp();
+				this.sDatamart = this.byId("inputDatamart").getValue();
 				this.step1validation();
 			} catch (error) {
 				if (error.message == "EmptyFieldException")
@@ -661,6 +663,16 @@ sap.ui.define([
 
 					oSelectedItem.destroy();
 					sap.m.MessageToast.show("Element erfolgreich gelöscht");
+
+					if (this.setStep3 != '' && this.setStep1.length == 0) {
+						var aItems = this.byId("table3").getItems();
+						for (var i = 1; i < aItems.length; i++) {
+							this.byId("table3").removeItem(aItems[i]);
+						}
+						this.setStep3 = [];
+						this.sDatamart = "";
+						this.step3validation();
+					}
 				}
 			} else {
 				sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt!");
