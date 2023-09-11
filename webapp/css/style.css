@@ -1,3 +1,7 @@
 .firstRow .sapMListTblRow:nth-child(1) {
     background-color: #cce3eb;
 }
+
+.errorStep {
+    background-color: #ffcccc;
+}

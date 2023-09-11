@@ -100,7 +100,7 @@ sap.ui.define([
 						}
 					}.bind(this),
 					error: function (errorEntit1) {
-						console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+						console.log("Fehler bei der Abfrage von Entität 2:", errorEntit1);
 					}
 				});
 			}
@@ -118,7 +118,7 @@ sap.ui.define([
 						}
 					}.bind(this),
 					error: function (errorEntit1) {
-						console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+						console.log("Fehler bei der Abfrage von Entität 3:", errorEntit1);
 					}
 				});
 			}
@@ -879,14 +879,15 @@ sap.ui.define([
 				this._oWizard.validateStep(this.byId("step1"));
 				this.byId("step2").setVisible(true);
 				this._oWizard.setShowNextButton(true);
+				this.byId("step1").removeStyleClass("errorStep");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step1"));
+				this.byId("step1").addStyleClass("errorStep");
 				this._oWizard.setShowNextButton(false);
 				this.byId("inputDatamart").setEditable(true);
 				this.byId("inputTxtSh").setEditable(true);
 				this.byId("inputTxtLg").setEditable(true);
 			}
-
 		},
 		step2validation: function () {
 			var oInputInfoTyp = this.byId("inputInfoTyp"),
@@ -938,8 +939,10 @@ sap.ui.define([
 			if (oTableItems.length > 0 && flag) {
 				this._oWizard.validateStep(this.byId("step2"));
 				this._oWizard.setShowNextButton(true);
+				this.byId("step2").removeStyleClass("errorStep");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step2"));
+				this.byId("step2").addStyleClass("errorStep");
 				this._oWizard.setShowNextButton(false);
 			}
 		},
@@ -974,8 +977,10 @@ sap.ui.define([
 			if (iItems.length > 1 && this.byId("step2").getValidated()) {
 				this._oWizard.validateStep(this.byId("step3"));
 				this._oWizard.setShowNextButton(true);
+				this.byId("step3").removeStyleClass("errorStep");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step3"));
+				this.byId("step3").addStyleClass("errorStep");
 				this._oWizard.setShowNextButton(false);
 			}
 		},
@@ -988,8 +993,10 @@ sap.ui.define([
 			if (iItems.length > 1 && this.byId("step3").getValidated()) {
 				this._oWizard.validateStep(this.byId("step4"));
 				this._oWizard.setShowNextButton(true);
+				this.byId("step4").removeStyleClass("errorStep");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step4"));
+				this.byId("step4").addStyleClass("errorStep");
 				this._oWizard.setShowNextButton(false);
 			}
 		},
