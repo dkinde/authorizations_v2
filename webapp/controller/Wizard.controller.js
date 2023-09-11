@@ -473,8 +473,11 @@ sap.ui.define([
 				this.sDatamart = this.byId("inputDatamart").getValue();
 
 				this.step1validation();
-				if (this._oWizard.getCurrentStep() == "application-authorization-display-component---Wizard--step3")
+				if (this._oWizard.getCurrentStep() != "application-authorization-display-component---Wizard--step1")
 					this.step2validation();
+
+				if (this._oWizard.getCurrentStep() == "application-authorization-display-component---Wizard--step4")
+					this.step4validation();
 
 			} catch (error) {
 				if (error.message == "EmptyFieldException")
@@ -620,7 +623,6 @@ sap.ui.define([
 					throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
 
 				this.step2validation();
-				console.log(this.byId("step2").getValidated());
 
 				if (!this.byId("step2").getValidated())
 					throw new sap.ui.base.Exception("NoElementsPreviousStep", "Falsche Definition");
@@ -731,6 +733,7 @@ sap.ui.define([
 							}
 							this.setStep4 = [];
 							this.setFunction = [];
+							this.byId("selectfunktion").removeAllItems();
 						}
 					}
 
@@ -979,8 +982,10 @@ sap.ui.define([
 		step4validation: function () {
 			var iItems = this.byId("table4").getItems();
 
+			console.log(iItems);
+
 			// validation all inputs & next button
-			if (iItems.length > 1) {
+			if (iItems.length > 1 && this.byId("step3").getValidated()) {
 				this._oWizard.validateStep(this.byId("step4"));
 				this._oWizard.setShowNextButton(true);
 			} else {

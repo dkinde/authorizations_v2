@@ -312,6 +312,7 @@
                             <cells>                                                                                        
                                 <Select id="selectpersonalnummer"
                                         forceSelection="false"
+                                        change="step4validation"
                                         items="{
                                             path: '/PIPEPERID',
                                             sorter: { 
@@ -322,6 +323,7 @@
                                                 text="{personalnummer}" />
                                 </Select>                                                
                                 <Select id="selectfunktion"
+                                        change="step4validation"
                                         forceSelection="false"                                        
                                         items="{}">
                                     <core:Item  key="" 
