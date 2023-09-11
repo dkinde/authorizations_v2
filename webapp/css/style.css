@@ -5,3 +5,7 @@
 .errorStep {
     background-color: #ffcccc;
 }
+
+.errorStepBorder {
+    border: 3px solid #e60c0c;
+}

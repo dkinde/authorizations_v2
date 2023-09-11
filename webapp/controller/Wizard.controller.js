@@ -718,7 +718,6 @@ sap.ui.define([
 					this.byId("inputwert").setValue("");
 
 					if (this.setStep3 != '' && this.setStep1.length == 0) {
-						//TODO: clean  Wert(step3) if Typ Entit is "D" and Entit is "DATAMART"
 						var aItems = this.byId("table3").getItems();
 						for (var i = 1; i < aItems.length; i++) {
 							this.byId("table3").removeItem(aItems[i]);
@@ -879,10 +878,11 @@ sap.ui.define([
 				this._oWizard.validateStep(this.byId("step1"));
 				this.byId("step2").setVisible(true);
 				this._oWizard.setShowNextButton(true);
-				this.byId("step1").removeStyleClass("errorStep");
+				this.byId("step1").removeStyleClass("errorStepBorder");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step1"));
-				this.byId("step1").addStyleClass("errorStep");
+				// this.byId("step1").addStyleClass("errorStep");
+				this.byId("step1").addStyleClass("errorStepBorder");
 				this._oWizard.setShowNextButton(false);
 				this.byId("inputDatamart").setEditable(true);
 				this.byId("inputTxtSh").setEditable(true);
@@ -939,10 +939,10 @@ sap.ui.define([
 			if (oTableItems.length > 0 && flag) {
 				this._oWizard.validateStep(this.byId("step2"));
 				this._oWizard.setShowNextButton(true);
-				this.byId("step2").removeStyleClass("errorStep");
+				this.byId("step2").removeStyleClass("errorStepBorder");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step2"));
-				this.byId("step2").addStyleClass("errorStep");
+				this.byId("step2").addStyleClass("errorStepBorder");
 				this._oWizard.setShowNextButton(false);
 			}
 		},
@@ -977,10 +977,10 @@ sap.ui.define([
 			if (iItems.length > 1 && this.byId("step2").getValidated()) {
 				this._oWizard.validateStep(this.byId("step3"));
 				this._oWizard.setShowNextButton(true);
-				this.byId("step3").removeStyleClass("errorStep");
+				this.byId("step3").removeStyleClass("errorStepBorder");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step3"));
-				this.byId("step3").addStyleClass("errorStep");
+				this.byId("step3").addStyleClass("errorStepBorder");
 				this._oWizard.setShowNextButton(false);
 			}
 		},
@@ -993,10 +993,10 @@ sap.ui.define([
 			if (iItems.length > 1 && this.byId("step3").getValidated()) {
 				this._oWizard.validateStep(this.byId("step4"));
 				this._oWizard.setShowNextButton(true);
-				this.byId("step4").removeStyleClass("errorStep");
+				this.byId("step4").removeStyleClass("errorStepBorder");
 			} else {
 				this._oWizard.invalidateStep(this.byId("step4"));
-				this.byId("step4").addStyleClass("errorStep");
+				this.byId("step4").addStyleClass("errorStepBorder");
 				this._oWizard.setShowNextButton(false);
 			}
 		},
