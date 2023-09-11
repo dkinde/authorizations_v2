@@ -40,6 +40,7 @@ sap.ui.define([
 			this.aDatamart = [];
 			this.aFiltersCube = [];
 			this.setStep1 = [];
+			this.setStep1Texts = [];
 			this.setStep2 = [];
 			this.setStep3 = [];
 			this.setStep4 = [];
@@ -196,6 +197,7 @@ sap.ui.define([
 			this.byId("selectfunktion").setSelectedKey(null);
 
 			this.setStep1 = [];
+			this.setStep1Texts = [];
 			this.setStep2 = [];
 			this.setStep3 = [];
 			this.setStep4 = [];
@@ -304,6 +306,7 @@ sap.ui.define([
 				this.byId("inputwert").setValue("");
 				this.byId("inputwert").setEditable(true);
 			}
+			this.step3validation();
 		},
 		handleSearch: function (oEvent) {
 			var aFilters = [],
@@ -399,6 +402,7 @@ sap.ui.define([
 					throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
 
 				var oTable = this.byId("table1"),
+					existTexts = false,
 					oTemplate = new sap.m.ColumnListItem({
 						cells: [new sap.m.Text({ text: this.byId("inputDatamart").getValue() }),
 						new sap.m.Text({ text: this.byId("selectMulti").getSelectedItem().getText() })]
@@ -420,6 +424,29 @@ sap.ui.define([
 				this.setStep1.push([this.byId("inputDatamart").getValue(),
 				this.byId("selectMulti").getSelectedItem().getText()]);
 
+				if (this.setStep1Texts.length != 0) {
+					for (var i = 0; i < this.setStep1Texts.length; i++) {
+						if (
+							this.byId("inputDatamart").getValue() === this.setStep1Texts[i][0] &&
+							this.byId("inputTxtSh").getValue() === this.setStep1Texts[i][1] &&
+							this.byId("inputTxtLg").getValue() === this.setStep1Texts[i][2]
+						) {
+							existTexts = true;
+							break;
+						}
+					}
+					if (!existTexts)
+						this.setStep1Texts.push([this.byId("inputDatamart").getValue(),
+						this.byId("inputTxtSh").getValue(),
+						this.byId("inputTxtLg").getValue()]);
+				} else {
+					this.setStep1Texts.push([this.byId("inputDatamart").getValue(),
+					this.byId("inputTxtSh").getValue(),
+					this.byId("inputTxtLg").getValue()]);
+				}
+
+				console.log(this.setStep1Texts);
+
 				this.aDatamart.push(this.byId("selectMulti").getSelectedItem().getText());
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 				this.byId("selectMulti").setSelectedKey(null);
@@ -435,9 +462,20 @@ sap.ui.define([
 					}));
 					this.updPrev(this.aProvider, aItems[i].Partcube);
 				}
+
+				// clean step3 selection
+				this.byId("inputFuntkion").setValue("");
+				this.byId("selecttyp").setSelectedKey(null);
+				this.byId("selectentit").setSelectedKey(null);
+				this.byId("inputwert").setValue("");
+
 				this.getMaxTyp();
 				this.sDatamart = this.byId("inputDatamart").getValue();
+
 				this.step1validation();
+				if (this._oWizard.getCurrentStep() == "application-authorization-display-component---Wizard--step3")
+					this.step2validation();
+
 			} catch (error) {
 				if (error.message == "EmptyFieldException")
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
@@ -581,6 +619,12 @@ sap.ui.define([
 				if (!auth_flag && this.byId("selecttyp").getSelectedItem().getText() != "D")
 					throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
 
+				this.step2validation();
+				console.log(this.byId("step2").getValidated());
+
+				if (!this.byId("step2").getValidated())
+					throw new sap.ui.base.Exception("NoElementsPreviousStep", "Falsche Definition");
+
 				oTable.addItem(oTemplate);
 
 				this.setStep3.push([this.byId("inputFuntkion").getValue(),
@@ -596,7 +640,10 @@ sap.ui.define([
 				this.byId("selecttyp").setSelectedKey(null);
 				this.byId("selectentit").setSelectedKey(null);
 				this.byId("inputwert").setValue("");
+
 			} catch (error) {
+				if (error.message == "NoElementsPreviousStep")
+					sap.m.MessageBox.warning("Es fehlen noch Elemente, die in den vorherigen Schritten hinzugefügt werden müssen");
 				if (error.message == "FunktionLengthException")
 					sap.m.MessageBox.warning("Die Funktion darf nicht mehr als zwei Ziffern lang sein");
 				if (error.message == "EmptyFieldException")
@@ -660,11 +707,16 @@ sap.ui.define([
 						}));
 						this.updPrev(this.aProvider, aItems[i].Partcube);
 					}
-
 					oSelectedItem.destroy();
 					sap.m.MessageToast.show("Element erfolgreich gelöscht");
 
+					this.byId("inputFuntkion").setValue("");
+					this.byId("selecttyp").setSelectedKey(null);
+					this.byId("selectentit").setSelectedKey(null);
+					this.byId("inputwert").setValue("");
+
 					if (this.setStep3 != '' && this.setStep1.length == 0) {
+						//TODO: clean  Wert(step3) if Typ Entit is "D" and Entit is "DATAMART"
 						var aItems = this.byId("table3").getItems();
 						for (var i = 1; i < aItems.length; i++) {
 							this.byId("table3").removeItem(aItems[i]);
@@ -672,6 +724,18 @@ sap.ui.define([
 						this.setStep3 = [];
 						this.sDatamart = "";
 						this.step3validation();
+						if (this.setStep4 != '') {
+							var aItems = this.byId("table4").getItems();
+							for (var i = 1; i < aItems.length; i++) {
+								this.byId("table4").removeItem(aItems[i]);
+							}
+							this.setStep4 = [];
+							this.setFunction = [];
+						}
+					}
+
+					if (this.setStep1.length == 0) {
+						this.setStep1Texts = [];
 					}
 				}
 			} else {
@@ -904,7 +968,7 @@ sap.ui.define([
 			}
 
 			// validation all inputs & next button
-			if (iItems.length > 1) {
+			if (iItems.length > 1 && this.byId("step2").getValidated()) {
 				this._oWizard.validateStep(this.byId("step3"));
 				this._oWizard.setShowNextButton(true);
 			} else {

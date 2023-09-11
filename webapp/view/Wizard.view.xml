@@ -259,13 +259,14 @@
                                     </suggestionItems>                                        
                                 </Input>                                    
                                 <Select id="selecttyp" 
-                                        change="filterTyp"
+                                        change="filterTyp"                                        
                                         forceSelection="false">
                                     <core:Item text="D" />
                                     <core:Item text="I" />
                                     <core:Item text="S" />                                                        
                                 </Select>
                                 <Select id="selectentit" 
+                                        change="step3validation"
                                         forceSelection="false">
                                     <core:Item key="" text=""/>                                                                                           
                                 </Select>                                
@@ -321,7 +322,7 @@
                                                 text="{personalnummer}" />
                                 </Select>                                                
                                 <Select id="selectfunktion"
-                                        forceSelection="false"
+                                        forceSelection="false"                                        
                                         items="{}">
                                     <core:Item  key="" 
                                                 text="" />
