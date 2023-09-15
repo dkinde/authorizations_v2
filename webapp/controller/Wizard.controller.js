@@ -35,6 +35,7 @@ sap.ui.define([
 			//Controller.prototype.onInit.apply(this, arguments);
 			this._oModel = this.getOwnerComponent().getModel();
 			sap.ui.getCore().getConfiguration().setLanguage("de");
+			//console.log(this._oModel);
 			this._oWizard = this.byId("createWizard");
 			this.sDatamart = "";
 			this.aDatamart = [];
@@ -232,11 +233,12 @@ sap.ui.define([
 								text: "Die neuen Berechtigungselemente werden nun erstellt. \n Bitte warten Sie einen Moment"
 							});
 
-						var aSteps = this._oWizard.getSteps();
+						//var aSteps = this._oWizard.getSteps();
 
 						oBusyDialog.open();
 						oWizard.setBusy(true);
 
+						//this.createAllElements();
 						setTimeout(function () {
 							oWizard.setBusy(false);
 							oBusyDialog.close();
@@ -251,7 +253,79 @@ sap.ui.define([
 				}.bind(this)
 			});
 		},
+		createAllElements: function () {
+			var sUrl = this._oModel.sServiceUrl + "AUDMART",
+				oData = {},
+				fnSucces = function () {
+					sap.m.MessageToast.show("Element erfolgreich erstellt");
+					/* var oList = this.byId("table1");
+					oList.getItems().some(function (oItem) {
+						if (oItem.getBindingContext() === oContext) {
+							oItem.focus();
+							oItem.setSelected(true);
+							return true;
+						}
+					}); */
+				}.bind(this),
+				fnError = function (oError) {
+					sap.m.MessageBox.error(oError.message);
+				}.bind(this);
 
+			//this.setStep1Texts;	
+			// console.log(this.setStep1Texts(1));
+
+			this.setStep1Texts.forEach(item => {
+				/* var oContext = this._oModel.create("/AUDMART", {
+					datamart: item[0],
+					Txtsh: item[1],
+					Txtlg: item[2]
+				});
+				oContext.created().then(fnSucces, fnError).catch(function (oError) {
+					if (!oError.canceled) {
+						throw oError;
+					}
+				});
+				this._oModel.submitBatch("$auto").then(fnSucces, fnError); */
+				oData = {
+					datamart: item[0],
+					Txtsh: item[1],
+					Txtlg: item[2]
+				};
+			});
+			console.log(oData);
+			console.log(sUrl);
+
+			var csrfToken;
+
+			$.ajax({
+				url: "/sap/opu/odata4/sap/zui_c_auth/srvd/sap/zui_c_auth/0001/$metadata",
+				type: "GET",
+				headers: {
+					"X-CSRF-Token": "Fetch"
+				},
+				success: function (data, textStatus, request) {
+					csrfToken = request.getResponseHeader("X-CSRF-Token");
+
+				}
+			});
+			console.log(csrfToken);
+
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+				url: sUrl,
+				data: JSON.stringify(oData),
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("X-CSRFToken", csrfToken);
+				},
+				success: function (oResponseData) {
+					console.log("Entrada creada con éxito: ", oResponseData);
+				},
+				error: function (oError) {
+					console.error("Error: ", oError);
+				}
+			});
+		},
 		filterIobj: function () {
 			var sCube = [this.byId("selectCube").getSelectedItem().getText()],
 				aItems = this.filterCube(this.aValores, sCube, 2),
@@ -426,11 +500,9 @@ sap.ui.define([
 
 				if (this.setStep1Texts.length != 0) {
 					for (var i = 0; i < this.setStep1Texts.length; i++) {
-						if (
-							this.byId("inputDatamart").getValue() === this.setStep1Texts[i][0] &&
+						if (this.byId("inputDatamart").getValue() === this.setStep1Texts[i][0] &&
 							this.byId("inputTxtSh").getValue() === this.setStep1Texts[i][1] &&
-							this.byId("inputTxtLg").getValue() === this.setStep1Texts[i][2]
-						) {
+							this.byId("inputTxtLg").getValue() === this.setStep1Texts[i][2]) {
 							existTexts = true;
 							break;
 						}
@@ -445,7 +517,8 @@ sap.ui.define([
 					this.byId("inputTxtLg").getValue()]);
 				}
 
-				console.log(this.setStep1Texts);
+				//console.log(this.setStep1Texts);
+				//this.createAllElements();
 
 				this.aDatamart.push(this.byId("selectMulti").getSelectedItem().getText());
 				sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
@@ -487,6 +560,9 @@ sap.ui.define([
 				if (error.message == "DuplicatedKey")
 					sap.m.MessageBox.warning("Das Element ist vorhanden");
 				if (error instanceof TypeError)
+					//console.log(error);
+					// sap.m.MessageBox.error(error);
+					// sap.m.MessageBox.warning(error);
 					sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
 			}
 		},
@@ -987,7 +1063,7 @@ sap.ui.define([
 		step4validation: function () {
 			var iItems = this.byId("table4").getItems();
 
-			console.log(iItems);
+			//console.log(iItems);
 
 			// validation all inputs & next button
 			if (iItems.length > 1 && this.byId("step3").getValidated()) {
