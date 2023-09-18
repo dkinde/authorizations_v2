@@ -25,7 +25,7 @@
                         validated="false"
                         visible="false">
             <VBox   class="sapUiSmallMargin">
-                <Title  text="Datamart Texts"/>                                
+                <Title  text="{i18n>wizardSubtitle1Step1}"/>                                
                 <form:SimpleForm    editable="true" 
                                     layout="ResponsiveGridLayout">
                     <form:content>                                
@@ -48,7 +48,7 @@
                                 valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>                                
                     </form:content>
                 </form:SimpleForm>
-                <Title  text="Datamart vs Provider"/>
+                <Title  text="{i18n>wizardSubtitle2Step1}"/>
                 <Table  id="table1" 
                         mode="SingleSelectMaster" >       
                         <headerToolbar>
