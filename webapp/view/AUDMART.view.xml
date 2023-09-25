@@ -5,7 +5,8 @@
             showNavButton="true"
             navButtonPress=".onNavButtonPressed"
             backgroundDesign="Solid">    
-        <content>        
+        <content>    
+                
         <VBox>           
             <Table  sticky="ColumnHeaders,HeaderToolbar" 
                     id="table1" 
