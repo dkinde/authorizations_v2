@@ -21,7 +21,19 @@
 								<core:Item key="Datamart" text="Datamart"/>                                                                                           
 							</Select> -->
 						<Label 	text="{i18n>colAUWERT}" id="text12" required="true"/>
-						<Select id="selectDatamart" 
+						<MultiComboBox id="comboDatamart"
+							showSecondaryValues= "true"
+							showSelectAll="true"
+							selectionChange="createValidation"
+							selectionFinish="createValidation"
+							width="500px"
+							items="{
+								path: '/AUDMART',
+								sorter: { path: 'datamart' }
+							}">
+							<core:ListItem key="{datamart}" text="{datamart}" additionalText="{Txtlg}"/>
+						</MultiComboBox>	
+						<!-- <Select id="selectDatamart" 
 								change="createValidation" 								
 								forceSelection="false"
 								items="{
@@ -31,7 +43,7 @@
 									}
 								}">
 							<core:Item key="{datamart}" text="{datamart}"/>                                                                                           
-						</Select>						
+						</Select> -->						
 					</form:content>							
 				</form:SimpleForm>	
 				<form:SimpleForm title="IOBJ/Sondern" id="form2" editable="true" width="250px" >

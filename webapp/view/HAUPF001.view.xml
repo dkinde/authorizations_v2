@@ -31,9 +31,11 @@
                         parameters: {
                             $count: true                                    
                         }    
-                    }">
+                    }"
+                    fixedLayout="false"
+                    alternateRowColors="true">
                 <headerToolbar>
-                    <Toolbar>
+                    <Toolbar height="100px">
                         <content>                            
                             <Button icon="sap-icon://add" 
                                     text="{i18n>tableToolbarButtonAdd}" 
@@ -43,11 +45,11 @@
                                     type="Reject" 
                                     text="{i18n>tableToolbarButtonDelete}" 
                                     press="onDeletePress"/>
-                            <ToolbarSpacer/>
-                            <SearchField    id="searchField"
+                            <!-- <ToolbarSpacer/> -->
+                            <!-- <SearchField    id="searchField"
                                             width="20%"
                                             liveChange=".onSearch"
-                                            placeholder="{i18n>searchFieldPlaceholder}"/>
+                                            placeholder="{i18n>searchFieldPlaceholder}"/> -->
                             <Button id="sortUsersButton"
                                     icon="sap-icon://sort"
                                     tooltip="{i18n>sortButtonText}"
@@ -63,6 +65,8 @@
                             <Button icon="sap-icon://excel-attachment"
                                     tooltip="{i18n>excelButtonText}" 
                                     press="onExport"/>  
+                            </content>
+                            <content> 
                             <Label text="{i18n>colPIPEPERID}"></Label>   
                             <Input id="inputPersonalnummer">
                                 <layoutData>
@@ -79,7 +83,7 @@
                     </Toolbar>
                 </headerToolbar>
                 <columns>
-                    <Column>
+                    <Column mergeDuplicates="true">
                         <Text text="{i18n>colPIPEPERID}" />
                     </Column>
                     <Column>

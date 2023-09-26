@@ -22,7 +22,8 @@
                         parameters: {
                             $count: true                                    
                         }    
-                    }">
+                    }"
+                    fixedLayout="false">
                 <headerToolbar>
                     <Toolbar>
                         <content>                            
