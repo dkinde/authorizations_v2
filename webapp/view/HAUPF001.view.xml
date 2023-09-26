@@ -6,6 +6,15 @@
             showNavButton="true"
             navButtonPress=".onNavButtonPressed"
             backgroundDesign="Solid">    
+        <headerContent>
+            <!-- <Button ></Button> -->
+            <Button icon="sap-icon://action" tooltip="Share" />
+        </headerContent>
+        <subHeader>
+			<OverflowToolbar>
+				<SearchField />
+			</OverflowToolbar>
+		</subHeader>
         <content>
         <l:Grid defaultSpan="L12 M12 S12" 
                 class="sapUiResponsiveMargin" 
@@ -25,7 +34,7 @@
                     }">
                 <headerToolbar>
                     <Toolbar>
-                        <content>
+                        <content>                            
                             <Button icon="sap-icon://add" 
                                     text="{i18n>tableToolbarButtonAdd}" 
                                     press="onOpenDialog"
@@ -53,7 +62,19 @@
                                     press="handleGroupButtonPressed"/>
                             <Button icon="sap-icon://excel-attachment"
                                     tooltip="{i18n>excelButtonText}" 
-                                    press="onExport"/>                                                
+                                    press="onExport"/>  
+                            <Label text="{i18n>colPIPEPERID}"></Label>   
+                            <Input id="inputPersonalnummer">
+                                <layoutData>
+                                    <l:GridData span="L1 M1 S1"></l:GridData>
+                                </layoutData>
+                            </Input>       
+                            <Label text="{i18n>colAUFKT}"></Label>   
+                            <Input id="inputFunktion">
+                                <layoutData>
+                                    <l:GridData span="L1 M1 S1"></l:GridData>
+                                </layoutData>
+                            </Input>                                      
                         </content>
                     </Toolbar>
                 </headerToolbar>

@@ -1,46 +1,64 @@
 <core:FragmentDefinition xmlns="sap.m" 
                          xmlns:core="sap.ui.core"                                                   
 						 xmlns:form="sap.ui.layout.form" 
+						 xmlns:l="sap.ui.layout"
                          width="100%">
-    <Dialog title="{i18n>inputFieldDialogTitle}" id="dialog1">
+    <Dialog title="{i18n>inputFieldDialogTitleFunktion}" id="dialog1" busy="true" contentHeight="380px" contentWidth="600px">
 		<content>
-			<form:SimpleForm				
-				editable="true">
-				<form:content>
-					<Label text="{i18n>colAUFKT}" id="text9" required="true"/>					
-					<Input  id="__inputCRUD0" 
-                            placeholder="Geben Sie 2 Ziffern ein" 
-                            type="Number" 
-                            liveChange="createValidation"                                         
-                            valueLiveUpdate="true"    
-                            showSuggestion="true"
-                            suggestionItems="{/FUNKTION}"                                                     
-                            valueStateText="Geben Sie nicht mehr als 2 Zahlen ein">
-                        <suggestionItems>
-                            <core:Item text="{funktion}"/>
-                        </suggestionItems>                                        
-                    </Input>
-					<Label text="{i18n>colAUENTTYP}"  id="text10" />
-					<Select id="selecttyp" 
-							change="filterTyp"
-                            forceSelection="false">
-                        <core:Item key="D" text="D" />
-                        <core:Item key="I" text="I" />
-                        <core:Item key="S" text="S" />                                                        
-                    </Select>					
-					<Label text="{i18n>colAUENT}"  id="text11" />					
-					<Select id="selectentit" 
-							change="createValidation" 
-                            forceSelection="false">
-                        <core:Item key="" text=""/>                                                                                           
-                    </Select>
-					<Label  text="{i18n>colAUWERT}" id="text12" />
-					<Input  id="__inputCRUD3" 
-							liveChange="createValidation" 
-							valueLiveUpdate="true" 
-							valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>					
-				</form:content>							
-			</form:SimpleForm>			
+			<l:HorizontalLayout allowWrapping="false" class="sapUiContentPadding" >
+				<form:SimpleForm title="Datamart" id="form1" editable="true" width="250px" >
+					<form:content>						
+						<Label text="{i18n>colAUFKT}" id="text9" required="true"/>					
+						<Input  id="__inputFunktion1" editable="false" value="" />
+						<Label 	text="{i18n>colAUENTTYP}"  id="text10" required="true"/>
+						<Input 	id="__inputTyp1" editable="false" value="D"/>
+						<!-- <Select id="selecttyp" change="filterTyp"	forceSelection="true">
+								<core:Item key="D" text="D" />                                                     
+							</Select> -->					
+						<Label 	text="{i18n>colAUENT}"  id="text11" required="true"/>	
+						<Input 	id="__inputEntit1" editable="false"	value="DATAMART"/>				
+						<!-- <Select id="selectentit" change="createValidation" forceSelection="true">
+								<core:Item key="Datamart" text="Datamart"/>                                                                                           
+							</Select> -->
+						<Label 	text="{i18n>colAUWERT}" id="text12" required="true"/>
+						<Select id="selectDatamart" 
+								change="createValidation" 								
+								forceSelection="false"
+								items="{
+									path:'/AUDMART',
+									sorter: {
+										path: 'datamart'
+									}
+								}">
+							<core:Item key="{datamart}" text="{datamart}"/>                                                                                           
+						</Select>						
+					</form:content>							
+				</form:SimpleForm>	
+				<form:SimpleForm title="IOBJ/Sondern" id="form2" editable="true" width="250px" >
+					<form:content>
+						<Label text="{i18n>colAUFKT}" id="text92" required="true"/>					
+						<Input  id="__inputFunktion2" editable="false" value=""/>							
+						<Label text="{i18n>colAUENTTYP}"  id="text102" required="true"/>
+						<Select id="selecttyp" 
+								change="filterTyp"
+								forceSelection="false">							
+							<core:Item key="I" text="I" />
+							<core:Item key="S" text="S" />                                                        
+						</Select>					
+						<Label text="{i18n>colAUENT}"  id="text112" required="true"/>					
+						<Select id="selectentit" 
+								change="createValidation" 
+								forceSelection="false">
+							<core:Item key="" text=""/>                                                                                           
+						</Select>
+						<Label  text="{i18n>colAUWERT}" id="text122" required="true" />
+						<Input  id="__inputWert" 
+								liveChange="createValidation" 
+								valueLiveUpdate="true" 
+								valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>					
+					</form:content>							
+				</form:SimpleForm>		
+			</l:HorizontalLayout>			
 		</content>
 		<beginButton>
 			<Button id="createButton" 

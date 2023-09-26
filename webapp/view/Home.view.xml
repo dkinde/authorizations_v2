@@ -37,8 +37,9 @@
                             <FeedContent    contentText="{i18n>homepageGenTile2Content}" />                                                                                    
                         </TileContent>                    
                 </GenericTile>                
-            </layout:HorizontalLayout>            
-            <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+            </layout:HorizontalLayout>  
+            <layout:HorizontalLayout allowWrapping="true" id="layout3">
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
                             id="g4" 
                             frameType="TwoByOne"                          
                             header="{i18n>homepageGenTile4Header}" 
@@ -56,7 +57,27 @@
                                             icon="sap-icon://menu2" 
                                             withMargin="false" />   
                         </TileContent>                    
-            </GenericTile>
+                </GenericTile>
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                            id="g5" 
+                            frameType="TwoByOne"                          
+                            header="{i18n>homepageGenTile5Header}" 
+                            subheader="{i18n>homepageGenTile5Content}"                                
+                            press="onNavToKontroll">                    
+                        <TileContent id="t6">                            
+                            <!-- <FeedContent    contentText="{i18n>homepageGenTile4Content}" 
+                                            value="{
+                                                path: '/HAUPLPHA/$count'
+                                            }" /> -->  
+                            <NumericContent value="{
+                                                path: '/HAUPLPHA/$count'
+                                            }" 
+                                            scale="Einträge"
+                                            icon="sap-icon://menu2" 
+                                            withMargin="false" />   
+                        </TileContent>                    
+                </GenericTile>
+            </layout:HorizontalLayout>                
             <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
                             id="g3" 
                             frameType="TwoByOne"                          
