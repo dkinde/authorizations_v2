@@ -35,6 +35,9 @@ sap.ui.define([
             this.aEntit = [];
             this.aFunktion = [];
             this.maxFunktion = 1;
+            this.aNewEntryDatamart = [];
+            this.bAlleDatamart = false;
+            this.aIOBJ_Sondern = [];
 
             var that = this,
                 iSkip = 0;
@@ -68,13 +71,20 @@ sap.ui.define([
             sap.m.MessageToast.show("Aktion abgebrochen");
             this.byId("dialog1").setBusy(true);
             this.byId("__inputWert").setValue("");
-            this.byId("__inputFunktion1").setValue("");
-            this.byId("__inputFunktion2").setValue("");
-            /* this.byId("__inputTyp1").setValue("");
-            this.byId("__inputEntit1").setValue(""); */
-            this.byId("selectDatamart").setSelectedKey(null);
+            this.byId("__inputFunktion1").setText("");
+            this.byId("__inputFunktion2").setText("");
+            this.byId("comboDatamart").setSelectedKeys(null);
             this.byId("selecttyp").setSelectedKey(null);
             this.byId("selectentit").setSelectedKey(null);
+
+            this.aNewEntryDatamart = [];
+            this.aIOBJ_Sondern = [];
+
+            var aItems = this.byId("table2").getItems();
+            for (let i = 1; i < aItems.length; i++) {
+                this.byId("table2").removeItem(aItems[i]);
+            }
+
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -114,9 +124,6 @@ sap.ui.define([
                 this.oDialog.open();
             }.bind(this));
 
-            //console.log(this.byId("table1").getBinding("items"));
-            //console.log(this.byId("table1").getBinding("items").getContexts());            
-
             this.maxFunktion = 1;
 
             var that = this,
@@ -143,8 +150,8 @@ sap.ui.define([
                                 }
                             });
                             that.maxFunktion += 1;
-                            that.byId("__inputFunktion1").setValue(that.maxFunktion.toString());
-                            that.byId("__inputFunktion2").setValue(that.byId("__inputFunktion1").getValue());
+                            that.byId("__inputFunktion1").setText(that.maxFunktion.toString());
+                            that.byId("__inputFunktion2").setText(that.byId("__inputFunktion1").getText());
                             return;
                         }
                     }.bind(this),
@@ -157,10 +164,95 @@ sap.ui.define([
             getData();
 
         },
+        handleSelectionFinish: function (oEvent) {
+            var selectedItems = oEvent.getParameter("selectedItems"),
+                aItems = this.byId("comboDatamart").getItems();
+
+            this.aNewEntryDatamart = [];
+
+            for (let i = 0; i < selectedItems.length; i++)
+                this.aNewEntryDatamart.push(selectedItems[i].getText());
+
+            if (selectedItems.length === aItems.length)
+                this.bAlleDatamart = true;
+            else
+                this.bAlleDatamart = false;
+
+            this.createValidation();
+        },
+        onAddPress2: function () {
+            try {
+                var oTable = this.byId("table2"),
+                    oTemplate = new sap.m.ColumnListItem({
+                        cells: [new sap.m.Text({ text: this.byId("__inputFunktion2").getText() }),
+                        new sap.m.Text({ text: this.byId("selecttyp").getSelectedItem().getText() }),
+                        new sap.m.Text({ text: this.byId("selectentit").getSelectedItem().getText() }),
+                        new sap.m.Text({ text: this.byId("__inputWert").getValue() })]
+                    });
+
+                if (this.byId("__inputFunktion2").getText() == "" ||
+                    this.byId("selecttyp").getSelectedKey() == null ||
+                    this.byId("selectentit").getSelectedKey() == null ||
+                    this.byId("__inputWert").getValue() == "")
+                    throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
+
+                this.aIOBJ_Sondern.forEach(element => {
+                    if (element[0] == this.byId("__inputFunktion2").getText() &&
+                        element[1] == this.byId("selecttyp").getSelectedItem().getText() &&
+                        element[2] == this.byId("selectentit").getSelectedItem().getText() &&
+                        element[3] == this.byId("__inputWert").getValue()) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                    }
+                });
+
+                oTable.addItem(oTemplate);
+
+                this.aIOBJ_Sondern.push([
+                    this.byId("__inputFunktion2").getText(),
+                    this.byId("selecttyp").getSelectedItem().getText(),
+                    this.byId("selectentit").getSelectedItem().getText(),
+                    this.byId("__inputWert").getValue()
+                ]);
+
+                sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
+
+                this.createValidation();
+                this.byId("selecttyp").setSelectedKey(null);
+                this.byId("selectentit").setSelectedKey(null);
+                this.byId("__inputWert").setValue("");
+
+            } catch (error) {
+                if (error.message == "EmptyFieldException")
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("Das Element ist vorhanden");
+                if (error instanceof TypeError)
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+            }
+        },
+        onDeletePress2: function () {
+            var oSelectedItem = this.byId("table2").getSelectedItem(),
+                iIndex = this.byId("table2").indexOfItem(oSelectedItem);
+
+            if (oSelectedItem) {
+                if (iIndex == 0) {
+                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
+                }
+                else {
+                    iIndex -= 1;
+                    this.aIOBJ_Sondern.splice(iIndex, 1);
+                    oSelectedItem.destroy();
+                    sap.m.MessageToast.show("Element erfolgreich gelöscht");
+                    this.createValidation();
+                }
+            } else {
+                sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
+            }
+            this.createValidation();
+        },
         onCreatePress: function () {
             var oNewEntryDatamart = {},
                 oNewEntryTyp = {},
-                aItems = this.byId("table1").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                     var oList = this.byId("table1");
@@ -177,59 +269,63 @@ sap.ui.define([
                 }.bind(this);
 
             try {
-                oNewEntryDatamart.funktion = this.getView().byId("__inputFunktion1").getValue();
-                oNewEntryDatamart.typ = this.getView().byId("__inputTyp1").getValue();
-                oNewEntryDatamart.entit = this.getView().byId("__inputEntit1").getValue();
-                oNewEntryDatamart.wert = this.getView().byId("selectDatamart").getSelectedItem().getText();
+                oNewEntryDatamart.funktion = this.getView().byId("__inputFunktion1").getText();
+                oNewEntryDatamart.typ = this.getView().byId("__inputTyp1").getText();
+                oNewEntryDatamart.entit = this.getView().byId("__inputEntit1").getText();
 
-                oNewEntryTyp.funktion = this.getView().byId("__inputFunktion2").getValue();
-                oNewEntryTyp.typ = this.getView().byId("selecttyp").getSelectedItem().getText();
-                oNewEntryTyp.entit = this.getView().byId("selectentit").getSelectedItem().getText();
-                oNewEntryTyp.wert = this.getView().byId("__inputWert").getValue();
+                if (this.bAlleDatamart) {
+                    oNewEntryDatamart.wert = '*';
+                    var oContext = this.byId("table1").getBinding("items").create({
+                        funktion: oNewEntryDatamart.funktion,
+                        typ: oNewEntryDatamart.typ,
+                        entit: oNewEntryDatamart.entit,
+                        wert: oNewEntryDatamart.wert
+                    });
+                    oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                        if (!oError.canceled) {
+                            throw oError;
+                        }
+                    });
+                    this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                } else {
+                    this.aNewEntryDatamart.forEach(item => {
+                        var oContext = this.byId("table1").getBinding("items").create({
+                            funktion: oNewEntryDatamart.funktion,
+                            typ: oNewEntryDatamart.typ,
+                            entit: oNewEntryDatamart.entit,
+                            wert: item
+                        });
+                        oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                            if (!oError.canceled) {
+                                throw oError;
+                            }
+                        });
+                        this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                    });
+                }
 
-                /* for (var i = 0; i < aItems.length; i++) {
-                    var oItem = aItems[i],
-                        oContext = oItem.getBindingContext(),
-                        sTyp = oContext.getProperty("typ"),
-                        sFunktion = oContext.getProperty("funktion"),
-                        sEntit = oContext.getProperty("entit"),
-                        sWert = oContext.getProperty("wert");
+                this.aIOBJ_Sondern.forEach(item => {
+                    oNewEntryTyp.funktion = item[0];
+                    oNewEntryTyp.typ = item[1];
+                    oNewEntryTyp.entit = item[2];
+                    oNewEntryTyp.wert = item[3];
 
-                    if (sTyp === oNewEntry.typ &&
-                        sFunktion === oNewEntry.funktion &&
-                        sEntit === oNewEntry.ent &&
-                        sWert === oNewEntry.wert) {
-                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
-                    }
-                } */
-
-                var oContext = this.byId("table1").getBinding("items").create({
-                    funktion: oNewEntryDatamart.funktion,
-                    typ: oNewEntryDatamart.typ,
-                    entit: oNewEntryDatamart.entit,
-                    wert: oNewEntryDatamart.wert
+                    var oContext = this.byId("table1").getBinding("items").create({
+                        funktion: oNewEntryTyp.funktion,
+                        typ: oNewEntryTyp.typ,
+                        entit: oNewEntryTyp.entit,
+                        wert: oNewEntryTyp.wert
+                    });
+                    oContext.created().then(fnSucces, fnError).catch(function (oError) {
+                        if (!oError.canceled) {
+                            throw oError;
+                        }
+                    });
+                    this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 });
-                oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                    if (!oError.canceled) {
-                        throw oError;
-                    }
-                });
-                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
-
-                var oContext = this.byId("table1").getBinding("items").create({
-                    funktion: oNewEntryTyp.funktion,
-                    typ: oNewEntryTyp.typ,
-                    entit: oNewEntryTyp.entit,
-                    wert: oNewEntryTyp.wert
-                });
-                oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                    if (!oError.canceled) {
-                        throw oError;
-                    }
-                });
-                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
 
                 this.byId("table1").getBinding("items").refresh();
+
             } catch (error) {
                 if (error instanceof TypeError)
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
@@ -237,12 +333,10 @@ sap.ui.define([
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
 
-            this.byId("__inputFunktion1").setValue("");
-            /* this.byId("__inputTyp1").setValue("");
-            this.byId("__inputEntit1").setValue(""); */
-            this.byId("selectDatamart").setSelectedKey(null);
+            this.byId("__inputFunktion1").setText("");
+            this.byId("comboDatamart").setSelectedKeys(null);
 
-            this.byId("__inputFunktion2").setValue("");
+            this.byId("__inputFunktion2").setText("");
             this.byId("selecttyp").setSelectedKey(null);
             this.byId("selectentit").setSelectedKey(null);
             this.byId("__inputWert").setValue("");
@@ -251,7 +345,7 @@ sap.ui.define([
         },
         createValidation: function () {
             var sInput1 = this.byId("__inputWert").getValue(),
-                selectDatamart = this.getView().byId("selectDatamart").getSelectedKey(),
+                aItems = this.getView().byId("table2").getItems(),
                 selectTyp = this.getView().byId("selecttyp").getSelectedKey(),
                 selectEntit = this.getView().byId("selectentit").getSelectedKey(),
                 oInput1 = this.byId("__inputWert");
@@ -267,12 +361,23 @@ sap.ui.define([
                 oInput1.setValueState(sap.ui.core.ValueState.None);
             }
 
+            if (this.aNewEntryDatamart != '')
+                this.byId("addButton2").setEnabled(true);
+            else
+                this.byId("addButton2").setEnabled(false);
+
+            if (aItems.length > 1)
+                this.byId("deleteButton2").setEnabled(true);
+            else
+                this.byId("deleteButton2").setEnabled(false);
+
+
             // validation all inputs - create button
-            if (selectDatamart && selectTyp && selectEntit &&
-                sInput1.length > 0 && sInput1.length < 61) {
-                this.byId("createButton").setVisible(true);
+            if (this.aNewEntryDatamart != '' && aItems.length > 1 &&
+                selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
+                this.byId("createButton").setEnabled(true);
             } else {
-                this.byId("createButton").setVisible(false);
+                this.byId("createButton").setEnabled(false);
             }
         },
         editValidation: function () {
