@@ -34,13 +34,82 @@ sap.ui.define([
             this.mGroupFunctions = {};
             sap.ui.getCore().getConfiguration().setLanguage("de");
         },
-        onAfterShow: function () {
-            this.onOpenEntryDialog();
-        },
         onNavButtonPressed: function () {
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteHome");
         },
+        onBeforeExport: function (oEvt) {
+            var mExcelSettings = oEvt.getParameter("exportSettings");
+
+            // Disable Worker as Mockserver is used in Demokit sample
+            mExcelSettings.worker = false;
+        },
+
+        onSort: function () {
+            var oSmartTable = this._getSmartTable();
+            if (oSmartTable) {
+                oSmartTable.openPersonalisationDialog("Sort");
+            }
+        },
+
+        onFilter: function () {
+            var oSmartTable = this._getSmartTable();
+            if (oSmartTable) {
+                oSmartTable.openPersonalisationDialog("Filter");
+            }
+        },
+
+        onGroup: function () {
+            MessageToast.show("Not available as this feature is disabled for this app in the view.xml");
+        },
+
+        onColumns: function () {
+            var oSmartTable = this._getSmartTable();
+            if (oSmartTable) {
+                oSmartTable.openPersonalisationDialog("Columns");
+            }
+        },
+
+        _getSmartTable: function () {
+            if (!this._oSmartTable) {
+                this._oSmartTable = this.getView().byId("smartTable");
+            }
+            return this._oSmartTable;
+        },
+
+        applyUiState: function () {
+            var oSmartTable = this._getSmartTable(),
+                oUiState = oSmartTable.getUiState(),
+                oPresentationVariant = oUiState.getPresentationVariant();
+
+            // change SortOrder
+            oPresentationVariant.SortOrder = [{
+                Property: "Dmbtr",
+                Descending: false
+            }];
+
+            // change my Bukrs column width
+            var oColumnWidth = oPresentationVariant.Visualizations.find(function (oVisualization) {
+                return oVisualization.Type === "ColumnWidth";
+            });
+            var oMyBukrsColumnSettings = oColumnWidth.Content.find(function (oContent) {
+                return oContent.Value === "Bukrs";
+            });
+            oMyBukrsColumnSettings.Width = "10rem";
+
+            oUiState.setPresentationVariant(oPresentationVariant);
+            oSmartTable.setUiState(oUiState);
+        },
+
+        onUiStateChange: function (oEvent) {
+            MessageToast.show("UI state changed for SmartTable with id - " + oEvent.getSource().getId());
+        },
+
+        onExit: function () {
+            this._oSmartTable = null;
+            this._oMockServer.stop();
+        },
+
         onCancelEntryDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");

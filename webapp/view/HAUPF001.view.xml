@@ -1,19 +1,20 @@
 <mvc:View   xmlns:mvc="sap.ui.core.mvc"    
             xmlns="sap.m"
             xmlns:l="sap.ui.layout"
+            xmlns:f="sap.f"
+		    xmlns:fb="sap.ui.comp.filterbar"
             controllerName="authorization.controller.HAUPF001">
     <Page   title="{i18n>table5PageTitle}"
             showNavButton="true"
             navButtonPress=".onNavButtonPressed"
             backgroundDesign="Solid">    
-        <headerContent>
-            <!-- <Button ></Button> -->
+        <!-- <headerContent>            
             <Button icon="sap-icon://action" tooltip="Share" />
-        </headerContent>
+        </headerContent> -->
         <subHeader>
-			<OverflowToolbar>
+			<Toolbar>
 				<SearchField />
-			</OverflowToolbar>
+			</Toolbar>
 		</subHeader>
         <content>
         <l:Grid defaultSpan="L12 M12 S12" 
@@ -45,11 +46,23 @@
                                     type="Reject" 
                                     text="{i18n>tableToolbarButtonDelete}" 
                                     press="onDeletePress"/>
-                            <!-- <ToolbarSpacer/> -->
+                            <ToolbarSpacer/> 
                             <!-- <SearchField    id="searchField"
                                             width="20%"
                                             liveChange=".onSearch"
                                             placeholder="{i18n>searchFieldPlaceholder}"/> -->
+                            <Label text="{i18n>colPIPEPERID}:"></Label>   
+                            <Input id="inputPersonalnummer" width="150px">
+                                <layoutData>
+                                    <l:GridData span="L1 M1 S1"></l:GridData>
+                                </layoutData>
+                            </Input>       
+                            <Label text="Funktion:"></Label>   
+                            <Input id="inputFunktion" width="150px">
+                                <layoutData>
+                                    <l:GridData span="L1 M1 S1"></l:GridData>
+                                </layoutData>
+                            </Input>
                             <Button id="sortUsersButton"
                                     icon="sap-icon://sort"
                                     tooltip="{i18n>sortButtonText}"
@@ -64,21 +77,7 @@
                                     press="handleGroupButtonPressed"/>
                             <Button icon="sap-icon://excel-attachment"
                                     tooltip="{i18n>excelButtonText}" 
-                                    press="onExport"/>  
-                            </content>
-                            <content> 
-                            <Label text="{i18n>colPIPEPERID}"></Label>   
-                            <Input id="inputPersonalnummer">
-                                <layoutData>
-                                    <l:GridData span="L1 M1 S1"></l:GridData>
-                                </layoutData>
-                            </Input>       
-                            <Label text="{i18n>colAUFKT}"></Label>   
-                            <Input id="inputFunktion">
-                                <layoutData>
-                                    <l:GridData span="L1 M1 S1"></l:GridData>
-                                </layoutData>
-                            </Input>                                      
+                                    press="onExport"/>                                                                     
                         </content>
                     </Toolbar>
                 </headerToolbar>
@@ -91,7 +90,7 @@
                     </Column>                                                                      
                 </columns>
                 <items>
-                    <ColumnListItem>
+                    <ColumnListItem vAlign="Middle">
                         <cells>                                                                                        
                             <ObjectIdentifier text="{personalnummer}" />
                             <ObjectIdentifier text="{funktion}" />                                                                                       
