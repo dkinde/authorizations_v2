@@ -33,83 +33,265 @@ sap.ui.define([
             this._mViewSettingsDialogs = {};
             this.mGroupFunctions = {};
             sap.ui.getCore().getConfiguration().setLanguage("de");
+            this.aValue = [];
+            this._oPage = this.byId("dynamicPage1");
+
+            var that = this,
+                iSkip = 0;
+
+            function getData() {
+                $.ajax({
+                    url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUKB001" + "?$top=5000" + "&$skip=" + iSkip,
+                    method: "GET",
+                    success: function (data) {
+                        if (data && data.value) {
+                            that.aValue = that.aValue.concat(data.value.map(function (item) {
+                                return item;
+                            }));
+                        }
+                        if (data.value.length === 5000) {
+                            iSkip += 5000;
+                            getData();
+                        } else {
+                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.datamart === oItem.datamart; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems2 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems3 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.org_einh === oItem.org_einh; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems4 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.typ === oItem.typ; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems5 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.entit === oItem.entit; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems6 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.infoobjectkontrolle === oItem.infoobjectkontrolle; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems7 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.wertkontrolle === oItem.wertkontrolle; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var oDistinctModel = new sap.ui.model.json.JSONModel({
+                                distinctItems: aDistinctItems
+                            });
+                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
+                                distinctItems1: aDistinctItems1
+                            });
+                            var oDistinctModel2 = new sap.ui.model.json.JSONModel({
+                                distinctItems2: aDistinctItems2
+                            });
+                            var oDistinctModel3 = new sap.ui.model.json.JSONModel({
+                                distinctItems3: aDistinctItems3
+                            });
+                            var oDistinctModel4 = new sap.ui.model.json.JSONModel({
+                                distinctItems4: aDistinctItems4
+                            });
+                            var oDistinctModel5 = new sap.ui.model.json.JSONModel({
+                                distinctItems5: aDistinctItems5
+                            });
+                            var oDistinctModel6 = new sap.ui.model.json.JSONModel({
+                                distinctItems6: aDistinctItems6
+                            });
+                            var oDistinctModel7 = new sap.ui.model.json.JSONModel({
+                                distinctItems7: aDistinctItems7
+                            });
+
+
+                            that.getView().byId("multiPersonal").setModel(oDistinctModel);
+                            that.getView().byId("multiDatamart").setModel(oDistinctModel1);
+                            that.getView().byId("multiFunktion").setModel(oDistinctModel2);
+                            that.getView().byId("multiOrgEinh").setModel(oDistinctModel3);
+                            that.getView().byId("multiTyp").setModel(oDistinctModel4);
+                            that.getView().byId("multiEntit").setModel(oDistinctModel5);
+                            that.getView().byId("multiIOBJK").setModel(oDistinctModel6);
+                            that.getView().byId("multiWertK").setModel(oDistinctModel7);
+
+                            that._oPage.setBusy(false);
+                            console.log("that.aValue:" + that.aValue.length);
+                            console.log("aDistinctItems:" + aDistinctItems.length);
+                            console.log("aDistinctItems1:" + aDistinctItems1.length);
+                            console.log("aDistinctItems2:" + aDistinctItems2.length);
+
+                            return;
+                        }
+                    }.bind(this),
+                    error: function (errorEntit1) {
+                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+                    }
+                });
+            }
+            getData();
+
+            /* this.oSmartVariantManagement = this.getView().byId("svm"); */
+            this.oFilterBar = this.getView().byId("filterbar");
+            this.oExpandedLabel = this.getView().byId("expandedLabel");
+            this.oSnappedLabel = this.getView().byId("snappedLabel");
+            this.oTable = this.getView().byId("table1");
+            this.applyData = this.applyData.bind(this);
+            this.fetchData = this.fetchData.bind(this);
+            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
+
+            this.oFilterBar.registerFetchData(this.fetchData);
+            this.oFilterBar.registerApplyData(this.applyData);
+            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
+
+            /* var oPersInfo = new sap.ui.comp.smartvariants.PersonalizableInfo({
+                type: "filterBar",
+                keyName: "persistencyKey",
+                dataSource: "",
+                control: this.oFilterBar
+            });
+            this.oSmartVariantManagement.addPersonalizableControl(oPersInfo);
+            this.oSmartVariantManagement.initialise(function () { }, this.oFilterBar); */
+
         },
         onNavButtonPressed: function () {
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteHome");
         },
-        onBeforeExport: function (oEvt) {
-            var mExcelSettings = oEvt.getParameter("exportSettings");
+        fetchData: function () {
+            var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
+                aResult.push({
+                    groupName: oFilterItem.getGroupName(),
+                    fieldName: oFilterItem.getName(),
+                    fieldData: oFilterItem.getControl().getSelectedKeys()
+                });
 
-            // Disable Worker as Mockserver is used in Demokit sample
-            mExcelSettings.worker = false;
+                return aResult;
+            }, []);
+
+            return aData;
         },
+        applyData: function (aData) {
+            aData.forEach(function (oDataObject) {
+                var oControl = this.oFilterBar.determineControlByName(oDataObject.fieldName, oDataObject.groupName);
+                oControl.setSelectedKeys(oDataObject.fieldData);
+            }, this);
+        },
+        getFiltersWithValues: function () {
+            var aFiltersWithValue = this.oFilterBar.getFilterGroupItems().reduce(function (aResult, oFilterGroupItem) {
+                var oControl = oFilterGroupItem.getControl();
 
-        onSort: function () {
-            var oSmartTable = this._getSmartTable();
-            if (oSmartTable) {
-                oSmartTable.openPersonalisationDialog("Sort");
+                if (oControl && oControl.getSelectedKeys && oControl.getSelectedKeys().length > 0) {
+                    aResult.push(oFilterGroupItem);
+                }
+
+                return aResult;
+            }, []);
+
+            return aFiltersWithValue;
+        },
+        onSelectionChange: function (oEvent) {
+            //this.oSmartVariantManagement.currentVariantSetModified(true);
+            this.oFilterBar.fireFilterChange(oEvent);
+        },
+        onFilterChange: function () {
+            this._updateLabelsAndTable();
+        },
+        onAfterVariantLoad: function () {
+            this._updateLabelsAndTable();
+        },
+        _updateLabelsAndTable: function () {
+            this.oExpandedLabel.setText(this.getFormattedSummaryTextExpanded());
+            this.oSnappedLabel.setText(this.getFormattedSummaryText());
+            this.oTable.setShowOverlay(true);
+        },
+        getFormattedSummaryText: function () {
+            var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
+
+            if (aFiltersWithValues.length === 0) {
+                return "No filters active";
             }
-        },
 
-        onFilter: function () {
-            var oSmartTable = this._getSmartTable();
-            if (oSmartTable) {
-                oSmartTable.openPersonalisationDialog("Filter");
+            if (aFiltersWithValues.length === 1) {
+                return aFiltersWithValues.length + " filter active: " + aFiltersWithValues.join(", ");
             }
-        },
 
-        onGroup: function () {
-            MessageToast.show("Not available as this feature is disabled for this app in the view.xml");
+            return aFiltersWithValues.length + " filters active: " + aFiltersWithValues.join(", ");
         },
+        getFormattedSummaryTextExpanded: function () {
+            var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
-        onColumns: function () {
-            var oSmartTable = this._getSmartTable();
-            if (oSmartTable) {
-                oSmartTable.openPersonalisationDialog("Columns");
+            if (aFiltersWithValues.length === 0) {
+                return "No filters active";
             }
-        },
 
-        _getSmartTable: function () {
-            if (!this._oSmartTable) {
-                this._oSmartTable = this.getView().byId("smartTable");
+            var sText = aFiltersWithValues.length + " filters active",
+                aNonVisibleFiltersWithValues = this.oFilterBar.retrieveNonVisibleFiltersWithValues();
+
+            if (aFiltersWithValues.length === 1) {
+                sText = aFiltersWithValues.length + " filter active";
             }
-            return this._oSmartTable;
+
+            if (aNonVisibleFiltersWithValues && aNonVisibleFiltersWithValues.length > 0) {
+                sText += " (" + aNonVisibleFiltersWithValues.length + " hidden)";
+            }
+
+            return sText;
         },
+        onSearch: function () {
+            var aTableFilters = this.oFilterBar.getFilterGroupItems().reduce(function (aResult, oFilterGroupItem) {
+                var oControl = oFilterGroupItem.getControl(),
+                    aSelectedKeys = oControl.getSelectedKeys(),
+                    aFilters = aSelectedKeys.map(function (sSelectedKey) {
+                        return new sap.ui.model.Filter({
+                            path: oFilterGroupItem.getName(),
+                            operator: sap.ui.model.FilterOperator.Contains,
+                            value1: sSelectedKey
+                        });
+                    });
+                
+                if (aSelectedKeys.length > 0) {
+                    aResult.push(new sap.ui.model.Filter({
+                        filters: aFilters,
+                        and: false
+                    }));
+                }                
 
-        applyUiState: function () {
-            var oSmartTable = this._getSmartTable(),
-                oUiState = oSmartTable.getUiState(),
-                oPresentationVariant = oUiState.getPresentationVariant();
+                return aResult;
+            }, []);
 
-            // change SortOrder
-            oPresentationVariant.SortOrder = [{
-                Property: "Dmbtr",
-                Descending: false
-            }];
-
-            // change my Bukrs column width
-            var oColumnWidth = oPresentationVariant.Visualizations.find(function (oVisualization) {
-                return oVisualization.Type === "ColumnWidth";
-            });
-            var oMyBukrsColumnSettings = oColumnWidth.Content.find(function (oContent) {
-                return oContent.Value === "Bukrs";
-            });
-            oMyBukrsColumnSettings.Width = "10rem";
-
-            oUiState.setPresentationVariant(oPresentationVariant);
-            oSmartTable.setUiState(oUiState);
+            this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
+            this.oTable.setShowOverlay(false);
         },
-
-        onUiStateChange: function (oEvent) {
-            MessageToast.show("UI state changed for SmartTable with id - " + oEvent.getSource().getId());
-        },
-
-        onExit: function () {
-            this._oSmartTable = null;
-            this._oMockServer.stop();
-        },
-
         onCancelEntryDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
@@ -620,7 +802,7 @@ sap.ui.define([
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
             }
         },
-        onSearch: function (oEvent) {
+        onSearch1: function (oEvent) {
             var aFilters = [],
                 sQuery = oEvent.getSource().getValue();
 
