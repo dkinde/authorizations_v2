@@ -117,11 +117,29 @@ sap.ui.define([
 
         },
         onNavButtonPressed: function () {
-            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
+            //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
             UIComponent.getRouterFor(this).navTo("RouteFunktion");
         },
-        onListItemPress: function () {
-            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded);
+        onListItemPress: function (oEvent) {
+            /* console.log(this.oView.getParent().getParent());
+            console.log()
+            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
+
+            console.log(oEvent.getSource().getBindingContext().getPath());
+
+            var funktionPath = oEvent.getSource().getBindingContext().getPath(),
+                funktion = funktionPath.match(/funktion='(\d+)'/);
+
+            if (funktion && funktion.length > 1) {
+                const numeroExtraido = funktion[1];
+                console.log("Funktion gefunden: " + numeroExtraido);
+            } else {
+                console.log("Funktion nicht gefunden");
+            }
+
+            // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
+            // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
+            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", { layout:sap.f.LayoutType.TwoColumnsMidExpanded, funktion: funktion[1] });
         },
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {

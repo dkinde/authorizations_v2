@@ -56,24 +56,28 @@
                         </headerContent>
 
                         <sections>
-                            <ObjectPageSection title="General Information">
+                            <ObjectPageSection title="Definition der Funktion">
                                 <subSections>
                                     <ObjectPageSubSection>
                                         <blocks>
-                                            <form:SimpleForm
-                                                maxContainerCols="2"
-                                                editable="false"
-                                                layout="ResponsiveGridLayout"
-                                                labelSpanL="12"
-                                                labelSpanM="12"
-                                                emptySpanL="0"
-                                                emptySpanM="0"
-                                                columnsL="1"
-                                                columnsM="1">
+                                            <form:SimpleForm    maxContainerCols="2"
+                                                                editable="false"
+                                                                layout="ResponsiveGridLayout"
+                                                                labelSpanL="12"
+                                                                labelSpanM="12"
+                                                                emptySpanL="0"
+                                                                emptySpanM="0"
+                                                                columnsL="1"
+                                                                columnsM="1">
                                                 <form:content>
-                                                    <m:Label text="Product ID"/>
-                                                    <m:Label text="Description"/>
-                                                    <m:Label text="Supplier"/>
+                                                    <m:Label text="Funktion"/>
+                                                    <m:Text text="{/HAUFW001>funktion}"/>
+                                                    <m:Label text="Typ"/>
+                                                    <m:Text text="{HAUFW001>typ}"/>
+                                                    <m:Label text="Entität"/>
+                                                    <m:Text text="{HAUFW001>entit}"/>
+                                                    <m:Label text="Wert"/>
+                                                    <m:Text text="{HAUFW001>wert}"/>
                                                 </form:content>
                                             </form:SimpleForm>
                                         </blocks>
@@ -81,19 +85,40 @@
                                 </subSections>
                             </ObjectPageSection>
 
-                            <ObjectPageSection title="Suppliers">
+                            <ObjectPageSection title="Vorhandene Funktionen">
                                 <subSections>
                                     <ObjectPageSubSection>
                                         <blocks>
-                                            <m:Table
-                                                id="suppliersTable">
+                                            <m:Table    id="funktionTable"
+                                                        items="{
+                                                            path: '/HAUFW001',
+                                                            parameters: {
+                                                                $count: true                                    
+                                                            }    
+                                                        }"
+                                                        fixedLayout="false"
+                                                        alternateRowColors="true">
                                                 <m:columns>
-                                                    <m:Column/>
+                                                    <m:Column mergeDuplicates="false">
+                                                        <m:Text text="Funktion" />
+                                                    </m:Column>
+                                                    <m:Column mergeDuplicates="false">
+                                                        <m:Text text="Typ" />
+                                                    </m:Column>
+                                                    <m:Column mergeDuplicates="false">
+                                                        <m:Text text="{i18n>colAUENT}" />
+                                                    </m:Column>
+                                                    <m:Column>
+                                                        <m:Text text="{i18n>colAUWERT}" />
+                                                    </m:Column>
                                                 </m:columns>
                                                 <m:items>
                                                     <m:ColumnListItem>
                                                         <m:cells>
-                                                            <m:ObjectIdentifier text=""/>
+                                                            <m:ObjectIdentifier title="{funktion}" text="{entit}"/>
+                                                            <m:ObjectIdentifier text="{typ}" />
+                                                            <m:ObjectIdentifier text="{entit}" />
+                                                            <m:ObjectIdentifier text="{wert}" /> 
                                                         </m:cells>
                                                     </m:ColumnListItem>
                                                 </m:items>

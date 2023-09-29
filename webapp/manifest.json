@@ -187,6 +187,14 @@
           ]
         },
         {
+          "name": "RouteDetailPersFKT",
+          "pattern": "Funktion/HAUPF001/DetailPersFKT/{funktion}/{layout}",
+          "target": [
+            "TargetDetailPersFKT",
+            "TargetHAUPF001"
+          ]
+        },
+        {
           "name": "RouteHAUFW001",
           "pattern": "Funktion/HAUFW001",
           "target": [
@@ -270,6 +278,13 @@
           "viewType": "XML",
           "viewId": "MasterPersFKT",
           "viewName": "MasterPersFKT",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetDetailPersFKT": {
+          "viewType": "XML",
+          "viewId": "DetailPersFKT",
+          "viewName": "DetailPersFKT",
           "viewLevel": 2,
           "transition": "slide"
         }

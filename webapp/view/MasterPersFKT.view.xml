@@ -1,9 +1,10 @@
 <mvc:View   xmlns:mvc="sap.ui.core.mvc" 
             displayBlock="true"
             xmlns="sap.f"             
-            height="100%">
+            height="100%"
+            controllerName="authorization.controller.MasterPersFKT">
 
-	<FlexibleColumnLayout id="flexibleColumnLayout" backgroundDesign="Solid">
+	<FlexibleColumnLayout id="flexibleColumnLayout" backgroundDesign="Solid" stateChange=".onStateChanged">
 		<beginColumnPages>
 			<mvc:XMLView id="beginPersFKT" viewName="authorization.view.HAUPF001"/> 
 		</beginColumnPages>

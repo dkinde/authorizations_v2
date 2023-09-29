@@ -29,129 +29,45 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorization.controller.DetailPersFKT", {
+    return Controller.extend("authorization.controller.MasterPersFKT", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
-            /* this._mViewSettingsDialogs = {};
-            this.mGroupFunctions = {}; */
             sap.ui.getCore().getConfiguration().setLanguage("de");
-
-            /* this.aValue = [];
-            this._oPage = this.byId("dynamicPage1");
-
-            var that = this,
-                iSkip = 0;
-
-            function getData() {
-                $.ajax({
-                    url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPF001" + "?$top=500" + "&$skip=" + iSkip,
-                    method: "GET",
-                    success: function (data) {
-                        if (data && data.value) {
-                            that.aValue = that.aValue.concat(data.value.map(function (item) {
-                                return item;
-                            }));
-                        }
-                        if (data.value.length === 500) {
-                            iSkip += 500;
-                            getData();
-                        } else {
-                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var oDistinctModel = new sap.ui.model.json.JSONModel({
-                                distinctItems: aDistinctItems
-                            });
-                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
-                                distinctItems1: aDistinctItems1
-                            });
-
-                            that.getView().byId("multiPersonal").setModel(oDistinctModel);
-                            that.getView().byId("multiFunktion").setModel(oDistinctModel1);
-
-                            that._oPage.setBusy(false);
-                            return;
-                        }
-                    }.bind(this),
-                    error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
-                    }
-                });
-            }
-            getData(); */
-
-            /* this.oSmartVariantManagement = this.getView().byId("svm"); */
-            /* this.oFilterBar = this.getView().byId("filterbar");
-            this.oExpandedLabel = this.getView().byId("expandedLabel");
-            this.oSnappedLabel = this.getView().byId("snappedLabel");
-            this.oTable = this.getView().byId("table1");
-            this.applyData = this.applyData.bind(this);
-            this.fetchData = this.fetchData.bind(this);
-            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
-
-            this.oFilterBar.registerFetchData(this.fetchData);
-            this.oFilterBar.registerApplyData(this.applyData);
-            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues); */
-
-            /* var oPersInfo = new sap.ui.comp.smartvariants.PersonalizableInfo({
-                type: "filterBar",
-                keyName: "persistencyKey",
-                dataSource: "",
-                control: this.oFilterBar
-            });
-            this.oSmartVariantManagement.addPersonalizableControl(oPersInfo);
-            this.oSmartVariantManagement.initialise(function () { }, this.oFilterBar); */
 
             this.oView = this.getView();
             this.oRouter = UIComponent.getRouterFor(this);
 
-            this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
-            this.oRouter.getRoute("RouteHAUPF001").attachPatternMatched(this._onFunktionMatched, this);
+            this.oRouter.attachRouteMatched(this.onRouteMatched, this);
 
         },
         /* onNavButtonPressed: function () {
             this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
             UIComponent.getRouterFor(this).navTo("RouteFunktion");
         }, */
-        onCancelTwoColumns: function () {
-            UIComponent.getRouterFor(this).navTo("RouteHAUPF001");
-            //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
+        onRouteMatched: function (oEvent) {
+            var sRouteName = oEvent.getParameter("name"),
+                oArguments = oEvent.getParameter("arguments");
+
+            // Save the current route name
+            console.log(sRouteName);
+            this.currentRouteName = sRouteName;
+            this.currentFunktion = oArguments.funktion;
         },
-        _onFunktionMatched: function (oEvent) {
-            console.log(oEvent.getParameter("arguments"));
-            console.log(oEvent.getParameter("arguments").funktion);
-            this._funktion = oEvent.getParameter("arguments").funktion || this._funktion || "0";
-            console.log(this._funktion);
+        onStateChanged: function (oEvent) {
+            var bIsNavigationArrow = oEvent.getParameter("isNavigationArrow"),
+                sLayout = oEvent.getParameter("layout");
 
-            var filter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, this._funktion);
+            console.log("StateChanged!!");
+            console.log(sLayout);
+            console.log(bIsNavigationArrow);
 
-            this.byId("funktionTable").getBinding("items").filter(filter, sap.ui.model.FilterType.Application);
-
-            /* this.getView().bindElement({
-                path: "/HAUFW001/" + this._funktion,
-                model: this._oModel
-            }); */
-        },
-        onEditToggleButtonPress: function () {
-            var oObjectPage = this.getView().byId("ObjectPageLayout"),
-                bCurrentShowFooterState = oObjectPage.getShowFooter();
-
-            oObjectPage.setShowFooter(!bCurrentShowFooterState);
+            // Replace the URL with the new layout if a navigation arrow was used
+            if (bIsNavigationArrow) {
+                this.oRouter.navTo(this.currentRouteName, { layout: sLayout, funktion: this.currentFunktion }, true);
+            }
         },
         onExit: function () {
-            this.oRouter.getRoute("RouteDetailPersFKT").detachPatternMatched(this._onFunktionMatched, this);
-            this.oRouter.getRoute("RouteHAUPF001").detachPatternMatched(this._onFunktionMatched, this);
+            this.oRouter.detachRouteMatched(this.onRouteMatched, this);
         },
         /* fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {

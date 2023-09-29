@@ -40,7 +40,7 @@
                 <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
                                 id="g2" 
                                 header="{i18n>funktionGenTile2Header}"                                 
-                                press="onNavToMasterPersFKT">                    
+                                press="onNavToHAUPF001">                    
                     <TileContent id="t3">                            
                         <NumericContent value="{
                                             path: '/HAUPF001/$count'
