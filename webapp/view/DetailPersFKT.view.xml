@@ -1,0 +1,159 @@
+<mvc:View   xmlns:mvc="sap.ui.core.mvc" 
+            displayBlock="true"
+            xmlns="sap.uxap" 
+            xmlns:m="sap.m"
+            xmlns:f="sap.f"
+	        xmlns:form="sap.ui.layout.form"
+            controllerName="authorization.controller.DetailPersFKT">
+
+	<ObjectPageLayout   id="ObjectPageLayout"
+                        showTitleInHeaderContent="true"
+                        alwaysShowContentHeader="false"
+                        preserveHeaderStateOnScroll="false"
+                        headerContentPinnable="true"
+                        isChildPage="true"
+                        upperCaseAnchorBar="false">
+                        <headerTitle>
+                            <ObjectPageDynamicHeaderTitle>
+                                <actions>
+                                    <!-- <m:ToggleButton
+                                        text="Edit"
+                                        type="Emphasized"/>
+                                    <m:Button
+                                        text="Delete"
+                                        type="Transparent"/> -->
+                                    <m:Button
+                                        icon="sap-icon://decline"
+                                        text="Schließen"
+                                        press="onCancelTwoColumns"
+                                        type="Transparent"/>
+                                    <m:Button
+                                        text="Schließen"
+                                        press="onCancelTwoColumns"
+                                        icon="sap-icon://decline"
+                                        type="Reject"/>
+                                </actions>
+                            </ObjectPageDynamicHeaderTitle>
+                        </headerTitle>
+
+                        <headerContent>
+                            <m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch">
+                                <!-- <f:Avatar
+                                    displaySize="L"
+                                    displayShape="Square"
+                                    class="sapUiTinyMarginEnd">
+                                </f:Avatar> -->
+                                <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                                    <m:Label text="Main Category"/>
+                                </m:VBox>
+                                <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                                    <m:Label text="Subcategory"/>
+                                </m:VBox>
+                                <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                                    <m:Label text="Price"/>
+                                </m:VBox>
+                            </m:FlexBox>
+                        </headerContent>
+
+                        <sections>
+                            <ObjectPageSection title="General Information">
+                                <subSections>
+                                    <ObjectPageSubSection>
+                                        <blocks>
+                                            <form:SimpleForm
+                                                maxContainerCols="2"
+                                                editable="false"
+                                                layout="ResponsiveGridLayout"
+                                                labelSpanL="12"
+                                                labelSpanM="12"
+                                                emptySpanL="0"
+                                                emptySpanM="0"
+                                                columnsL="1"
+                                                columnsM="1">
+                                                <form:content>
+                                                    <m:Label text="Product ID"/>
+                                                    <m:Label text="Description"/>
+                                                    <m:Label text="Supplier"/>
+                                                </form:content>
+                                            </form:SimpleForm>
+                                        </blocks>
+                                    </ObjectPageSubSection>
+                                </subSections>
+                            </ObjectPageSection>
+
+                            <ObjectPageSection title="Suppliers">
+                                <subSections>
+                                    <ObjectPageSubSection>
+                                        <blocks>
+                                            <m:Table
+                                                id="suppliersTable">
+                                                <m:columns>
+                                                    <m:Column/>
+                                                </m:columns>
+                                                <m:items>
+                                                    <m:ColumnListItem>
+                                                        <m:cells>
+                                                            <m:ObjectIdentifier text=""/>
+                                                        </m:cells>
+                                                    </m:ColumnListItem>
+                                                </m:items>
+                                            </m:Table>
+                                        </blocks>
+                                    </ObjectPageSubSection>
+                                </subSections>
+                            </ObjectPageSection>
+                        </sections>
+	</ObjectPageLayout>
+
+
+<!--     <Page   id="page" 
+            title="{i18n>funktionPageTitle}" 
+            navButtonPress=".onNavButtonPressed" 
+            showNavButton="true">
+        <Toolbar    height="5rem">
+            <Title  titleStyle="H2" 
+                    text="{i18n>funktionTitle}" 
+                    class="sapUiTinyMarginBegin" 
+                    id="t1"/>
+            <ToolbarSpacer/>
+            <Image  alt="DVZ Icon"                    
+                    src="src/DVZ_icon.png"
+                    useMap=""
+                    height="5rem"
+                    width="5rem">            
+            </Image>                  
+        </Toolbar> 
+        <layout:VerticalLayout  class="sapUiResponsiveMargin" 
+                                id="layout1">            
+            <layout:HorizontalLayout    allowWrapping="true" 
+                                        id="layout2">
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                                id="g1" 
+                                header="{i18n>funktionGenTile1Header}"                             
+                                press="onNavToHAUFW001">                   
+                    <TileContent id="t2">                            
+                        <NumericContent value="{
+                                            path: '/HAUFW001/$count'
+                                        }"                                                                                          
+                                        id="n1" 
+                                        scale="Einträge"
+                                        icon="sap-icon://menu2"/>                            
+                    </TileContent>                    
+                </GenericTile>
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                                id="g2" 
+                                header="{i18n>funktionGenTile2Header}"                                 
+                                press="onNavToHAUPF001">                    
+                    <TileContent id="t3">                            
+                        <NumericContent value="{
+                                            path: '/HAUPF001/$count'
+                                        }"                 
+                                        scale="Einträge"                       
+                                        id="n2" 
+                                        icon="sap-icon://menu2"/>                            
+                    </TileContent>                    
+                </GenericTile>               
+            </layout:HorizontalLayout>            
+        </layout:VerticalLayout>        
+    </Page> -->
+</mvc:View>

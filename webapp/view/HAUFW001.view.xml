@@ -91,7 +91,7 @@
                         growingThreshold="200"
                         sticky="ColumnHeaders,HeaderToolbar" 
                         id="table1" 
-                        mode="SingleSelectMaster" 
+                        mode="SingleSelectLeft" 
                             items="{
                                 path: '/HAUFW001',
                                 parameters: {

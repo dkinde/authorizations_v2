@@ -134,7 +134,6 @@ sap.ui.define([
                                 distinctItems7: aDistinctItems7
                             });
 
-
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
                             that.getView().byId("multiDatamart").setModel(oDistinctModel1);
                             that.getView().byId("multiFunktion").setModel(oDistinctModel2);
@@ -145,11 +144,6 @@ sap.ui.define([
                             that.getView().byId("multiWertK").setModel(oDistinctModel7);
 
                             that._oPage.setBusy(false);
-                            console.log("that.aValue:" + that.aValue.length);
-                            console.log("aDistinctItems:" + aDistinctItems.length);
-                            console.log("aDistinctItems1:" + aDistinctItems1.length);
-                            console.log("aDistinctItems2:" + aDistinctItems2.length);
-
                             return;
                         }
                     }.bind(this),
@@ -278,13 +272,13 @@ sap.ui.define([
                             value1: sSelectedKey
                         });
                     });
-                
+
                 if (aSelectedKeys.length > 0) {
                     aResult.push(new sap.ui.model.Filter({
                         filters: aFilters,
                         and: false
                     }));
-                }                
+                }
 
                 return aResult;
             }, []);

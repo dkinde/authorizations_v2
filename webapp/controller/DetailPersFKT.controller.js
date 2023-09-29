@@ -29,14 +29,14 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorization.controller.HAUPF001", {
+    return Controller.extend("authorization.controller.DetailPersFKT", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
-            this._mViewSettingsDialogs = {};
-            this.mGroupFunctions = {};
+            /* this._mViewSettingsDialogs = {};
+            this.mGroupFunctions = {}; */
             sap.ui.getCore().getConfiguration().setLanguage("de");
 
-            this.aValue = [];
+            /* this.aValue = [];
             this._oPage = this.byId("dynamicPage1");
 
             var that = this,
@@ -89,10 +89,10 @@ sap.ui.define([
                     }
                 });
             }
-            getData();
+            getData(); */
 
             /* this.oSmartVariantManagement = this.getView().byId("svm"); */
-            this.oFilterBar = this.getView().byId("filterbar");
+            /* this.oFilterBar = this.getView().byId("filterbar");
             this.oExpandedLabel = this.getView().byId("expandedLabel");
             this.oSnappedLabel = this.getView().byId("snappedLabel");
             this.oTable = this.getView().byId("table1");
@@ -102,7 +102,7 @@ sap.ui.define([
 
             this.oFilterBar.registerFetchData(this.fetchData);
             this.oFilterBar.registerApplyData(this.applyData);
-            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
+            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues); */
 
             this.oView = this.getView();
 
@@ -116,14 +116,15 @@ sap.ui.define([
             this.oSmartVariantManagement.initialise(function () { }, this.oFilterBar); */
 
         },
-        onNavButtonPressed: function () {
+        /* onNavButtonPressed: function () {
             this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
             UIComponent.getRouterFor(this).navTo("RouteFunktion");
+        }, */
+        onCancelTwoColumns: function () {
+            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
         },
-        onListItemPress: function () {
-            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded);
-        },
-        fetchData: function () {
+
+        /* fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
                 aResult.push({
                     groupName: oFilterItem.getGroupName(),
@@ -227,7 +228,7 @@ sap.ui.define([
 
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
-        },
+        }, */
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
@@ -619,32 +620,6 @@ sap.ui.define([
             oSheet.build().finally(function () {
                 oSheet.destroy();
             });
-        },
-        onRefresh: function () {
-            var oBinding = this.byId("table1").getBinding("items");
-
-            if (oBinding.hasPendingChanges()) {
-                sap.m.MessageBox.error(this._getText("refreshNotPossibleMessage"));
-                return;
-            }
-            oBinding.refresh();
-            sap.m.MessageToast.show(this._getText("refreshSuccessMessage"));
-        },
-        _getText: function (sTextId, aArgs) {
-            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sTextId, aArgs);
-        },
-        _setUIChanges: function (bHasUIChanges) {
-            if (this._bTechnicalErrors) {
-                // If there is currently a technical error, then force 'true'.
-                bHasUIChanges = true;
-            } else if (bHasUIChanges === undefined) {
-                bHasUIChanges = this.getView().getModel().hasPendingChanges();
-            }
-
-            var oContext = this.byId("table1").getSelectedItem().getBindingContext().setProperty("/hasUIChanges", bHasUIChanges);
-        },
-        _setBusy: function (bIsBusy) {
-            var oView = this.getView().setBusy(bIsBusy);
         }
     });
 });

@@ -1,9 +1,25 @@
-<mvc:View   controllerName="authorization.controller.Funktion"
-            xmlns:mvc="sap.ui.core.mvc" 
+<mvc:View   xmlns:mvc="sap.ui.core.mvc" 
             displayBlock="true"
-            xmlns="sap.m" 
-            xmlns:layout="sap.ui.layout">
-    <Page   id="page" 
+            xmlns="sap.f"             
+            height="100%">
+
+	<FlexibleColumnLayout id="flexibleColumnLayout" backgroundDesign="Solid">
+		<beginColumnPages>
+			<mvc:XMLView id="beginPersFKT" viewName="authorization.view.HAUPF001"/> 
+		</beginColumnPages>
+        <midColumnPages>
+			<mvc:XMLView id="detailPersFKT" viewName="authorization.view.DetailPersFKT"/>
+		</midColumnPages>
+	</FlexibleColumnLayout>
+
+<!--     <FlexibleColumnLayout   autoFocus="false"
+                            id="fcl"
+                            stateChange="onStateChanged"
+                            restoreFocusOnBackNavigation="true"
+                            layout="{/layout}"
+                            backgroundDesign="Translucent"/> -->
+
+<!--     <Page   id="page" 
             title="{i18n>funktionPageTitle}" 
             navButtonPress=".onNavButtonPressed" 
             showNavButton="true">
@@ -40,7 +56,7 @@
                 <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
                                 id="g2" 
                                 header="{i18n>funktionGenTile2Header}"                                 
-                                press="onNavToMasterPersFKT">                    
+                                press="onNavToHAUPF001">                    
                     <TileContent id="t3">                            
                         <NumericContent value="{
                                             path: '/HAUPF001/$count'
@@ -52,5 +68,5 @@
                 </GenericTile>               
             </layout:HorizontalLayout>            
         </layout:VerticalLayout>        
-    </Page>
+    </Page> -->
 </mvc:View>

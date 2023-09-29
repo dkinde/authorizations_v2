@@ -37,7 +37,7 @@ sap.ui.define([
             this.maxFunktion = 1;
             this.aNewEntryDatamart = [];
             this.bAlleDatamart = false;
-            this.aIOBJ_Sondern = [];            
+            this.aIOBJ_Sondern = [];
 
             this.aValue = [];
 
@@ -64,7 +64,7 @@ sap.ui.define([
                     }
                 });
             }
-            getEntit();                        
+            getEntit();
 
             function getData() {
                 $.ajax({
@@ -126,12 +126,7 @@ sap.ui.define([
                             that.getView().byId("multiEntit").setModel(oDistinctModel2);
                             that.getView().byId("multiWert").setModel(oDistinctModel3);
 
-
                             that._oPage.setBusy(false);
-                            console.log("that.aValue:" + that.aValue.length);
-                            console.log("aDistinctItems:" + aDistinctItems.length);
-                            console.log("aDistinctItems1:" + aDistinctItems1.length);
-
                             return;
                         }
                     }.bind(this),

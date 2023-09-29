@@ -66,7 +66,7 @@
                         growingScrollToLoad="true"
                         growingThreshold="100" 
                         id="table1" 
-                        mode="SingleSelectMaster" 
+                        mode="SingleSelectLeft" 
                         items="{
                             path: '/HAUPF001',
                             parameters: {
@@ -74,7 +74,10 @@
                             }    
                         }"
                         fixedLayout="false"
-                        alternateRowColors="true">
+                        alternateRowColors="true"
+                        class="sapFDynamicPageAlignContent"
+					    width="auto"
+                        inset="false">
                     <headerToolbar>
                         <Toolbar>
                             <content>                            
@@ -118,7 +121,7 @@
                         </Column>                                                                      
                     </columns>
                     <items>
-                        <ColumnListItem vAlign="Middle">
+                        <ColumnListItem type="Navigation" press="onListItemPress">
                             <cells>                                                                                        
                                 <ObjectIdentifier text="{personalnummer}" />
                                 <ObjectIdentifier text="{funktion}" />                                                                                       

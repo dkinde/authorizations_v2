@@ -180,6 +180,13 @@
           ]
         },
         {
+          "name": "RouteMasterPersFKT",
+          "pattern": "Funktion/MasterPersFKT",
+          "target": [
+            "TargetMasterPersFKT"
+          ]
+        },
+        {
           "name": "RouteHAUFW001",
           "pattern": "Funktion/HAUFW001",
           "target": [
@@ -256,6 +263,13 @@
           "viewType": "XML",
           "viewId": "HAUFW001",
           "viewName": "HAUFW001",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetMasterPersFKT": {
+          "viewType": "XML",
+          "viewId": "MasterPersFKT",
+          "viewName": "MasterPersFKT",
           "viewLevel": 2,
           "transition": "slide"
         }
