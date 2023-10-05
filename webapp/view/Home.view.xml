@@ -63,14 +63,14 @@
                             frameType="TwoByOne"                          
                             header="{i18n>homepageGenTile5Header}" 
                             subheader="{i18n>homepageGenTile5Content}"                                
-                            press="onNavToKontroll">                    
+                            press="onNavToPersPlan">                    
                         <TileContent id="t6">                            
                             <!-- <FeedContent    contentText="{i18n>homepageGenTile4Content}" 
                                             value="{
                                                 path: '/HAUPLPHA/$count'
                                             }" /> -->  
                             <NumericContent value="{
-                                                path: '/HAUPLPHA/$count'
+                                                path: '/PERID_PLAPHA/$count'
                                             }" 
                                             scale="Einträge"
                                             icon="sap-icon://menu2" 

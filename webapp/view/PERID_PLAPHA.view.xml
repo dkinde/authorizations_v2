@@ -4,13 +4,13 @@
             xmlns:l="sap.ui.layout"
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
-            controllerName="authorization.controller.HAUPF001">
+            controllerName="authorization.controller.PERID_PLAPHA">
 
     <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
-                        <Title text="{i18n>table5PageTitle}"/>
+                        <Title text="{i18n>table7PageTitle}"/>
 						<!-- <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" /> -->
 					</f:heading>
 					<f:expandedContent>
@@ -23,7 +23,7 @@
                         <Button text="Schließen" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:actions>
                     <f:navigationActions>
-                        <Button text="zur Menü-Sondernfunktion" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                        <Button text="zur Startseite" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:navigationActions>
 				</f:DynamicPageTitle>
 			</f:title>
@@ -36,23 +36,22 @@
 								<fb:FilterGroupItem id="filterPersonal" name="personalnummer" label="{i18n>colPIPEPERID}" groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
 										<MultiComboBox  id="multiPersonal" name="personalnummer" selectionChange=".onSelectionChange"
-                                                        showSecondaryValues= "true"
                                                         items="{
                                                             path: '/distinctItems',
 												            templateShareable: true
                                                         }">
-											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtlg}"/>
+											<core:ListItem key="{personalnummer}" text="{personalnummer}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="funktion" label="{i18n>colAUFKT}" groupName="Group1" visibleInFilterBar="true">
+								<fb:FilterGroupItem name="pla_pha" label="{i18n>colCOPLAPHA}" groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
-										<MultiComboBox	id="multiFunktion" name="funktion"	selectionChange=".onSelectionChange"
+										<MultiComboBox	id="multiPla_pha" name="pla_pha"	selectionChange=".onSelectionChange"
                                                         items="{
                                                             path: '/distinctItems1',
 												            templateShareable: true
                                                         }">
-											<core:ListItem key="{funktion}" text="{funktion}"/>
+											<core:ListItem key="{pla_pha}" text="{pla_pha}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>								
@@ -69,7 +68,7 @@
                         id="table1" 
                         mode="SingleSelectLeft" 
                         items="{
-                            path: '/HAUPF001',
+                            path: '/PERID_PLAPHA',
                             parameters: {
                                 $count: true                                    
                             }    
@@ -114,18 +113,18 @@
                         </Toolbar>
                     </headerToolbar>
                     <columns>
-                        <Column mergeDuplicates="false">
+                        <Column mergeDuplicates="true">
                             <Text text="{i18n>colPIPEPERID}" />
                         </Column>
                         <Column>
-                            <Text text="{i18n>colAUFKT}" />
+                            <Text text="{i18n>colCOPLAPHA}" />
                         </Column>                                                                      
                     </columns>
                     <items>
-                        <ColumnListItem type="Navigation" press="onListItemPress">
+                        <ColumnListItem>
                             <cells>                                                                                        
-                                <ObjectIdentifier title="{personalnummer}" text="{Txtlg}" />
-                                <ObjectIdentifier text="{funktion}" />                                                                                       
+                                <ObjectIdentifier text="{personalnummer}" />
+                                <ObjectIdentifier text="{pla_pha}" />                                                                                       
                             </cells>                                        
                         </ColumnListItem>
                     </items>

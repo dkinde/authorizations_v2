@@ -152,6 +152,13 @@
           ]
         },
         {
+          "name": "RoutePersPlan",
+          "pattern": "PERID_PLAPHA",
+          "target": [
+            "TargetPERID_PLAPHA"
+          ]
+        },
+        {
           "name": "RouteAUDMART",
           "pattern": "BasisKonfig/AUDMART",
           "target": [
@@ -181,14 +188,14 @@
         },
         {
           "name": "RouteMasterPersFKT",
-          "pattern": "Funktion/MasterPersFKT",
+          "pattern": ":layout:",
           "target": [
             "TargetMasterPersFKT"
           ]
         },
         {
           "name": "RouteDetailPersFKT",
-          "pattern": "Funktion/HAUPF001/DetailPersFKT/{funktion}/{layout}",
+          "pattern": "Funktion/HAUPF001/{funktion}/{layout}",
           "target": [
             "TargetDetailPersFKT",
             "TargetHAUPF001"
@@ -238,6 +245,13 @@
           "viewId": "HAUKB001",
           "viewName": "HAUKB001",
           "viewLevel": 1
+        },
+        "TargetPERID_PLAPHA": {
+          "viewType": "XML",
+          "viewId": "PERID_PLAPHA",
+          "viewName": "PERID_PLAPHA",
+          "viewLevel": 1,
+          "transition": "slide"
         },
         "TargetAUDMART": {
           "viewType": "XML",

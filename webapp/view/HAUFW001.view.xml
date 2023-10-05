@@ -10,7 +10,7 @@
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
-                        <Title text="Funktion"/>
+                        <Title text="{i18n>table4PageTitle}"/>
 						<!-- <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" /> -->
 					</f:heading>
 					<f:expandedContent>
@@ -36,11 +36,12 @@
 								<fb:FilterGroupItem name="funktion" label="{i18n>colAUFKT}" groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
 										<MultiComboBox  id="multiFunktion" name="funktion" selectionChange=".onSelectionChange"
+                                                        showSecondaryValues= "true"
                                                         items="{
                                                             path: '/distinctItems',
 												            templateShareable: true
                                                         }">
-											<core:ListItem key="{funktion}" text="{funktion}"/>
+											<core:ListItem key="{funktion}" text="{funktion}" additionalText="{Txtlg}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>
@@ -155,7 +156,7 @@
                     <items>
                         <ColumnListItem>
                             <cells>                               
-                                <ObjectIdentifier title="{funktion}" text="{entit}"/>
+                                <ObjectIdentifier title="{funktion}" text="{Txtlg}"/>
                                 <ObjectIdentifier text="{typ}" />
                                 <ObjectIdentifier text="{entit}" />
                                 <ObjectIdentifier text="{wert}" />                                                                                                                                   

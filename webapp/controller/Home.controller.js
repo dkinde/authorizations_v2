@@ -24,6 +24,9 @@ sap.ui.define([
             onNavToKontroll: function () {
                 this.getRouter().navTo("RouteKontroll");
             },
+            onNavToPersPlan: function () {
+                this.getRouter().navTo("RoutePersPlan");
+            },
             getRouter: function () {
                 return this.getOwnerComponent().getRouter();
             },

@@ -29,14 +29,14 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorization.controller.DetailPersFKT", {
+    return Controller.extend("authorization.controller.PERID_PLAPHA", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
-            /* this._mViewSettingsDialogs = {};
-            this.mGroupFunctions = {}; */
+            this._mViewSettingsDialogs = {};
+            this.mGroupFunctions = {};
             sap.ui.getCore().getConfiguration().setLanguage("de");
 
-            /* this.aValue = [];
+            this.aValue = [];
             this._oPage = this.byId("dynamicPage1");
 
             var that = this,
@@ -44,7 +44,7 @@ sap.ui.define([
 
             function getData() {
                 $.ajax({
-                    url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPF001" + "?$top=500" + "&$skip=" + iSkip,
+                    url: that.getOwnerComponent().getModel().sServiceUrl + "/PERID_PLAPHA" + "?$top=500" + "&$skip=" + iSkip,
                     method: "GET",
                     success: function (data) {
                         if (data && data.value) {
@@ -64,7 +64,7 @@ sap.ui.define([
                             }, []);
 
                             var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
+                                if (!aUnique.some(function (obj) { return obj.pla_pha === oItem.pla_pha; })) {
                                     aUnique.push(oItem);
                                 }
                                 return aUnique;
@@ -78,7 +78,7 @@ sap.ui.define([
                             });
 
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
-                            that.getView().byId("multiFunktion").setModel(oDistinctModel1);
+                            that.getView().byId("multiPla_pha").setModel(oDistinctModel1);
 
                             that._oPage.setBusy(false);
                             return;
@@ -89,10 +89,10 @@ sap.ui.define([
                     }
                 });
             }
-            getData(); */
+            getData();
 
             /* this.oSmartVariantManagement = this.getView().byId("svm"); */
-            /* this.oFilterBar = this.getView().byId("filterbar");
+            this.oFilterBar = this.getView().byId("filterbar");
             this.oExpandedLabel = this.getView().byId("expandedLabel");
             this.oSnappedLabel = this.getView().byId("snappedLabel");
             this.oTable = this.getView().byId("table1");
@@ -102,7 +102,9 @@ sap.ui.define([
 
             this.oFilterBar.registerFetchData(this.fetchData);
             this.oFilterBar.registerApplyData(this.applyData);
-            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues); */
+            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
+
+            this.oView = this.getView();
 
             /* var oPersInfo = new sap.ui.comp.smartvariants.PersonalizableInfo({
                 type: "filterBar",
@@ -113,47 +115,33 @@ sap.ui.define([
             this.oSmartVariantManagement.addPersonalizableControl(oPersInfo);
             this.oSmartVariantManagement.initialise(function () { }, this.oFilterBar); */
 
-            this.oView = this.getView();
-            this.oRouter = UIComponent.getRouterFor(this);
-
-            this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
-            //this.oRouter.getRoute("RouteHAUPF001").attachPatternMatched(this._onFunktionMatched, this);
-
         },
-        /* onNavButtonPressed: function () {
-            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
-            UIComponent.getRouterFor(this).navTo("RouteFunktion");
-        }, */
-        onCancelTwoColumns: function () {
-            UIComponent.getRouterFor(this).navTo("RouteHAUPF001");
+        onNavButtonPressed: function () {
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
+            UIComponent.getRouterFor(this).navTo("RouteHome");
         },
-        _onFunktionMatched: function (oEvent) {
-            console.log(oEvent.getParameter("arguments"));
-            console.log(oEvent.getParameter("arguments").funktion);
-            this._funktion = oEvent.getParameter("arguments").funktion || this._funktion || "0";
-            console.log(this._funktion);
+        onListItemPress: function (oEvent) {
+            /* console.log(this.oView.getParent().getParent());
+            console.log()
+            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
 
-            var filter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, this._funktion);
+            console.log(oEvent.getSource().getBindingContext().getPath());
 
-            this.byId("funktionTable").getBinding("items").filter(filter, sap.ui.model.FilterType.Application);
+            var funktionPath = oEvent.getSource().getBindingContext().getPath(),
+                funktion = funktionPath.match(/funktion='(\d+)'/);
 
-            /* this.getView().bindElement({
-                path: "/HAUFW001/" + this._funktion,
-                model: this._oModel
-            }); */
+            if (funktion && funktion.length > 1) {
+                const numeroExtraido = funktion[1];
+                console.log("Funktion gefunden: " + numeroExtraido);
+            } else {
+                console.log("Funktion nicht gefunden");
+            }
+
+            // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
+            // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
+            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", { layout: sap.f.LayoutType.TwoColumnsMidExpanded, funktion: funktion[1] });
         },
-        onEditToggleButtonPress: function () {
-            var oObjectPage = this.getView().byId("ObjectPageLayout"),
-                bCurrentShowFooterState = oObjectPage.getShowFooter();
-
-            oObjectPage.setShowFooter(!bCurrentShowFooterState);
-        },
-        onExit: function () {
-            this.oRouter.getRoute("RouteDetailPersFKT").detachPatternMatched(this._onFunktionMatched, this);
-            // this.oRouter.getRoute("RouteHAUPF001").detachPatternMatched(this._onFunktionMatched, this);
-        },
-        /* fetchData: function () {
+        fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
                 aResult.push({
                     groupName: oFilterItem.getGroupName(),
@@ -257,7 +245,7 @@ sap.ui.define([
 
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
-        }, */
+        },
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
@@ -649,6 +637,32 @@ sap.ui.define([
             oSheet.build().finally(function () {
                 oSheet.destroy();
             });
+        },
+        onRefresh: function () {
+            var oBinding = this.byId("table1").getBinding("items");
+
+            if (oBinding.hasPendingChanges()) {
+                sap.m.MessageBox.error(this._getText("refreshNotPossibleMessage"));
+                return;
+            }
+            oBinding.refresh();
+            sap.m.MessageToast.show(this._getText("refreshSuccessMessage"));
+        },
+        _getText: function (sTextId, aArgs) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sTextId, aArgs);
+        },
+        _setUIChanges: function (bHasUIChanges) {
+            if (this._bTechnicalErrors) {
+                // If there is currently a technical error, then force 'true'.
+                bHasUIChanges = true;
+            } else if (bHasUIChanges === undefined) {
+                bHasUIChanges = this.getView().getModel().hasPendingChanges();
+            }
+
+            var oContext = this.byId("table1").getSelectedItem().getBindingContext().setProperty("/hasUIChanges", bHasUIChanges);
+        },
+        _setBusy: function (bIsBusy) {
+            var oView = this.getView().setBusy(bIsBusy);
         }
     });
 });

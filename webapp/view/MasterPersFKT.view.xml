@@ -4,14 +4,18 @@
             height="100%"
             controllerName="authorization.controller.MasterPersFKT">
 
-	<FlexibleColumnLayout id="flexibleColumnLayout" backgroundDesign="Solid" stateChange=".onStateChanged">
-		<beginColumnPages>
+	<FlexibleColumnLayout   id="flexibleColumnLayout" 
+                            backgroundDesign="Solid" 
+                            stateChange=".onStateChanged" 
+                            layout="{/layout}">
+		<!-- <beginColumnPages>
 			<mvc:XMLView id="beginPersFKT" viewName="authorization.view.HAUPF001"/> 
 		</beginColumnPages>
         <midColumnPages>
 			<mvc:XMLView id="detailPersFKT" viewName="authorization.view.DetailPersFKT"/>
-		</midColumnPages>
+		</midColumnPages> -->
 	</FlexibleColumnLayout>
+    
 
 <!--     <FlexibleColumnLayout   autoFocus="false"
                             id="fcl"
