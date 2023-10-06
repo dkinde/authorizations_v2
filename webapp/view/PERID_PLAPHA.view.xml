@@ -41,7 +41,7 @@
                                                             path: '/distinctItems',
 												            templateShareable: true
                                                         }">
-											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtlg}"/>
+											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtmd}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>
@@ -115,17 +115,17 @@
                     </headerToolbar>
                     <columns>
                         <Column mergeDuplicates="false">
-                            <Text text="{i18n>colPIPEPERID}" />
-                        </Column>
-                        <Column>
                             <Text text="{i18n>colCOPLAPHA}" />
                         </Column>                                                                      
+                        <Column mergeDuplicates="false">
+                            <Text text="{i18n>colPIPEPERID}" />
+                        </Column>
                     </columns>
                     <items>
                         <ColumnListItem>
                             <cells>                                                                                        
-                                <ObjectIdentifier title="{personalnummer}" text="{Txtlg}" />
                                 <ObjectIdentifier text="{pla_pha}" />                                                                                       
+                                <ObjectIdentifier title="{personalnummer}" text="{Txtmd}" />
                             </cells>                                        
                         </ColumnListItem>
                     </items>

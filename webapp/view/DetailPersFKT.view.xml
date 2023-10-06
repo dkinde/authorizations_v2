@@ -5,7 +5,6 @@
             xmlns:f="sap.f"
 	        xmlns:form="sap.ui.layout.form"
             controllerName="authorization.controller.DetailPersFKT">
-
 	<ObjectPageLayout   id="ObjectPageLayout"
                         showTitleInHeaderContent="true"
                         alwaysShowContentHeader="false"
@@ -13,15 +12,10 @@
                         headerContentPinnable="true"
                         isChildPage="true"
                         upperCaseAnchorBar="false">
+
                         <headerTitle>
                             <ObjectPageDynamicHeaderTitle>
-                                <actions>
-                                    <!-- <m:ToggleButton
-                                        text="Edit"
-                                        type="Emphasized"/>
-                                    <m:Button
-                                        text="Delete"
-                                        type="Transparent"/> -->
+                                <actions>                                    
                                     <m:Button
                                         icon="sap-icon://decline"
                                         text="Schließen"
@@ -37,12 +31,12 @@
                         </headerTitle>
 
                         <headerContent>
-                            <m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch">
-                                <!-- <f:Avatar
+                            <!-- <m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch">
+                                <f:Avatar
                                     displaySize="L"
                                     displayShape="Square"
                                     class="sapUiTinyMarginEnd">
-                                </f:Avatar> -->
+                                </f:Avatar>
                                 <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
                                     <m:Label text="Main Category"/>
                                 </m:VBox>
@@ -52,15 +46,43 @@
                                 <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
                                     <m:Label text="Price"/>
                                 </m:VBox>
-                            </m:FlexBox>
+                            </m:FlexBox> -->
                         </headerContent>
 
                         <sections>
-                            <ObjectPageSection title="Definition der Funktion">
+                            <ObjectPageSection title="Personal - Funktion">
                                 <subSections>
                                     <ObjectPageSubSection>
                                         <blocks>
-                                            <form:SimpleForm    maxContainerCols="2"
+                                            <m:Table    id="funktionTable1"
+                                                        items="{
+                                                            path: '/HAUPF001',
+                                                            parameters: {
+                                                                $count: true                                    
+                                                            }    
+                                                        }"
+                                                        growing="true"
+                                                        growingThreshold="3"
+                                                        fixedLayout="false"
+                                                        alternateRowColors="true">
+                                                <m:columns>                                                    
+                                                    <m:Column mergeDuplicates="false">
+                                                        <m:Text text="{i18n>colPIPEPERID}" />
+                                                    </m:Column>
+                                                    <m:Column mergeDuplicates="false">
+                                                        <m:Text text="{i18n>colAUFKT}" />
+                                                    </m:Column>                                                    
+                                                </m:columns>
+                                                <m:items>
+                                                    <m:ColumnListItem>
+                                                        <m:cells>
+                                                            <m:ObjectIdentifier title="{personalnummer}" text="{Txtmd}" />
+                                                            <m:ObjectIdentifier title="{funktion}" />                                                            
+                                                        </m:cells>
+                                                    </m:ColumnListItem>
+                                                </m:items>
+                                            </m:Table>
+                                            <!-- <form:SimpleForm    maxContainerCols="2"
                                                                 editable="false"
                                                                 layout="ResponsiveGridLayout"
                                                                 labelSpanL="12"
@@ -79,13 +101,13 @@
                                                     <m:Label text="Wert"/>
                                                     <m:Text text="{HAUFW001>wert}"/>
                                                 </form:content>
-                                            </form:SimpleForm>
+                                            </form:SimpleForm> -->
                                         </blocks>
                                     </ObjectPageSubSection>
                                 </subSections>
                             </ObjectPageSection>
 
-                            <ObjectPageSection title="Vorhandene Funktionen">
+                            <ObjectPageSection title="Funktionswerte/daten">
                                 <subSections>
                                     <ObjectPageSubSection>
                                         <blocks>
@@ -95,7 +117,7 @@
                                                             parameters: {
                                                                 $count: true                                    
                                                             }    
-                                                        }"
+                                                        }"                                                        
                                                         fixedLayout="false"
                                                         alternateRowColors="true">
                                                 <m:columns>
@@ -115,7 +137,7 @@
                                                 <m:items>
                                                     <m:ColumnListItem>
                                                         <m:cells>
-                                                            <m:ObjectIdentifier title="{funktion}" text="{entit}"/>
+                                                            <m:ObjectIdentifier title="{funktion}" text="{Txtlg}"/>
                                                             <m:ObjectIdentifier text="{typ}" />
                                                             <m:ObjectIdentifier text="{entit}" />
                                                             <m:ObjectIdentifier text="{wert}" /> 
@@ -129,56 +151,6 @@
                             </ObjectPageSection>
                         </sections>
 	</ObjectPageLayout>
-
-
-<!--     <Page   id="page" 
-            title="{i18n>funktionPageTitle}" 
-            navButtonPress=".onNavButtonPressed" 
-            showNavButton="true">
-        <Toolbar    height="5rem">
-            <Title  titleStyle="H2" 
-                    text="{i18n>funktionTitle}" 
-                    class="sapUiTinyMarginBegin" 
-                    id="t1"/>
-            <ToolbarSpacer/>
-            <Image  alt="DVZ Icon"                    
-                    src="src/DVZ_icon.png"
-                    useMap=""
-                    height="5rem"
-                    width="5rem">            
-            </Image>                  
-        </Toolbar> 
-        <layout:VerticalLayout  class="sapUiResponsiveMargin" 
-                                id="layout1">            
-            <layout:HorizontalLayout    allowWrapping="true" 
-                                        id="layout2">
-                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
-                                id="g1" 
-                                header="{i18n>funktionGenTile1Header}"                             
-                                press="onNavToHAUFW001">                   
-                    <TileContent id="t2">                            
-                        <NumericContent value="{
-                                            path: '/HAUFW001/$count'
-                                        }"                                                                                          
-                                        id="n1" 
-                                        scale="Einträge"
-                                        icon="sap-icon://menu2"/>                            
-                    </TileContent>                    
-                </GenericTile>
-                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
-                                id="g2" 
-                                header="{i18n>funktionGenTile2Header}"                                 
-                                press="onNavToHAUPF001">                    
-                    <TileContent id="t3">                            
-                        <NumericContent value="{
-                                            path: '/HAUPF001/$count'
-                                        }"                 
-                                        scale="Einträge"                       
-                                        id="n2" 
-                                        icon="sap-icon://menu2"/>                            
-                    </TileContent>                    
-                </GenericTile>               
-            </layout:HorizontalLayout>            
-        </layout:VerticalLayout>        
-    </Page> -->
 </mvc:View>
+
+

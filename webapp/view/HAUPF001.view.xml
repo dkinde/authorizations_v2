@@ -91,10 +91,10 @@
                                         text="{i18n>tableToolbarButtonDelete}" 
                                         press="onDeletePress"/>
                                 <ToolbarSpacer/> 
-                                <SearchField    id="searchField"
+                                <!-- <SearchField    id="searchField"
                                                 width="20%"
                                                 liveChange=".onSearch1"
-                                                placeholder="{i18n>searchFieldPlaceholder}"/>                            
+                                                placeholder="{i18n>searchFieldPlaceholder}"/>  -->                           
                                 <Button id="sortUsersButton"
                                         icon="sap-icon://sort"
                                         tooltip="{i18n>sortButtonText}"
@@ -122,10 +122,10 @@
                         </Column>                                                                      
                     </columns>
                     <items>
-                        <ColumnListItem type="Navigation" press="onListItemPress">
-                            <cells>                                                                                        
-                                <ObjectIdentifier title="{personalnummer}" text="{Txtlg}" />
-                                <ObjectIdentifier text="{funktion}" />                                                                                       
+                        <ColumnListItem type="Navigation" press="onListItemPress" >
+                            <cells>                                                
+                                <ObjectIdentifier title="{personalnummer}" text="{Txtmd}" tooltip="zur Definition der Funktion" />
+                                <ObjectIdentifier text="{funktion}" tooltip="zur Definition der Funktion"/>                                                                                       
                             </cells>                                        
                         </ColumnListItem>
                     </items>

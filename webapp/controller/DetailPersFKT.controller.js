@@ -137,6 +137,7 @@ sap.ui.define([
             var filter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, this._funktion);
 
             this.byId("funktionTable").getBinding("items").filter(filter, sap.ui.model.FilterType.Application);
+            this.byId("funktionTable1").getBinding("items").filter(filter, sap.ui.model.FilterType.Application);
 
             /* this.getView().bindElement({
                 path: "/HAUFW001/" + this._funktion,

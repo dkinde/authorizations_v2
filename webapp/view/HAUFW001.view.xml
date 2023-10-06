@@ -117,18 +117,18 @@
                                         text="{i18n>tableToolbarButtonDelete}" 
                                         press="onDeletePress"/>
                                 <ToolbarSpacer/>
-                                <SearchField    id="searchField"
+                                <!-- <SearchField    id="searchField"
                                                 width="20%"
                                                 liveChange=".onSearch1"
-                                                placeholder="{i18n>searchFieldPlaceholder}"/>
+                                                placeholder="{i18n>searchFieldPlaceholder}"/> -->
                                 <Button id="sortUsersButton"
                                         icon="sap-icon://sort"
                                         tooltip="{i18n>sortButtonText}"
                                         press="handleSortButtonPressed"/> 
-                                <Button id="filterButton"
+                                <!-- <Button id="filterButton"
                                         icon="sap-icon://filter"
                                         tooltip="{i18n>filterButtonText}"
-                                        press="handleFilterButtonPressed"/>
+                                        press="handleFilterButtonPressed"/> -->
                                 <Button id="groupButton"
                                         icon="sap-icon://group-2"
                                         tooltip="{i18n>groupButtonText}"
@@ -144,6 +144,9 @@
                             <Text text="{i18n>colAUFKT}" />
                         </Column>
                         <Column mergeDuplicates="false">
+                            <Text text="{i18n>colTxtlg}" />
+                        </Column>
+                        <Column mergeDuplicates="false">
                             <Text text="{i18n>colAUENTTYP}" />
                         </Column>
                         <Column mergeDuplicates="false">
@@ -156,7 +159,8 @@
                     <items>
                         <ColumnListItem>
                             <cells>                               
-                                <ObjectIdentifier title="{funktion}" text="{Txtlg}"/>
+                                <ObjectIdentifier text="{funktion}" />
+                                <ObjectIdentifier text="{Txtlg}" />
                                 <ObjectIdentifier text="{typ}" />
                                 <ObjectIdentifier text="{entit}" />
                                 <ObjectIdentifier text="{wert}" />                                                                                                                                   
