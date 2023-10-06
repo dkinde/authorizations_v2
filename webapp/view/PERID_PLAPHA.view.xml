@@ -36,11 +36,12 @@
 								<fb:FilterGroupItem id="filterPersonal" name="personalnummer" label="{i18n>colPIPEPERID}" groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
 										<MultiComboBox  id="multiPersonal" name="personalnummer" selectionChange=".onSelectionChange"
+                                                        showSecondaryValues= "true"
                                                         items="{
                                                             path: '/distinctItems',
 												            templateShareable: true
                                                         }">
-											<core:ListItem key="{personalnummer}" text="{personalnummer}"/>
+											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtlg}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>
@@ -98,10 +99,10 @@
                                         icon="sap-icon://sort"
                                         tooltip="{i18n>sortButtonText}"
                                         press="handleSortButtonPressed"/> 
-                                <Button id="filterButton"
+                                <!-- <Button id="filterButton"
                                         icon="sap-icon://filter"
                                         tooltip="{i18n>filterButtonText}"
-                                        press="handleFilterButtonPressed"/>
+                                        press="handleFilterButtonPressed"/> -->
                                 <Button id="groupButton"
                                         icon="sap-icon://group-2"
                                         tooltip="{i18n>groupButtonText}"
@@ -113,7 +114,7 @@
                         </Toolbar>
                     </headerToolbar>
                     <columns>
-                        <Column mergeDuplicates="true">
+                        <Column mergeDuplicates="false">
                             <Text text="{i18n>colPIPEPERID}" />
                         </Column>
                         <Column>
@@ -123,7 +124,7 @@
                     <items>
                         <ColumnListItem>
                             <cells>                                                                                        
-                                <ObjectIdentifier text="{personalnummer}" />
+                                <ObjectIdentifier title="{personalnummer}" text="{Txtlg}" />
                                 <ObjectIdentifier text="{pla_pha}" />                                                                                       
                             </cells>                                        
                         </ColumnListItem>

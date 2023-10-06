@@ -188,7 +188,7 @@
         },
         {
           "name": "RouteMasterPersFKT",
-          "pattern": ":layout:",
+          "pattern": "Funktion/HAUPF001",
           "target": [
             "TargetMasterPersFKT"
           ]
@@ -197,8 +197,7 @@
           "name": "RouteDetailPersFKT",
           "pattern": "Funktion/HAUPF001/{funktion}/{layout}",
           "target": [
-            "TargetDetailPersFKT",
-            "TargetHAUPF001"
+            "TargetDetailPersFKT"
           ]
         },
         {

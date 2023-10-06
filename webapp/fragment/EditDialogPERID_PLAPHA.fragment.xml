@@ -1,0 +1,34 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"     
+>
+<Dialog title="{i18n>editDialogTitle}" id="dialog2" >
+    <content>
+        <form:SimpleForm editable="true">
+            <form:content>
+                <Label text="{i18n>colPIPEPERID}" required="true"/>
+                <Input id="__editCRUD0" 
+                        placeholder="Geben Sie 5 Ziffern ein" 
+                        type="Number" 
+                        liveChange="editValidation" 
+                        valueLiveUpdate="true" 
+                        valueStateText="Geben Sie nicht mehr als 5 Zahlen ein"/>
+                <Label text="{i18n>colAUFKT}" required="true"/>
+                <Input id="__editCRUD1" 
+                        placeholder="Geben Sie 2 Ziffern ein" 
+                        type="Number" 
+                        liveChange="editValidation" 
+                        valueLiveUpdate="true" 
+                        valueStateText="Geben Sie nicht mehr als 2 Zahlen ein"/>                                               
+            </form:content>							
+        </form:SimpleForm>			
+    </content>
+    <beginButton>
+        <Button id="editButton" text="{i18n>editDialogBeginButton}" type="Accept" press=".onUpdateEditPress"/>
+    </beginButton>
+    <endButton>
+        <Button text="{i18n>editDialogEndButton}"  type="Reject" press=".onCloseEditDialog"/>
+    </endButton>
+</Dialog>
+</c:FragmentDefinition>

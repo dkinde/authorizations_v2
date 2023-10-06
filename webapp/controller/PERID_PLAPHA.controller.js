@@ -37,6 +37,7 @@ sap.ui.define([
             sap.ui.getCore().getConfiguration().setLanguage("de");
 
             this.aValue = [];
+            this.aPhase = [];
             this._oPage = this.byId("dynamicPage1");
 
             var that = this,
@@ -76,6 +77,7 @@ sap.ui.define([
                             var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                                 distinctItems1: aDistinctItems1
                             });
+                            that.aPhase = aDistinctItems1;
 
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
                             that.getView().byId("multiPla_pha").setModel(oDistinctModel1);
@@ -119,27 +121,6 @@ sap.ui.define([
         onNavButtonPressed: function () {
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
             UIComponent.getRouterFor(this).navTo("RouteHome");
-        },
-        onListItemPress: function (oEvent) {
-            /* console.log(this.oView.getParent().getParent());
-            console.log()
-            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
-
-            console.log(oEvent.getSource().getBindingContext().getPath());
-
-            var funktionPath = oEvent.getSource().getBindingContext().getPath(),
-                funktion = funktionPath.match(/funktion='(\d+)'/);
-
-            if (funktion && funktion.length > 1) {
-                const numeroExtraido = funktion[1];
-                console.log("Funktion gefunden: " + numeroExtraido);
-            } else {
-                console.log("Funktion nicht gefunden");
-            }
-
-            // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
-            // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
-            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", { layout: sap.f.LayoutType.TwoColumnsMidExpanded, funktion: funktion[1] });
         },
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
@@ -250,7 +231,7 @@ sap.ui.define([
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
             this.getView().byId("selectpersonalnummer").setSelectedKey(null);
-            this.getView().byId("selectfunktion").setSelectedKey(null);
+            this.getView().byId("selectphase").setSelectedKey(null);
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -263,13 +244,17 @@ sap.ui.define([
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsHAUPF001",
+                    name: "authorization.fragment.InputFieldsPERID_PLAPHA",
                     controller: this
                 });
             }
             this._oDialogCRUD.then(function (oDialog) {
                 this.oDialog = oDialog;
                 this.oDialog.open();
+                var oDistinctModel1 = new sap.ui.model.json.JSONModel({
+                    distinctItems1: this.aPhase
+                });
+                this.byId("selectphase").setModel(oDistinctModel1);
             }.bind(this));
         },
         onCreatePress: function () {
@@ -292,22 +277,22 @@ sap.ui.define([
 
             try {
                 oNewEntry.personalnummer = this.getView().byId("selectpersonalnummer").getSelectedItem().getText();
-                oNewEntry.funktion = this.getView().byId("selectfunktion").getSelectedItem().getText();
+                oNewEntry.pla_pha = this.getView().byId("selectphase").getSelectedItem().getText();
 
                 for (var i = 0; i < aItems.length; i++) {
                     var oItem = aItems[i],
                         oContext = oItem.getBindingContext(),
                         sPersonalnummer = oContext.getProperty("personalnummer"),
-                        sFunktion = oContext.getProperty("funktion");
+                        sPhase = oContext.getProperty("pla_pha");
 
                     if (sPersonalnummer === oNewEntry.personalnummer &&
-                        sFunktion === oNewEntry.funktion) {
+                        sPhase === oNewEntry.pla_pha) {
                         throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
                     }
                 }
                 var oContext = this.byId("table1").getBinding("items").create({
                     personalnummer: oNewEntry.personalnummer,
-                    funktion: oNewEntry.funktion
+                    pla_pha: oNewEntry.pla_pha
                 });
                 oContext.created().then(fnSucces, fnError).catch(function (oError) {
                     if (!oError.canceled) {
@@ -324,15 +309,15 @@ sap.ui.define([
             }
 
             this.getView().byId("selectpersonalnummer").setSelectedKey(null);
-            this.getView().byId("selectfunktion").setSelectedKey(null);
+            this.getView().byId("selectphase").setSelectedKey(null);
             this.byId("dialog1").close();
         },
         createValidation: function () {
             var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
-                sFunktion = this.getView().byId("selectfunktion").getSelectedKey();
+                sPhase = this.getView().byId("selectphase").getSelectedKey();
 
             // validation create button
-            if (sPersonalNummer && sFunktion) {
+            if (sPersonalNummer && sPhase) {
                 this.byId("createButton").setVisible(true);
             } else {
                 this.byId("createButton").setVisible(false);
@@ -454,7 +439,7 @@ sap.ui.define([
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit) {
                     this._oDialogEdit = this.loadFragment({
-                        name: "authorization.fragment.EditDialogHAUPF001",
+                        name: "authorization.fragment.EditDialogPERID_PLAPHA",
                         controller: this
                     });
                 }
@@ -498,7 +483,7 @@ sap.ui.define([
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
                     new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery),
-                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sQuery)
+                    new sap.ui.model.Filter("pla_pha", sap.ui.model.FilterOperator.Contains, sQuery)
                 ], false);
                 aFilters.push(filter);
             }
@@ -523,19 +508,19 @@ sap.ui.define([
             this.groupReset = true;
         },
         handleSortButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogHAUPF001")
+            this.getViewSettingsDialog("authorization.fragment.SortDialogPERID_PLAPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUPF001")
+            this.getViewSettingsDialog("authorization.fragment.FilterDialogPERID_PLAPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUPF001")
+            this.getViewSettingsDialog("authorization.fragment.GroupDialogPERID_PLAPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
@@ -629,7 +614,7 @@ sap.ui.define([
                     hierarchyLevel: 'Level'
                 },
                 dataSource: oRowBinding,
-                fileName: 'Table export HAUPF001.xlsx',
+                fileName: 'Table export PERID_PLAPHA.xlsx',
                 worker: false
             };
 
