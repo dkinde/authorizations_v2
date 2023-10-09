@@ -6,12 +6,11 @@
 		    xmlns:fb="sap.ui.comp.filterbar"
             controllerName="authorization.controller.HAUFW001">
 
-    <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
+    <f:DynamicPage id="dynamicPage1" headerExpanded="true" >
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
-                        <Title text="{i18n>table4PageTitle}"/>
-						<!-- <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" /> -->
+                        <Title text="{i18n>table4PageTitle}"/>						
 					</f:heading>
 					<f:expandedContent>
 						<Label id="expandedLabel" text="No filters active" />
@@ -87,20 +86,70 @@
 				</f:DynamicPageHeader>
 			</f:header>
 			<f:content>
+            <VBox class="sapUiSmallMargin">
+                <Title  text="Sonderfunktion Übersicht"/>  
+                <Table  growing="true"
+                        growingThreshold="5" 
+                        mode="SingleSelectMaster"                  
+                        id="table5"  
+                        fixedLayout="false"  
+                        alternateRowColors="true"     
+                        sticky="ColumnHeaders,HeaderToolbar"                 
+                        items="{
+                            path: '/FKT_TXT',
+                            parameters: {
+                                $count: true                                    
+                            }                                                                   
+                        }"
+                        class="sapFDynamicPageAlignContent"
+					    width="auto"
+                        inset="false"                        
+                        selectionChange="onFunktionPress"> 
+                    <headerToolbar>
+                        <Toolbar>
+                            <content>                                
+                                <Button text="Auswahl löschen"
+                                        press=""/>                                                
+                            </content>
+                        </Toolbar>
+                    </headerToolbar>                   
+                    <columns>
+                        <Column mergeDuplicates="false">
+                            <Text text="{i18n>colAUFKT}" />
+                        </Column>
+                        <Column mergeDuplicates="false">
+                            <Text text="{i18n>colTxtlg}" />
+                        </Column>                                                                                               
+                    </columns>
+                    <items>
+                        <ColumnListItem >
+                            <cells>                               
+                                <ObjectIdentifier text="{funktion}" />
+                                <ObjectIdentifier text="{Txtlg}" />                                                                                                                                                                  
+                            </cells>                                        
+                        </ColumnListItem>
+                    </items>                                
+                </Table>
+            <!-- </f:content>
+            <f:content> -->
+                <Title  text="Details zu Sonderfunktion"/> 
                 <Table  growing="true"
                         growingScrollToLoad="true"
-                        growingThreshold="200"
+                        growingThreshold="50"
                         sticky="ColumnHeaders,HeaderToolbar" 
                         id="table1" 
                         mode="SingleSelectLeft" 
-                            items="{
-                                path: '/HAUFW001',
-                                parameters: {
-                                    $count: true                                    
-                                }    
-                            }"
-                            fixedLayout="false"
-                            alternateRowColors="true">
+                        items="{
+                            path: '/HAUFW001',
+                            parameters: {
+                                $count: true                                    
+                            }    
+                        }"
+                        fixedLayout="false"
+                        alternateRowColors="true"
+                        class="sapFDynamicPageAlignContent"
+					    width="auto"
+                        inset="false">
                     <headerToolbar>
                         <Toolbar>
                             <content>
@@ -116,19 +165,11 @@
                                         type="Reject" 
                                         text="{i18n>tableToolbarButtonDelete}" 
                                         press="onDeletePress"/>
-                                <ToolbarSpacer/>
-                                <!-- <SearchField    id="searchField"
-                                                width="20%"
-                                                liveChange=".onSearch1"
-                                                placeholder="{i18n>searchFieldPlaceholder}"/> -->
+                                <ToolbarSpacer/>                                
                                 <Button id="sortUsersButton"
                                         icon="sap-icon://sort"
                                         tooltip="{i18n>sortButtonText}"
-                                        press="handleSortButtonPressed"/> 
-                                <!-- <Button id="filterButton"
-                                        icon="sap-icon://filter"
-                                        tooltip="{i18n>filterButtonText}"
-                                        press="handleFilterButtonPressed"/> -->
+                                        press="handleSortButtonPressed"/>                                 
                                 <Button id="groupButton"
                                         icon="sap-icon://group-2"
                                         tooltip="{i18n>groupButtonText}"
@@ -143,9 +184,9 @@
                         <Column mergeDuplicates="false">
                             <Text text="{i18n>colAUFKT}" />
                         </Column>
-                        <Column mergeDuplicates="false">
+                        <!-- <Column mergeDuplicates="false">
                             <Text text="{i18n>colTxtlg}" />
-                        </Column>
+                        </Column> -->
                         <Column mergeDuplicates="false">
                             <Text text="{i18n>colAUENTTYP}" />
                         </Column>
@@ -160,14 +201,15 @@
                         <ColumnListItem>
                             <cells>                               
                                 <ObjectIdentifier text="{funktion}" />
-                                <ObjectIdentifier text="{Txtlg}" />
+                                <!-- <ObjectIdentifier text="{Txtlg}" /> -->
                                 <ObjectIdentifier text="{typ}" />
                                 <ObjectIdentifier text="{entit}" />
                                 <ObjectIdentifier text="{wert}" />                                                                                                                                   
                             </cells>                                        
                         </ColumnListItem>
                     </items>                                
-                </Table>
+                </Table>            
+                </VBox>    
 			</f:content>
 		</f:DynamicPage>
 

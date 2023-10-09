@@ -139,7 +139,7 @@ sap.ui.define([
 
             // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
             // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
-            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", { layout:sap.f.LayoutType.TwoColumnsMidExpanded, funktion: funktion[1] });
+            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", { layout: sap.f.LayoutType.TwoColumnsMidExpanded, funktion: funktion[1] });
         },
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
@@ -245,7 +245,7 @@ sap.ui.define([
 
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
-        },
+        },        
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");

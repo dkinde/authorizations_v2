@@ -289,6 +289,15 @@ sap.ui.define([
             this.byId("selecttyp1").setSelectedKey(null);
             this.oDialogEdit.close();
         },
+        onFunktionPress: function () {
+            var oSelectedItem = this.byId("table5").getSelectedItem(),
+                oContext = oSelectedItem.getBindingContext(),
+                iFunktion = oContext.getProperty("funktion"),
+                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, iFunktion);
+
+            this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
+
+        },
         filterTyp: function () {
             var selTyp = this.byId("selecttyp").getSelectedItem().getText(),
                 selEnt = this.byId("selectentit");
