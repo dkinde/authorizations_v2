@@ -89,7 +89,7 @@
             <VBox class="sapUiSmallMargin">
                 <Title  text="Sonderfunktion Übersicht"/>  
                 <Table  growing="true"
-                        growingThreshold="5" 
+                        growingThreshold="4" 
                         mode="SingleSelectMaster"                  
                         id="table5"  
                         fixedLayout="false"  
@@ -109,7 +109,7 @@
                         <Toolbar>
                             <content>                                
                                 <Button text="Auswahl löschen"
-                                        press=""/>                                                
+                                        press="onCleanFilter"/>                                                
                             </content>
                         </Toolbar>
                     </headerToolbar>                   

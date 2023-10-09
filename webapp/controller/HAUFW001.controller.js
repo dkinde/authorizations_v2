@@ -150,7 +150,21 @@ sap.ui.define([
             this.oFilterBar.registerApplyData(this.applyData);
             this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
         },
+        onExit: function () {
+            //Controller.prototype.onExit.apply(this, arguments);
+            var oFilter = [],
+                oSelectedItem = this.byId("table5").getSelectedItem();
+
+            // oSelectedItem.blur();
+            this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
+
+        },
         onNavButtonPressed: function () {
+            var oFilter = [],
+                oSelectedItem = this.byId("table5").getSelectedItem();
+
+            // oSelectedItem.blur();
+            this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteFunktion");
         },
@@ -295,6 +309,14 @@ sap.ui.define([
                 iFunktion = oContext.getProperty("funktion"),
                 oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, iFunktion);
 
+            this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
+
+        },
+        onCleanFilter: function () {
+            var oFilter = [],
+                oSelectedItem = this.byId("table5").getSelectedItem();
+
+            // oSelectedItem.blur();
             this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
 
         },
