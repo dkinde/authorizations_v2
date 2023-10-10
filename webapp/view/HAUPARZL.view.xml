@@ -1,7 +1,7 @@
 <mvc:View   xmlns:mvc="sap.ui.core.mvc"         
             xmlns="sap.m"
             xmlns:l="sap.ui.layout"
-            controllerName="authorization.controller.HAUPARZL">
+            controllerName="authorizationsv2.controller.HAUPARZL">
     <Page   title="{i18n>table3PageTitle}"
             showNavButton="true"
             navButtonPress=".onNavButtonPressed"

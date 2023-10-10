@@ -27,7 +27,7 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorization.controller.HAUKB001", {
+    return Controller.extend("authorizationsv2.controller.HAUKB001", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
             this._mViewSettingsDialogs = {};

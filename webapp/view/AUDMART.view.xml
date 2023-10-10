@@ -1,6 +1,6 @@
 <mvc:View   xmlns:mvc="sap.ui.core.mvc"            
             xmlns="sap.m"            
-            controllerName="authorization.controller.AUDMART">
+            controllerName="authorizationsv2.controller.AUDMART">
     <Page   title="{i18n>table1PageTitle}"
             showNavButton="true"
             navButtonPress=".onNavButtonPressed"

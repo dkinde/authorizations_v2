@@ -29,7 +29,7 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorization.controller.PERID_PLAPHA", {
+    return Controller.extend("authorizationsv2.controller.HAUPLPHA", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
             this._mViewSettingsDialogs = {};
@@ -45,7 +45,7 @@ sap.ui.define([
 
             function getData() {
                 $.ajax({
-                    url: that.getOwnerComponent().getModel().sServiceUrl + "/PERID_PLAPHA" + "?$top=500" + "&$skip=" + iSkip,
+                    url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPLPHA" + "?$top=500" + "&$skip=" + iSkip,
                     method: "GET",
                     success: function (data) {
                         if (data && data.value) {
@@ -244,7 +244,7 @@ sap.ui.define([
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsPERID_PLAPHA",
+                    name: "authorization.fragment.InputFieldsHAUPLPHA",
                     controller: this
                 });
             }
@@ -439,7 +439,7 @@ sap.ui.define([
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit) {
                     this._oDialogEdit = this.loadFragment({
-                        name: "authorization.fragment.EditDialogPERID_PLAPHA",
+                        name: "authorization.fragment.EditDialogHAUPLPHA",
                         controller: this
                     });
                 }
@@ -508,19 +508,19 @@ sap.ui.define([
             this.groupReset = true;
         },
         handleSortButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogPERID_PLAPHA")
+            this.getViewSettingsDialog("authorization.fragment.SortDialogHAUPLPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogPERID_PLAPHA")
+            this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUPLPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogPERID_PLAPHA")
+            this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUPLPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
@@ -614,7 +614,7 @@ sap.ui.define([
                     hierarchyLevel: 'Level'
                 },
                 dataSource: oRowBinding,
-                fileName: 'Table export PERID_PLAPHA.xlsx',
+                fileName: 'Table export HAUPLPHA.xlsx',
                 worker: false
             };
 

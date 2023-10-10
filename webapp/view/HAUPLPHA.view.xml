@@ -4,7 +4,7 @@
             xmlns:l="sap.ui.layout"
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
-            controllerName="authorization.controller.PERID_PLAPHA">
+            controllerName="authorizationsv2.controller.HAUPLPHA">
 
     <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
 			<f:title>
@@ -41,7 +41,7 @@
                                                             path: '/distinctItems',
 												            templateShareable: true
                                                         }">
-											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtmd}"/>
+											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{txt}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>
@@ -69,7 +69,7 @@
                         id="table1" 
                         mode="SingleSelectLeft" 
                         items="{
-                            path: '/PERID_PLAPHA',
+                            path: '/HAUPLPHA',
                             parameters: {
                                 $count: true                                    
                             }    
@@ -125,7 +125,7 @@
                         <ColumnListItem>
                             <cells>                                                                                        
                                 <ObjectIdentifier text="{pla_pha}" />                                                                                       
-                                <ObjectIdentifier title="{personalnummer}" text="{Txtmd}" />
+                                <ObjectIdentifier title="{personalnummer}" text="{txt}" />
                             </cells>                                        
                         </ColumnListItem>
                     </items>

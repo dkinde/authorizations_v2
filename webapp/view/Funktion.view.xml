@@ -1,4 +1,4 @@
-<mvc:View   controllerName="authorization.controller.Funktion"
+<mvc:View   controllerName="authorizationsv2.controller.Funktion"
             xmlns:mvc="sap.ui.core.mvc" 
             displayBlock="true"
             xmlns="sap.m" 

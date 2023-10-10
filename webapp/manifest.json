@@ -3,7 +3,14 @@
   "sap.app": {
     "id": "authorizationsv2",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
+    "i18n": {
+      "bundleName": "i18n/i18n.properties",
+      "supportedLocales": [
+        "en",
+        "de"
+      ],
+      "fallbackLocale": "de"
+    },
     "applicationVersion": {
       "version": "0.0.1"
     },
@@ -66,7 +73,12 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "authorizationsv2.i18n.i18n"
+          "bundleName": "authorizationsv2.i18n.i18n",
+          "supportedLocales": [
+            "en",
+            "de"
+          ],
+          "fallbackLocale": "de"
         }
       },
       "": {
@@ -95,24 +107,199 @@
         "viewPath": "authorizationsv2.view",
         "controlAggregation": "pages",
         "controlId": "app",
-        "clearControlAggregation": false
+        "clearControlAggregation": false,
+        "transition": "slide",
+        "bypassed": {
+          "target": [
+            "TargetHome"
+          ]
+        }
       },
       "routes": [
         {
-          "name": "RouteView1",
+          "name": "RouteHome",
           "pattern": ":?query:",
           "target": [
-            "TargetView1"
+            "TargetHome"
+          ]
+        },
+        {
+          "name": "RouteBasisKonfig",
+          "pattern": "BasisKonfig",
+          "target": [
+            "TargetBasisKonfig"
+          ]
+        },
+        {
+          "name": "RouteFunktion",
+          "pattern": "Funktion",
+          "target": [
+            "TargetFunktion"
+          ]
+        },
+        {
+          "name": "RouteWizard",
+          "pattern": "Wizard",
+          "target": [
+            "TargetWizard"
+          ]
+        },
+        {
+          "name": "RouteKontroll",
+          "pattern": "Kontroll",
+          "target": [
+            "TargetKontroll"
+          ]
+        },
+        {
+          "name": "RoutePersPlan",
+          "pattern": "HAUPLPHA",
+          "target": [
+            "TargetHAUPLPHA"
+          ]
+        },
+        {
+          "name": "RouteAUDMART",
+          "pattern": "BasisKonfig/AUDMART",
+          "target": [
+            "TargetAUDMART"
+          ]
+        },
+        {
+          "name": "RouteAUMPVDM",
+          "pattern": "BasisKonfig/AUMPVDM",
+          "target": [
+            "TargetAUMPVDM"
+          ]
+        },
+        {
+          "name": "RouteHAUPARZL",
+          "pattern": "BasisKonfig/HAUPARZL",
+          "target": [
+            "TargetHAUPARZL"
+          ]
+        },
+        {
+          "name": "RouteHAUPF001",
+          "pattern": "Funktion/HAUPF001",
+          "target": [
+            "TargetHAUPF001"
+          ]
+        },
+        {
+          "name": "RouteMasterPersFKT",
+          "pattern": "Funktion/HAUPF001",
+          "target": [
+            "TargetMasterPersFKT"
+          ]
+        },
+        {
+          "name": "RouteDetailPersFKT",
+          "pattern": "Funktion/HAUPF001/{funktion}/{layout}",
+          "target": [
+            "TargetDetailPersFKT"
+          ]
+        },
+        {
+          "name": "RouteHAUFW001",
+          "pattern": "Funktion/HAUFW001",
+          "target": [
+            "TargetHAUFW001"
           ]
         }
       ],
       "targets": {
-        "TargetView1": {
+        "TargetHome": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
-          "viewId": "View1",
-          "viewName": "View1"
+          "viewId": "Home",
+          "viewName": "Home",
+          "viewLevel": 0
+        },
+        "TargetBasisKonfig": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "BasisKonfig",
+          "viewName": "BasisKonfig",
+          "viewLevel": 1
+        },
+        "TargetFunktion": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "Funktion",
+          "viewName": "Funktion",
+          "viewLevel": 1
+        },
+        "TargetWizard": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "Wizard",
+          "viewName": "Wizard",
+          "viewLevel": 1
+        },
+        "TargetKontroll": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "HAUKB001",
+          "viewName": "HAUKB001",
+          "viewLevel": 1
+        },
+        "TargetHAUPLPHA": {
+          "viewType": "XML",
+          "viewId": "HAUPLPHA",
+          "viewName": "HAUPLPHA",
+          "viewLevel": 1,
+          "transition": "slide"
+        },
+        "TargetAUDMART": {
+          "viewType": "XML",
+          "viewId": "AUDMART",
+          "viewName": "AUDMART",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetAUMPVDM": {
+          "viewType": "XML",
+          "viewId": "AUMPVDM",
+          "viewName": "AUMPVDM",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetHAUPARZL": {
+          "viewType": "XML",
+          "viewId": "HAUPARZL",
+          "viewName": "HAUPARZL",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetHAUPF001": {
+          "viewType": "XML",
+          "viewId": "HAUPF001",
+          "viewName": "HAUPF001",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetHAUFW001": {
+          "viewType": "XML",
+          "viewId": "HAUFW001",
+          "viewName": "HAUFW001",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetMasterPersFKT": {
+          "viewType": "XML",
+          "viewId": "MasterPersFKT",
+          "viewName": "MasterPersFKT",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetDetailPersFKT": {
+          "viewType": "XML",
+          "viewId": "DetailPersFKT",
+          "viewName": "DetailPersFKT",
+          "viewLevel": 2,
+          "transition": "slide"
         }
       }
     },
@@ -121,6 +308,7 @@
       "type": "XML",
       "async": true,
       "id": "App"
-    }
+    },
+    "handleValidation": true
   }
 }

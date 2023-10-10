@@ -27,7 +27,7 @@ sap.ui.define([
 	) {
    "use strict";   
 
-   return Controller.extend("authorization.controller.AUMPVDM", {
+   return Controller.extend("authorizationsv2.controller.AUMPVDM", {
         onInit: function () {
            this._oModel = this.getOwnerComponent().getModel();
            this._mViewSettingsDialogs = {};

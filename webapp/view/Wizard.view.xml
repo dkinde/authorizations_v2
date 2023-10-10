@@ -2,7 +2,7 @@
             xmlns:core="sap.ui.core" 
             xmlns="sap.m"     
             xmlns:form="sap.ui.layout.form"         
-            controllerName="authorization.controller.Wizard" 
+            controllerName="authorizationsv2.controller.Wizard" 
             height="100%" >
     <Page   title="{i18n>wizardPageTitle}"  
             id="wizardContentPage"        

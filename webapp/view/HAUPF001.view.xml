@@ -4,7 +4,7 @@
             xmlns:l="sap.ui.layout"
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
-            controllerName="authorization.controller.HAUPF001">
+            controllerName="authorizationsv2.controller.HAUPF001">
 
     <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
 			<f:title>
@@ -41,7 +41,7 @@
                                                             path: '/distinctItems',
 												            templateShareable: true
                                                         }">
-											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtlg}"/>
+											<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{txt}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>
@@ -124,7 +124,7 @@
                     <items>
                         <ColumnListItem type="Navigation" press="onListItemPress" >
                             <cells>                                                
-                                <ObjectIdentifier title="{personalnummer}" text="{Txtmd}" tooltip="zur Definition der Funktion" />
+                                <ObjectIdentifier title="{personalnummer}" text="{txt}" tooltip="zur Definition der Funktion" />
                                 <ObjectIdentifier text="{funktion}" tooltip="zur Definition der Funktion"/>                                                                                       
                             </cells>                                        
                         </ColumnListItem>

@@ -4,7 +4,7 @@
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
             xmlns:svm="sap.ui.comp.smartvariants"
-            controllerName="authorization.controller.HAUKB001">
+            controllerName="authorizationsv2.controller.HAUKB001">
     <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
 			<f:title>
 				<f:DynamicPageTitle>

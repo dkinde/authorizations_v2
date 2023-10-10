@@ -4,7 +4,7 @@
             xmlns:m="sap.m"
             xmlns:f="sap.f"
 	        xmlns:form="sap.ui.layout.form"
-            controllerName="authorization.controller.DetailPersFKT">
+            controllerName="authorizationsv2.controller.DetailPersFKT">
 	<ObjectPageLayout   id="ObjectPageLayout"
                         showTitleInHeaderContent="true"
                         alwaysShowContentHeader="false"

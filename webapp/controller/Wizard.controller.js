@@ -27,7 +27,7 @@ sap.ui.define([
 ) {
 	"use strict";
 
-	return Controller.extend("authorization.controller.Wizard", {
+	return Controller.extend("authorizationsv2.controller.Wizard", {
 		/**
 		 * @override
 		 */
