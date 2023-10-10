@@ -1,4 +1,4 @@
-<mvc:View   controllerName="authorizationsv2.controller.Home"
+<mvc:View   controllerName="auth.controller.Home"
             xmlns:mvc="sap.ui.core.mvc" 
             displayBlock="true"
             xmlns="sap.m"           

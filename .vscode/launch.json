@@ -2,11 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Start auth",
+            "name": "Start authorizationsv2",
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "npx",
-            "cwd": "${workspaceFolder}/auth",
+            "cwd": "${workspaceFolder}/authorizationsv2",
             "windows": {
                 "runtimeExecutable": "npx.cmd"
             },
@@ -16,7 +16,7 @@
             ],
             "args": [
                 "--open",
-                "test/flpSandbox.html#auth-display"
+                "test/flpSandbox.html#authorizationsv2-display"
             ],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart",
@@ -28,10 +28,10 @@
             }
         },
         {
-            "name": "Start auth Mock",
+            "name": "Start authorizationsv2 Mock",
             "type": "node",
             "request": "launch",
-            "cwd": "${workspaceFolder}/auth",
+            "cwd": "${workspaceFolder}/authorizationsv2",
             "runtimeExecutable": "npx",
             "windows": {
                 "runtimeExecutable": "npx.cmd"
@@ -44,7 +44,7 @@
                 "--config",
                 "./ui5-mock.yaml",
                 "--open",
-                "test/flpSandbox.html#auth-display"
+                "test/flpSandbox.html#authorizationsv2-display"
             ],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart",
@@ -55,10 +55,10 @@
             }
         },
         {
-            "name": "Start auth Local",
+            "name": "Start authorizationsv2 Local",
             "type": "node",
             "request": "launch",
-            "cwd": "${workspaceFolder}/auth",
+            "cwd": "${workspaceFolder}/authorizationsv2",
             "runtimeExecutable": "npx",
             "windows": {
                 "runtimeExecutable": "npx.cmd"
@@ -71,7 +71,7 @@
                 "--config",
                 "./ui5-local.yaml",
                 "--open",
-                "test/flpSandbox.html#auth-display"
+                "test/flpSandbox.html#authorizationsv2-display"
             ],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart",

@@ -7,7 +7,7 @@ sap.ui.define([
     function (Controller) {
         "use strict";
 
-        return Controller.extend("authorizationsv2.controller.Home", {
+        return Controller.extend("auth.controller.Home", {
             onInit: function () {
                 sap.ui.getCore().getConfiguration().setLanguage("de");
                 sap.ui.getCore().applyChanges();

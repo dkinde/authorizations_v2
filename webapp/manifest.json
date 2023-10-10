@@ -1,7 +1,7 @@
 {
   "_version": "1.49.0",
   "sap.app": {
-    "id": "authorizationsv2",
+    "id": "auth",
     "type": "application",
     "i18n": {
       "bundleName": "i18n/i18n.properties",
@@ -73,7 +73,7 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "authorizationsv2.i18n.i18n",
+          "bundleName": "auth.i18n.i18n",
           "supportedLocales": [
             "en",
             "de"
@@ -99,7 +99,7 @@
         "routerClass": "sap.m.routing.Router",
         "viewType": "XML",
         "async": true,
-        "viewPath": "authorizationsv2.view",
+        "viewPath": "auth.view",
         "controlAggregation": "pages",
         "controlId": "app",
         "clearControlAggregation": false,
@@ -201,7 +201,7 @@
       }
     },
     "rootView": {
-      "viewName": "authorizationsv2.view.App",
+      "viewName": "auth.view.App",
       "type": "XML",
       "async": true,
       "id": "App"

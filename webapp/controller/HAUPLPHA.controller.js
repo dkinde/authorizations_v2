@@ -29,7 +29,7 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorizationsv2.controller.HAUPLPHA", {
+    return Controller.extend("auth.controller.HAUPLPHA", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
             this._mViewSettingsDialogs = {};
