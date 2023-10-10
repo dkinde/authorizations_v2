@@ -117,6 +117,41 @@
           "target": [
             "TargetHome"
           ]
+        },
+        {
+          "name": "RouteBasisKonfig",
+          "pattern": "BasisKonfig",
+          "target": [
+            "TargetBasisKonfig"
+          ]
+        },
+        {
+          "name": "RouteFunktion",
+          "pattern": "Funktion",
+          "target": [
+            "TargetFunktion"
+          ]
+        },
+        {
+          "name": "RouteWizard",
+          "pattern": "Wizard",
+          "target": [
+            "TargetWizard"
+          ]
+        },
+        {
+          "name": "RouteKontroll",
+          "pattern": "Kontroll",
+          "target": [
+            "TargetKontroll"
+          ]
+        },
+        {
+          "name": "RoutePersPlan",
+          "pattern": "HAUPLPHA",
+          "target": [
+            "TargetHAUPLPHA"
+          ]
         }
       ],
       "targets": {
@@ -127,6 +162,41 @@
           "viewId": "Home",
           "viewName": "Home",
           "viewLevel": 0
+        },
+        "TargetBasisKonfig": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "BasisKonfig",
+          "viewName": "BasisKonfig",
+          "viewLevel": 1
+        },
+        "TargetFunktion": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "Funktion",
+          "viewName": "Funktion",
+          "viewLevel": 1
+        },
+        "TargetWizard": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "Wizard",
+          "viewName": "Wizard",
+          "viewLevel": 1
+        },
+        "TargetKontroll": {
+          "viewType": "XML",
+          "transition": "slide",
+          "viewId": "HAUKB001",
+          "viewName": "HAUKB001",
+          "viewLevel": 1
+        },
+        "TargetHAUPLPHA": {
+          "viewType": "XML",
+          "viewId": "HAUPLPHA",
+          "viewName": "HAUPLPHA",
+          "viewLevel": 1,
+          "transition": "slide"
         }
       }
     },
