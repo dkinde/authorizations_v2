@@ -1,0 +1,191 @@
+<mvc:View   xmlns:mvc="sap.ui.core.mvc"    
+            xmlns:core="sap.ui.core"      
+            xmlns="sap.m"            
+            xmlns:f="sap.f"
+		    xmlns:fb="sap.ui.comp.filterbar"
+            xmlns:svm="sap.ui.comp.smartvariants"
+            controllerName="authorization.controller.HAUKB001">
+    <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
+			<f:title>
+				<f:DynamicPageTitle>
+					<f:heading>
+                        <Title text="Kontrollbericht"/>
+						<!-- <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" /> -->
+					</f:heading>
+					<f:expandedContent>
+						<Label id="expandedLabel" text="No filters active" />
+					</f:expandedContent>
+					<f:snappedContent>
+						<Label id="snappedLabel" text="No filters active" />
+					</f:snappedContent>
+                    <f:actions>
+                        <Button text="Schließen" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                    </f:actions>
+                    <f:navigationActions>
+                        <Button text="zur Startseite" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                    </f:navigationActions>
+				</f:DynamicPageTitle>
+			</f:title>
+			<f:header>
+				<f:DynamicPageHeader>
+					<f:content>
+						<fb:FilterBar   id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" 
+                                        filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+							<fb:filterGroupItems>
+								<fb:FilterGroupItem id="filterPersonal" name="personalnummer" label="{i18n>colPIPEPERID}" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox  id="multiPersonal" name="personalnummer" selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{personalnummer}" text="{personalnummer}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem name="datamart" label="{i18n>colDatamart}" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox	id="multiDatamart" name="datamart"	selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems1',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{datamart}" text="{datamart}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem name="funktion" label="{i18n>colAUFKT}" groupName="Group1" 
+                                                    visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox  id="multiFunktion" name="funktion"	selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems2',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{funktion}" text="{funktion}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+                                <fb:FilterGroupItem name="org_einh" label="{i18n>colAUOE}" groupName="Group1" 
+                                                    visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox  id="multiOrgEinh" name="org_einh"	selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems3',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{org_einh}" text="{org_einh}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+                                <fb:FilterGroupItem name="typ" label="{i18n>colAUENTTYP}" groupName="Group1" 
+                                                    visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox  id="multiTyp" name="typ"	selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems4',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{typ}" text="{typ}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+                                <fb:FilterGroupItem name="entit" label="{i18n>colAUENT}" groupName="Group1" 
+                                                    visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox  id="multiEntit" name="entit"	selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems5',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{entit}" text="{entit}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+                                <fb:FilterGroupItem name="infoobjectkontrolle" label="{i18n>colAUIOBJK}" groupName="Group1" 
+                                                    visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox  id="multiIOBJK" name="infoobjectkontrolle"	selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems6',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{infoobjectkontrolle}" text="{infoobjectkontrolle}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+                                <fb:FilterGroupItem name="wertkontrolle" label="{i18n>colAUWERTK}" groupName="Group1" 
+                                                    visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox  id="multiWertK" name="wertkontrolle"	selectionChange=".onSelectionChange"
+                                                        items="{
+                                                            path: '/distinctItems7',
+												            templateShareable: true
+                                                        }">
+											<core:ListItem key="{wertkontrolle}" text="{wertkontrolle}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+							</fb:filterGroupItems>
+						</fb:FilterBar>
+					</f:content>
+				</f:DynamicPageHeader>
+			</f:header>
+			<f:content>
+				<Table  sticky="ColumnHeaders,HeaderToolbar"                                         
+                        id="table1" 
+                        growing="true"
+                        growingScrollToLoad="true"
+                        growingThreshold="500"
+                        inset="false"
+                        items="{
+                            path: '/HAUKB001',
+                            parameters: {
+                                $count: true                                    
+                            }    
+                        }"
+                        fixedLayout="false">                        
+					<columns>
+                        <Column minScreenWidth="Tablet" demandPopin="true"> 
+                            <Text text="{i18n>colPIPEPERID}" />
+                        </Column>
+                        <Column minScreenWidth="Tablet" demandPopin="true">
+                            <Text text="{i18n>colDatamart}" />
+                        </Column>
+                        <Column minScreenWidth="Tablet" demandPopin="true">
+                            <Text text="{i18n>colAUFKT}" />
+                        </Column>
+                        <Column minScreenWidth="Tablet" demandPopin="true">
+                            <Text text="{i18n>colAUOE}" />
+                        </Column>                                                                        
+                        <Column minScreenWidth="Tablet" demandPopin="true">
+                            <Text text="{i18n>colAUENTTYP}" />
+                        </Column>  
+                        <Column minScreenWidth="Tablet" demandPopin="true">
+                            <Text text="{i18n>colAUENT}" />
+                        </Column>
+                        <Column minScreenWidth="Tablet" demandPopin="true">
+                            <Text text="{i18n>colAUIOBJK}" />
+                        </Column>
+                        <Column minScreenWidth="Tablet" demandPopin="true">
+                            <Text text="{i18n>colAUWERTK}" />
+                        </Column>
+					</columns>
+					<items>
+						<ColumnListItem vAlign="Middle">
+							<cells>
+								<ObjectIdentifier text="{personalnummer}" />
+                                <ObjectIdentifier text="{datamart}" />
+                                <ObjectIdentifier text="{funktion}" />
+                                <ObjectIdentifier text="{org_einh}" />                                            
+                                <ObjectIdentifier text="{typ}" />
+                                <ObjectIdentifier text="{entit}" />
+                                <ObjectIdentifier text="{infoobjectkontrolle}" />                                                                                    
+                                <ObjectIdentifier text="{wertkontrolle}" /> 
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</f:content>
+		</f:DynamicPage>
+</mvc:View>

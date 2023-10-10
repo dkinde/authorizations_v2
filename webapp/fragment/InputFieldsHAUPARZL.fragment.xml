@@ -1,0 +1,56 @@
+<core:FragmentDefinition xmlns="sap.m" 
+                         xmlns:core="sap.ui.core"                          
+                         xmlns:html="http://www.w3.org/1999/xhtml"                          
+						 xmlns:form="sap.ui.layout.form" 
+                         width="100%">
+    <Dialog title="{i18n>inputFieldDialogTitle}" id="dialog1">
+		<content>
+			<form:SimpleForm				
+				editable="true">
+				<form:content>
+					<Label text="{i18n>colAUPARNAME}" id="text9" required="true"/>
+					<Input  id="__inputCRUD0" 
+							liveChange="createValidation" 
+							valueLiveUpdate="true" 
+							valueStateText="Geben Sie weniger als 50 Zeichen ein"/>
+					<Label text="{i18n>colAUZIEL}"  id="text10" required="true"/>
+					<Input  id="__inputCRUD1" 
+							liveChange="createValidation" 
+							valueLiveUpdate="true" 
+							valueStateText="Geben Sie weniger als 30 Zeichen ein"/>
+					<Label text="{i18n>colAUIOBJ}"  id="text11" />
+					<Input  id="__inputCRUD2"  
+							liveChange="createValidation" 
+							valueLiveUpdate="true" 
+							valueStateText="Geben Sie weniger als 30 Zeichen ein"/>
+					<Label  text="{i18n>colAUIOBJTYP}" id="text12" required="true"/>
+					<Input  id="__inputCRUD3" 
+							type="Number" 
+							placeholder="Geben Sie 2 Ziffern ein" 
+							liveChange="createValidation" 
+							valueLiveUpdate="true" 
+							valueStateText="Geben Sie 2 oder weniger Ziffern ein"/>
+					<Label text="{i18n>colAUSEQUENZ}"  id="text13" required="true"/>
+					<Select id="selectSequenz" 
+                            forceSelection="false" >
+                        <core:Item text="1" />
+                        <core:Item text="2" />
+                        <core:Item text="3" />
+                    </Select>
+					<!-- <Input  id="__inputCRUD4" 
+							type="Number" 
+							placeholder="Geben Sie 1 Ziffer ein" 
+							liveChange="createValidation" 
+							valueLiveUpdate="true" 
+							valueStateText="Geben Sie 1 Ziffer ein"/> -->
+				</form:content>							
+			</form:SimpleForm>			
+		</content>
+		<beginButton>
+			<Button id="createButton" text="{i18n>inputFieldDialogBeginButton}" type="Accept"  press=".onCreatePress" visible="false" />
+		</beginButton>
+		<endButton>
+			<Button text="{i18n>inputFieldDialogEndButton}"  type="Reject" press=".onCloseViewDialog"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

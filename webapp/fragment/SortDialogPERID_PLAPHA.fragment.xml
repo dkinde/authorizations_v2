@@ -1,0 +1,13 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm="handleSortDialogConfirm">    
+    <sortItems>
+        <ViewSettingsItem selected="true" text="Personalnummer" key="personalnummer" />
+        <ViewSettingsItem selected="false" text="Planung Phase" key="pla_pha" />                
+    </sortItems>
+</ViewSettingsDialog>
+</c:FragmentDefinition>

@@ -1,1 +1,11 @@
-/* Enter your custom styles here */
+.firstRow .sapMListTblRow:nth-child(1) {
+    background-color: #cce3eb;
+}
+
+.errorStep {
+    background-color: #ffcccc;
+}
+
+.errorStepBorder {
+    border: 3px solid #e60c0c;
+}

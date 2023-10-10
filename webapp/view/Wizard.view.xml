@@ -1,0 +1,356 @@
+<mvc:View   xmlns:mvc="sap.ui.core.mvc" 
+            xmlns:core="sap.ui.core" 
+            xmlns="sap.m"     
+            xmlns:form="sap.ui.layout.form"         
+            controllerName="authorization.controller.Wizard" 
+            height="100%" >
+    <Page   title="{i18n>wizardPageTitle}"  
+            id="wizardContentPage"        
+            navButtonPress=".onNavButtonPressed" 
+            showNavButton="true"
+            floatingFooter="true"
+            class=" sapUiResponsivePadding--header 
+                    sapUiResponsivePadding--content 
+                    sapUiResponsivePadding--footer 
+                    sapUiResponsivePadding--floatingFooter" >
+        <content>                      
+        <Wizard id="createWizard"
+                class=" sapUiResponsivePadding--header 
+                        sapUiResponsivePadding--content"                                                                     
+                complete="wizardCompleteHandler"
+                finishButtonText="Speichern Berechtigungskonfiguration">
+            <WizardStep id="step1" 
+                        title="{i18n>wizardTitleStep1}" 
+                        activate="step1validation" 
+                        validated="false"
+                        visible="false">
+            <VBox   class="sapUiSmallMargin">
+                <Title  text="{i18n>wizardSubtitle1Step1}"/>                                
+                <form:SimpleForm    editable="true" 
+                                    layout="ResponsiveGridLayout">
+                    <form:content>                                
+                        <Label  text="{i18n>colDatamart}" 
+                                required="true"/>                                
+                        <Input  id="inputDatamart"                                         
+                                liveChange="step1validation" 
+                                valueLiveUpdate="true" 
+                                change="selectDatamartValidation"
+                                valueStateText="Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben"/>                                
+                        <Label  text="{i18n>colTxtSh}" required="true"/>
+                        <Input  id="inputTxtSh"                                         
+                                liveChange="updateTextLg"
+                                valueLiveUpdate="true" 
+                                valueStateText="Geben Sie nicht mehr als 20 Zeichen ein"/>
+                        <Label  text="{i18n>colTxtLg}" required="true"/>
+                        <Input  id="inputTxtLg" 
+                                liveChange="step1validation" 
+                                valueLiveUpdate="true" 
+                                valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>                                
+                    </form:content>
+                </form:SimpleForm>
+                <Title  text="{i18n>wizardSubtitle2Step1}"/>
+                <Table  id="table1" 
+                        mode="SingleSelectMaster" >       
+                        <headerToolbar>
+                            <Toolbar>
+                                <content>
+                                    <Button icon="sap-icon://add" 
+                                            text="{i18n>tableToolbarButtonAdd}" 
+                                            press="onAddPress1"
+                                            type="Accept"/>                                                                                           
+                                    <Button icon="sap-icon://delete" 
+                                            type="Reject" 
+                                            text="{i18n>tableToolbarButtonDelete}" 
+                                            press="onDeletePress1"/>                                                                                                                                    
+                                </content>
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column>
+                                <Text text="{i18n>colDatamart}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>colMultiproviderVsDatamart}" />
+                            </Column>                                                                                                                                              
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>                                            
+                                    <Text   id="datamartText"/>                                            
+                                    <Select id="selectMulti"
+                                            forceSelection="false" 
+                                            change="step1validation"                                                                                                                                                      
+                                            items="{
+                                                path: '/CUBE',                                    
+                                                parameters: {
+                                                    $select: 'Infocube'
+                                                }
+                                            }">
+                                            <core:Item  key="{Infocube}" 
+                                                        text="{Infocube}" />
+                                    </Select>                                                                                                                                                                                                                                                                                                         
+                                </cells>                                        
+                            </ColumnListItem>
+                        </items>
+                </Table>                        
+            </VBox>  
+            </WizardStep>
+            <WizardStep id="step2" 
+                        title="{i18n>wizardTitleStep2}" 
+                        activate="step2validation" 
+                        validated="false"
+                        visible="false">                           
+                <Table  id="table5" >
+                    <headerToolbar>
+                        <Toolbar>
+                            <content>
+                                <Title text="Vorschau (vorhandene Daten)"></Title>
+                            </content>
+                        </Toolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>colAUPARNAME}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUZIEL}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUIOBJ}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUSEQUENZ}" />
+                        </Column>  
+                        <Column>
+                            <Text text="{i18n>colAUIOBJTYP}" />
+                        </Column>                                                            
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>  
+                                <Text text="" />
+                                <Text text="" />
+                                <Text text="" />
+                                <Text text="" />
+                                <Text text="" />
+                            </cells>                                        
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                <Table  id="table2" 
+                        mode="SingleSelectMaster" >
+                    <headerToolbar>
+                        <Toolbar>
+                            <content>
+                                <Button icon="sap-icon://add" 
+                                        text="{i18n>tableToolbarButtonAdd}" 
+                                        press="onAddPress2"
+                                        type="Accept"/>                                                                                            
+                                <Button icon="sap-icon://delete" 
+                                        type="Reject" 
+                                        text="{i18n>tableToolbarButtonDelete}" 
+                                        press="onDeletePress2"/>                                             
+                            </content>
+                        </Toolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>colAUPARNAME}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUZIEL}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUIOBJ}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUSEQUENZ}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUIOBJTYP}" />
+                        </Column>                                                              
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Select id="selectInfoAuthName"
+                                        forceSelection="false"                                                                            
+                                        items="{
+                                            path: '/MERKMALE'
+                                        }">
+                                    <core:Item  key="{Chanm}" 
+                                                text="{Chanm}" />
+                                </Select>                                                                                        
+                                <Select id="selectCube"                                                                             
+                                        forceSelection="false"
+                                        items="{}"
+                                        change="filterIobj">
+                                        <core:Item  key="" 
+                                                    text="" />
+                                        
+                                    </Select> 
+                                <Select id="selectIobj"                                                                           
+                                        forceSelection="false"
+                                        items="{}">
+                                        <core:Item  key="" 
+                                                    text="" />
+                                </Select>                                   
+                                <Select id="selectSequenz" 
+                                        forceSelection="false" >
+                                    <core:Item text="1" />
+                                    <core:Item text="2" />
+                                    <core:Item text="3" />
+                                </Select>                                                                                                                                                                       
+                                <Input  id="inputInfoTyp" 
+                                        editable="false"/>
+                                                                                                                    
+                            </cells>                                        
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </WizardStep>
+            <WizardStep id="step3" 
+                        title="{i18n>wizardTitleStep3}" 
+                        activate="step3validation" 
+                        validated="false">
+                <Table  id="table3" 
+                        mode="SingleSelectMaster">
+                    <headerToolbar>
+                        <Toolbar>
+                            <content>
+                                <Button icon="sap-icon://add" 
+                                        text="{i18n>tableToolbarButtonAdd}" 
+                                        press="onAddPress3" 
+                                        type="Accept"/>                                                                                               
+                                <Button icon="sap-icon://delete" 
+                                        type="Reject" 
+                                        text="{i18n>tableToolbarButtonDelete}" 
+                                        press="onDeletePress3"/>                                                                                            
+                            </content>
+                        </Toolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>colAUFKT}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUENTTYP}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUENT}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUWERT}" />
+                        </Column>                                                                       
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Input  id="inputFuntkion" 
+                                        placeholder="Geben Sie 2 Ziffern ein" 
+                                        type="Number" 
+                                        liveChange="step3validation"                                         
+                                        valueLiveUpdate="true"    
+                                        showSuggestion="true"
+                                        suggestionItems="{/FUNKTION}"                                                     
+                                        valueStateText="Geben Sie nicht mehr als 2 Zahlen ein">
+                                    <suggestionItems>
+                                        <core:Item text="{funktion}"/>
+                                    </suggestionItems>                                        
+                                </Input>                                    
+                                <Select id="selecttyp" 
+                                        change="filterTyp"                                        
+                                        forceSelection="false">
+                                    <core:Item text="D" />
+                                    <core:Item text="I" />
+                                    <core:Item text="S" />                                                        
+                                </Select>
+                                <Select id="selectentit" 
+                                        change="step3validation"
+                                        forceSelection="false">
+                                    <core:Item key="" text=""/>                                                                                           
+                                </Select>                                
+                                <Input  id="inputwert" 
+                                        liveChange="step3validation" 
+                                        valueLiveUpdate="true" 
+                                        valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>                                                                                                                                    
+                            </cells>                                        
+                        </ColumnListItem>
+                    </items>                                
+                </Table>                                
+            </WizardStep>
+            <WizardStep id="step4" 
+                        title="{i18n>wizardTitleStep4}" 
+                        activate="step4validation" 
+                        validated="false">
+                <Table  id="table4" 
+                        mode="SingleSelectMaster" >
+                    <headerToolbar>
+                    <Toolbar>
+                        <content>
+                            <Button icon="sap-icon://add" 
+                                    text="{i18n>tableToolbarButtonAdd}" 
+                                    press="onAddPress4"
+                                    type="Accept"/>                                                                                          
+                            <Button icon="sap-icon://delete" 
+                                    type="Reject" 
+                                    text="{i18n>tableToolbarButtonDelete}" 
+                                    press="onDeletePress4"/>                                                                                           
+                        </content>
+                    </Toolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>colPIPEPERID}" />
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>colAUFKT}" />
+                        </Column>                                                                      
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>                                                                                        
+                                <Select id="selectpersonalnummer"
+                                        forceSelection="false"
+                                        change="step4validation"
+                                        items="{
+                                            path: '/PIPEPERID',
+                                            sorter: { 
+                                                path: 'personalnummer' 
+                                            }
+                                        }">
+                                    <core:Item  key="{personalnummer}" 
+                                                text="{personalnummer}" />
+                                </Select>                                                
+                                <Select id="selectfunktion"
+                                        change="step4validation"
+                                        forceSelection="false"                                        
+                                        items="{}">
+                                    <core:Item  key="" 
+                                                text="" />
+                                </Select>                                                                                                                                      
+                            </cells>                                        
+                        </ColumnListItem>
+                    </items>
+                </Table>                         
+            </WizardStep>
+        </Wizard>            
+        </content>
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button text="{i18n>wizardFooterButton}" 
+                        type="Reject" 
+                        press="handleWizardCancel"/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>
+
+
+
+
+
+
+
+
