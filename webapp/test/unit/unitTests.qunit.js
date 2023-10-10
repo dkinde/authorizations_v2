@@ -5,7 +5,7 @@ sap.ui.getCore().attachInit(function () {
 	"use strict";
 
 	sap.ui.require([
-		"authorizations_v2/test/unit/AllTests"
+		"auth/test/unit/AllTests"
 	], function () {
 		QUnit.start();
 	});

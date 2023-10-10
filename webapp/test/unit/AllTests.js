@@ -1,5 +1,5 @@
 sap.ui.define([
-	"authorizations_v2/test/unit/controller/View1.controller"
+	"auth/test/unit/controller/Home.controller"
 ], function () {
 	"use strict";
 });

@@ -5,12 +5,12 @@
 sap.ui.define([
         "sap/ui/core/UIComponent",
         "sap/ui/Device",
-        "authorizationsv2/model/models"
+        "auth/model/models"
     ],
     function (UIComponent, Device, models) {
         "use strict";
 
-        return UIComponent.extend("authorizationsv2.Component", {
+        return UIComponent.extend("auth.Component", {
             metadata: {
                 manifest: "json"
             },

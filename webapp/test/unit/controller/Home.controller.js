@@ -1,13 +1,13 @@
 /*global QUnit*/
 
 sap.ui.define([
-	"authorizations_v2/controller/View1.controller"
+	"auth/controller/Home.controller"
 ], function (Controller) {
 	"use strict";
 
-	QUnit.module("View1 Controller");
+	QUnit.module("Home Controller");
 
-	QUnit.test("I should test the View1 controller", function (assert) {
+	QUnit.test("I should test the Home controller", function (assert) {
 		var oAppController = new Controller();
 		oAppController.onInit();
 		assert.ok(oAppController);

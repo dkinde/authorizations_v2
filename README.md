@@ -1,14 +1,14 @@
 ## Application Details
 |               |
 | ------------- |
-|**Generation Date and Time**<br>Tue Oct 10 2023 10:49:28 GMT+0200 (Central European Summer Time)|
+|**Generation Date and Time**<br>Tue Oct 10 2023 16:00:21 GMT+0200 (Central European Summer Time)|
 |**App Generator**<br>@sap/generator-fiori-freestyle|
 |**App Generator Version**<br>1.9.2|
 |**Generation Platform**<br>Visual Studio Code|
 |**Template Used**<br>simple|
 |**Service Type**<br>SAP System (ABAP Environment on SAP Business Technology Platform)|
-|**Service URL**<br>https://c75f608d-4148-434a-88e1-64b75d24911a.abap.us10.hana.ondemand.com/sap/opu/odata4/sap/zui_c_auth/srvd/sap/zui_c_auth/0001/
-|**Module Name**<br>authorizations_v2|
+|**Service URL**<br>https://c75f608d-4148-434a-88e1-64b75d24911a.abap.us10.hana.ondemand.com/sap/opu/odata/sap/ZUI_C_AUTH_V2
+|**Module Name**<br>auth|
 |**Application Title**<br>App Title|
 |**Namespace**<br>|
 |**UI5 Theme**<br>sap_horizon|
@@ -17,7 +17,7 @@
 |**Enable TypeScript**<br>False|
 |**Add Eslint configuration**<br>False|
 
-## authorizations_v2
+## auth
 
 A Fiori application.
 

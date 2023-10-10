@@ -40,7 +40,7 @@ sap.ui.define([
 								"tileType": "sap.ushell.ui.tile.StaticTile",
 								"properties": {
 									"title": "App Title",
-									"targetURL": "#authorizationsv2-display"
+									"targetURL": "#auth-display"
 								}
 							}]
 						}]
@@ -51,8 +51,8 @@ sap.ui.define([
 				"adapter": {
 					"config": {
 						"inbounds": {
-							"authorizationsv2-display": {
-								"semanticObject": "authorizationsv2",
+							"auth-display": {
+								"semanticObject": "auth",
 								"action": "display",
 								"description": "A Fiori application.",
 								"title": "App Title",
@@ -61,8 +61,8 @@ sap.ui.define([
 								},
 								"resolutionResult": {
 									"applicationType": "SAPUI5",
-									"additionalInformation": "SAPUI5.Component=authorizationsv2",
-									"url": sap.ui.require.toUrl("authorizationsv2")
+									"additionalInformation": "SAPUI5.Component=auth",
+									"url": sap.ui.require.toUrl("auth")
 								}
 							}
 						}

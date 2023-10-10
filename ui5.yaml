@@ -2,7 +2,7 @@
 
 specVersion: "2.6"
 metadata:
-  name: authorizationsv2
+  name: auth
 type: application
 server:
   customMiddleware:
@@ -28,5 +28,5 @@ server:
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:
-        component: authorizationsv2
+        component: auth
         ui5Theme: sap_horizon

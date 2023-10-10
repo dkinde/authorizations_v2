@@ -2,7 +2,7 @@
 
 specVersion: "2.6"
 metadata:
-  name: authorizationsv2
+  name: auth
 type: application
 framework:
   name: SAPUI5
@@ -38,7 +38,7 @@ server:
       configuration:
         mountPath: /
         services:
-          - urlPath: /sap/opu/odata4/sap/zui_c_auth/srvd/sap/zui_c_auth/0001
+          - urlPath: /sap/opu/odata/sap/ZUI_C_AUTH_V2
             metadataPath: ./webapp/localService/metadata.xml
             mockdataPath: ./webapp/localService/data
             generateMockData: true
@@ -46,5 +46,5 @@ server:
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:
-        component: authorizationsv2
+        component: auth
         ui5Theme: sap_horizon

@@ -7,7 +7,7 @@ sap.ui.define([
 
 	Opa5.extendConfig({
 		arrangements: new Startup(),
-		viewNamespace: "authorizationsv2.view.",
+		viewNamespace: "auth.view.",
 		autoWait: true
 	});
 });
