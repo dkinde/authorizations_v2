@@ -5,7 +5,7 @@ sap.ui.define(
     function(BaseController) {
       "use strict";
   
-      return BaseController.extend("auth.controller.App", {
+      return BaseController.extend("authorizationsv2.controller.App", {
         onInit() {
         }
       });

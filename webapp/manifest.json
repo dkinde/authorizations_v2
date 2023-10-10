@@ -1,9 +1,16 @@
 {
   "_version": "1.49.0",
   "sap.app": {
-    "id": "auth",
+    "id": "authorizationsv2",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
+    "i18n": {
+      "bundleName": "i18n/i18n.properties",
+      "supportedLocales": [
+        "en",
+        "de"
+      ],
+      "fallbackLocale": "de"
+    },
     "applicationVersion": {
       "version": "0.0.1"
     },
@@ -66,7 +73,12 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "auth.i18n.i18n"
+          "bundleName": "authorizationsv2.i18n.i18n",
+          "supportedLocales": [
+            "en",
+            "de"
+          ],
+          "fallbackLocale": "de"
         }
       },
       "": {
@@ -87,10 +99,16 @@
         "routerClass": "sap.m.routing.Router",
         "viewType": "XML",
         "async": true,
-        "viewPath": "auth.view",
+        "viewPath": "authorizationsv2.view",
         "controlAggregation": "pages",
         "controlId": "app",
-        "clearControlAggregation": false
+        "clearControlAggregation": false,
+        "transition": "slide",
+        "bypassed": {
+          "target": [
+            "TargetHome"
+          ]
+        }
       },
       "routes": [
         {
@@ -107,15 +125,17 @@
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "Home",
-          "viewName": "Home"
+          "viewName": "Home",
+          "viewLevel": 0
         }
       }
     },
     "rootView": {
-      "viewName": "auth.view.App",
+      "viewName": "authorizationsv2.view.App",
       "type": "XML",
       "async": true,
       "id": "App"
-    }
+    },
+    "handleValidation": true
   }
 }

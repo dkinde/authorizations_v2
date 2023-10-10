@@ -1,0 +1,142 @@
+<core:FragmentDefinition xmlns="sap.m" 
+                         xmlns:core="sap.ui.core"    
+						 xmlns:form="sap.ui.layout.form"
+						 xmlns:l="sap.ui.layout"
+						 xmlns:html="http://www.w3.org/1999/xhtml" 						 
+                         width="100%">						         
+<!-- <VBox>     -->
+	<l:VerticalLayout>		
+		<Dialog title="{i18n>inputFieldDialogTitle}" id="dialog1">
+			<content>
+	<Table  sticky="ColumnHeaders,HeaderToolbar" 
+			id="tablefragment1" 
+			growing="true"
+			growingScrollToLoad="true"
+			growingThreshold="5"
+			mode="SingleSelectMaster" 
+			selectionChange="onCubeSelect"
+			items="{
+				path: '/MP_CUBE',
+				parameters: {
+					$count: true,
+					$expand: { _Cube: { 
+						$select:    ['Infocube','Iobjnm']                                            
+					}},
+					$select:    ['Infocube','Partcube']                                                                                             
+				}}">
+			<headerToolbar>
+				<Toolbar>                                        
+					<content>
+					<Button id="buttonAddTable1"
+							icon="sap-icon://add" 
+							text="{i18n>tableToolbarButtonAdd}" 
+							press="onOpenDialog1"
+							type="Accept"/>																                                              																
+					<ToolbarSpacer/>
+					<SearchField 	id="searchTable1"								    
+									width="20%"
+									liveChange=".onSearch1"
+									placeholder="{i18n>searchFieldPlaceholder}"/>																
+					<Button id="filterTable1"                                             
+							icon="sap-icon://filter"
+							tooltip="{i18n>filterButtonText}"
+							press="handleFilterButtonPressed1"/>																																                               
+					</content>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="INFOCUBE" />
+				</Column>
+				<Column>
+					<Text text="PARTCUBE" />
+				</Column>			                                      
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier text="{Infocube}" />
+						<ObjectIdentifier text="{Partcube}" />
+						<!-- <ObjectIdentifier text="{Txtmd}" />
+						<ObjectIdentifier text="{Txtlg}" />   -->                                         
+					</cells>                                        
+				</ColumnListItem>
+			</items>
+	</Table> 
+	<Table  sticky="ColumnHeaders,HeaderToolbar" 
+			id="tablefragment2" 
+			growing="true"
+			growingScrollToLoad="true"
+			growingThreshold="5"
+			mode="SingleSelectMaster" 			
+			items="{_Cube}">
+			<headerToolbar>
+				<Toolbar>                                        
+					<content>
+					<Button id="buttonAddTable2"
+							icon="sap-icon://add" 
+							text="{i18n>tableToolbarButtonAdd}" 
+							press="onOpenDialog2"
+							type="Accept"/>																                                              																
+					<ToolbarSpacer/>
+					<SearchField 	id="searchTable2"								    
+									width="20%"
+									liveChange=".onSearch2"
+									placeholder="{i18n>searchFieldPlaceholder}"/>																
+					<Button id="filterTable2"                                             
+							icon="sap-icon://filter"
+							tooltip="{i18n>filterButtonText}"
+							press="handleFilterButtonPressed2"/>																																                               
+					</content>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="INFOCUBE" />
+				</Column>
+				<Column>
+					<Text text="IOBJNM" />
+				</Column>			                                      
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier text="{Infocube}" />
+						<ObjectIdentifier text="{Iobjnm}" />
+						<!-- <ObjectIdentifier text="{Txtmd}" />
+						<ObjectIdentifier text="{Txtlg}" />   -->                                         
+					</cells>                                        
+				</ColumnListItem>
+			</items>
+	</Table> 
+</content>
+<beginButton>
+	<Button id="createButton1" text="{i18n>inputFieldDialogBeginButton}" type="Accept"  press=".onCreatePress1" visible="false" />
+</beginButton>
+<endButton>
+	<Button text="{i18n>inputFieldDialogEndButton}"  type="Reject" press=".onCloseViewDialog1"/>
+</endButton>
+</Dialog> 
+</l:VerticalLayout>        
+<!-- </VBox>            		 -->									 
+	<!-- <Dialog title="{i18n>inputFieldDialogTitle}" id="dialog1">
+		<content>
+			<form:SimpleForm editable="true">					
+				<Label text="AUDMART" required="true"/>
+				<Input id="__inputCRUD0" liveChange="createValidation1" valueLiveUpdate="true" valueStateText="Enter no more than 2 characters" placeholder="Enter 2 characters"/>
+				<Label text="TXTSH" />
+				<Input id="__inputCRUD1" liveChange="createValidation1" valueLiveUpdate="true" valueStateText="Enter no more than 20 characters"/>
+				<Label text="TXTMD" />                            
+				<Input id="__inputCRUD2" liveChange="createValidation1" valueLiveUpdate="true" valueStateText="Enter no more than 40 characters"/>
+				<Label text="TXTLG" />
+				<Input id="__inputCRUD3" liveChange="createValidation1" valueLiveUpdate="true" valueStateText="Enter no more than 60 characters"/>					
+			</form:SimpleForm>			
+		</content>
+		<beginButton>
+			<Button id="createButton1" text="{i18n>inputFieldDialogBeginButton}" type="Accept"  press=".onCreatePress1" visible="false" />
+		</beginButton>
+		<endButton>
+			<Button text="{i18n>inputFieldDialogEndButton}"  type="Reject" press=".onCloseViewDialog1"/>
+		</endButton>
+	</Dialog> -->
+</core:FragmentDefinition>

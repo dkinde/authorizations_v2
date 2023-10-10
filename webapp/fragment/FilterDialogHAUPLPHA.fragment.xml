@@ -1,0 +1,21 @@
+<c:FragmentDefinition	xmlns="sap.m"
+	                    xmlns:c="sap.ui.core">
+<ViewSettingsDialog title=""    
+                    confirm="handleFilterDialogConfirm">    
+    <filterItems>
+        <ViewSettingsFilterItem text="Personalnummer" key="personalnummer"> 
+            <items>
+                <ViewSettingsItem text="37244" key="personalnummer___37244"/>
+                <ViewSettingsItem text="33482" key="personalnummer___33482"/>                
+            </items>
+        </ViewSettingsFilterItem>
+        <ViewSettingsFilterItem text="Funktion für Berechtigung" key="funktion" > 
+            <items>
+                <ViewSettingsItem text="10" key="funktion___10"/>
+                <ViewSettingsItem text="15" key="funktion___15"/>                
+                <ViewSettingsItem text="40" key="funktion___40"/>
+            </items>
+        </ViewSettingsFilterItem>
+    </filterItems>     
+</ViewSettingsDialog>
+</c:FragmentDefinition>

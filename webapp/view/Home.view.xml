@@ -1,7 +1,93 @@
-<mvc:View controllerName="auth.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+<mvc:View   controllerName="authorizationsv2.controller.Home"
+            xmlns:mvc="sap.ui.core.mvc" 
+            displayBlock="true"
+            xmlns="sap.m"           
+            xmlns:layout="sap.ui.layout">
+    <Page id="page" title="{i18n>pageTitle}">        
+        <Toolbar    height="5rem">
+            <Title  titleStyle="H2" 
+                    text="{i18n>homepageTitle}" 
+                    class="sapUiTinyMarginBegin" 
+                    id="t1"/>
+            <ToolbarSpacer/>
+            <Image  alt="DVZ Icon"                    
+                    src="src/DVZ_icon.png"
+                    useMap=""
+                    height="5rem"
+                    width="5rem">            
+            </Image>                  
+        </Toolbar> 
+        <layout:VerticalLayout  class="sapUiResponsiveMargin" id="layout1">                       
+            <layout:HorizontalLayout    allowWrapping="true" id="layout2">
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"  
+                                frameType="TwoByOne"                          
+                                id="g1" 
+                                header="{i18n>homepageGenTile1Header}"                             
+                                press="onNavToBasisKonfig">                    
+                        <TileContent id="t2">
+                                <FeedContent contentText="{i18n>homepageGenTile1Content}" />                                                           
+                        </TileContent>                    
+                </GenericTile>
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                                id="g2" 
+                                frameType="TwoByOne"                          
+                                header="{i18n>homepageGenTile2Header}"                                 
+                                press="onNavToFunktion">                    
+                        <TileContent id="t3">                              
+                            <FeedContent    contentText="{i18n>homepageGenTile2Content}" />                                                                                    
+                        </TileContent>                    
+                </GenericTile>                
+            </layout:HorizontalLayout>  
+            <layout:HorizontalLayout allowWrapping="true" id="layout3">
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                            id="g4" 
+                            frameType="TwoByOne"                          
+                            header="{i18n>homepageGenTile4Header}" 
+                            subheader="{i18n>homepageGenTile4Content}"                                
+                            press="onNavToKontroll">                    
+                        <TileContent id="t5">                            
+                            <!-- <FeedContent    contentText="{i18n>homepageGenTile4Content}" 
+                                            value="{
+                                                path: '/HAUKB001/$count'
+                                            }" /> -->  
+                            <NumericContent value="{
+                                                path: '/HAUKB001/$count'
+                                            }" 
+                                            scale="Einträge"
+                                            icon="sap-icon://menu2" 
+                                            withMargin="false" />   
+                        </TileContent>                    
+                </GenericTile>
+                <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                            id="g5" 
+                            frameType="TwoByOne"                          
+                            header="{i18n>homepageGenTile5Header}" 
+                            subheader="{i18n>homepageGenTile5Content}"                                
+                            press="onNavToPersPlan">                    
+                        <TileContent id="t6">                            
+                            <!-- <FeedContent    contentText="{i18n>homepageGenTile4Content}" 
+                                            value="{
+                                                path: '/HAUPLPHA/$count'
+                                            }" /> -->  
+                            <NumericContent value="{
+                                                path: '/HAUPLPHA/$count'
+                                            }" 
+                                            scale="Einträge"
+                                            icon="sap-icon://menu2" 
+                                            withMargin="false" />   
+                        </TileContent>                    
+                </GenericTile>
+            </layout:HorizontalLayout>                
+            <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
+                            id="g3" 
+                            frameType="TwoByOne"                          
+                            header="{i18n>homepageGenTile3Header}"                                 
+                            press="onNavToWizard">                    
+                        <TileContent id="t4">                            
+                            <FeedContent    contentText="{i18n>homepageGenTile3Content}" />                                                           
+                        </TileContent>                    
+            </GenericTile>
+        </layout:VerticalLayout>
         <content />
     </Page>
 </mvc:View>

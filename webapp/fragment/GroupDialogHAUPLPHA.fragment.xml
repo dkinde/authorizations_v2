@@ -1,0 +1,14 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm=".handleGroupDialogConfirm"
+    reset=".resetGroupDialog">    
+    <groupItems>
+        <ViewSettingsItem selected="false" text="Personalnummer" key="personalnummer" />
+        <ViewSettingsItem selected="false" text="Planung Phase" key="pla_pha" />         
+    </groupItems>    
+</ViewSettingsDialog>
+</c:FragmentDefinition>

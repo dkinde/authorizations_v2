@@ -1,0 +1,103 @@
+<mvc:View   xmlns:mvc="sap.ui.core.mvc"         
+            xmlns="sap.m"
+            xmlns:l="sap.ui.layout"
+            controllerName="authorizationsv2.controller.HAUPARZL">
+    <Page   title="{i18n>table3PageTitle}"
+            showNavButton="true"
+            navButtonPress=".onNavButtonPressed"
+            backgroundDesign="Solid">    
+        <content>
+        <l:Grid defaultSpan="L12 M12 S12" 
+                class="sapUiResponsiveMargin" 
+                vSpacing="0" 
+                hSpacing="0">            
+            <Table  sticky="ColumnHeaders,HeaderToolbar" 
+                    growing="true"
+                    growingScrollToLoad="true"
+                    growingThreshold="100"
+                    id="table1" 
+                    mode="SingleSelectMaster" 
+                    items="{
+                        path: '/HAUPARZL',
+                        parameters: {
+                            $count: true                                    
+                        }    
+                    }">
+                <headerToolbar>
+                    <Toolbar>
+                        <content>
+                            <Button icon="sap-icon://add" 
+                                    text="{i18n>tableToolbarButtonAdd}" 
+                                    press="onOpenDialog"
+                                    type="Accept"/>                            
+                            <ToolbarSpacer/>
+                            <SearchField    id="searchField"
+                                            width="20%"
+                                            liveChange=".onSearch"
+                                            placeholder="{i18n>searchFieldPlaceholder}"/>
+                            <Button id="sortUsersButton"
+                                    icon="sap-icon://sort"
+                                    tooltip="{i18n>sortButtonText}"
+                                    press="handleSortButtonPressed"/> 
+                            <Button id="filterButton"
+                                    icon="sap-icon://filter"
+                                    tooltip="{i18n>filterButtonText}"
+                                    press="handleFilterButtonPressed"/>
+                            <Button id="groupButton"
+                                    icon="sap-icon://group-2"
+                                    tooltip="{i18n>groupButtonText}"
+                                    press="handleGroupButtonPressed"/>
+                            <Button icon="sap-icon://excel-attachment"
+                                    tooltip="{i18n>excelButtonText}" 
+                                    press="onExport"/>                                               
+                        </content>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="{i18n>colAUPARNAME}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colAUZIEL}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colAUIOBJ}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>colAUIOBJTYP}" />
+                    </Column>                                                                        
+                    <Column>
+                        <Text text="{i18n>colAUSEQUENZ}" />
+                    </Column>                                    
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier text="{InfoAuthName}" />
+                            <ObjectIdentifier text="{NameCube}" />                                            
+                            <ObjectIdentifier text="{InfoName}" />
+                            <ObjectNumber number="{InfoTyp}" />
+                            <ObjectNumber number="{Sequenz}" />                                           
+                        </cells>                                        
+                    </ColumnListItem>
+                </items>
+            </Table>                                        
+        </l:Grid>  
+        </content> 
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button id="saveButton" 
+                        text="Save" 
+                        type="Accept" 
+                        press="onSave" 
+                        visible="false" />
+                <Button id="cancelButton" 
+                        text="Cancel" 
+                        type="Reject" 
+                        press="onCancel" 
+                        visible="false" />
+            </OverflowToolbar>
+        </footer>                                               
+    </Page>
+</mvc:View>

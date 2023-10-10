@@ -1,0 +1,13 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm="handleSortDialogConfirm1">    
+    <sortItems>
+        <!-- <ViewSettingsItem selected="true" text="{i18n>colDatamart}" key="datamart" />                -->
+        <ViewSettingsItem selected="true" text="Datamart" key="datamart" />               
+    </sortItems>
+</ViewSettingsDialog>
+</c:FragmentDefinition>

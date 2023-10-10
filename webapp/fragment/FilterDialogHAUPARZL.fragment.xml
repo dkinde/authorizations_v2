@@ -1,0 +1,25 @@
+<c:FragmentDefinition	xmlns="sap.m"
+	                    xmlns:c="sap.ui.core">
+<ViewSettingsDialog title=""    
+                    confirm="handleFilterDialogConfirm">    
+    <filterItems>
+        <ViewSettingsFilterItem text="Cube" key="NameCube"> 
+            <items>
+                <ViewSettingsItem text="CO_C03" key="NameCube___CO_C03"/>
+                <ViewSettingsItem text="CO_C04" key="NameCube___CO_C04"/>
+                <ViewSettingsItem text="CO_C04N" key="NameCube___CO_C04N"/>
+                <ViewSettingsItem text="CO_C05" key="NameCube___CO_C05"/>
+            </items>
+        </ViewSettingsFilterItem>
+        <ViewSettingsFilterItem text="Typ Autorisierung IOBJ" key="InfoName" > 
+            <items>
+                <ViewSettingsItem text="COKOST" key="InfoName___COKOST"/>
+                <ViewSettingsItem text="COVKOST" key="InfoName___COVKOST"/>
+                <ViewSettingsItem text="MMMATKL" key="InfoName___MMMATKL"/>
+                <ViewSettingsItem text="FIKOSTTY" key="InfoName___FIKOSTTY"/> 
+                <ViewSettingsItem text="FIKOSTTRG" key="InfoName___FIKOSTTRG"/>
+            </items>
+        </ViewSettingsFilterItem>
+    </filterItems>     
+</ViewSettingsDialog>
+</c:FragmentDefinition>

@@ -1,0 +1,106 @@
+<core:FragmentDefinition xmlns="sap.m" 
+                         xmlns:core="sap.ui.core"    
+						 xmlns:form="sap.ui.layout.form"
+						 xmlns:l="sap.ui.layout"
+						 xmlns:html="http://www.w3.org/1999/xhtml" 						 
+                         width="100%">						         
+
+			 <Table id="myTable"
+					items="{
+							path : '/MP_CUBE_IOBJ',
+							parameters: { 
+								count: true 
+							},
+							sorter : {
+								path : 'Infocube',
+								ascending : false
+							}
+						}">	
+		<!-- <ColumnListItem vAlign="Middle">
+			<cells>
+				<ObjectIdentifier text="{Infocube}" />
+				<Text text="{Partcube}" />
+				<Text text="{Iobjnm}" />				
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column width="12em">
+				<header>
+					<Text text="Infocube" />
+				</header>
+			</Column>
+			<Column hAlign="Center">
+				<header>
+					<Text text="Partcube" />
+				</header>
+			</Column>
+			<Column hAlign="End">
+				<header>
+					<Text text="Iobjnm" />
+				</header>
+			</Column>			
+		</columns> -->
+		<columns>
+                                    <Column>
+                                        <Text text="Infocube" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Partcube" />
+                                    </Column>  
+									<Column>
+                                        <Text text="Iobjnm" />
+                                    </Column>                                                                      
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>                                                                                        
+                                            <ObjectIdentifier text="{Infocube}" />
+											<Text text="{Partcube}" />
+											<Text text="{Iobjnm}" />                                                                                      
+                                        </cells>                                        
+                                    </ColumnListItem>
+                                </items>
+	</Table>
+	<!-- <TableSelectDialog  id="myTable"
+						noDataText="Keine CUBE oder IOBJ gefunden"
+						growingThreshold="25"		
+						title="Wählen Sie ein CUBE und IOBJ"
+						search=".handleSearch"
+						confirm=".handleConfirm"
+						cancel=".handleClose"
+						items="{
+							path : '/MP_CUBE_IOBJ',
+							parameters: { 
+								count: true 
+							},
+							sorter : {
+								path : 'Infocube',
+								ascending : false
+							}
+						}">	
+		<ColumnListItem vAlign="Middle">
+			<cells>
+				<ObjectIdentifier text="{Infocube}" />
+				<Text text="{Partcube}" />
+				<Text text="{Iobjnm}" />				
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column width="12em">
+				<header>
+					<Text text="Infocube" />
+				</header>
+			</Column>
+			<Column hAlign="Center">
+				<header>
+					<Text text="Partcube" />
+				</header>
+			</Column>
+			<Column hAlign="End">
+				<header>
+					<Text text="Iobjnm" />
+				</header>
+			</Column>			
+		</columns>
+	</TableSelectDialog> -->						
+</core:FragmentDefinition>

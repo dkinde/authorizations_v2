@@ -1,0 +1,16 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+<ViewSettingsDialog    
+    title=""
+    confirm=".handleGroupDialogConfirm"
+    reset=".resetGroupDialog">    
+    <groupItems>
+        <ViewSettingsItem selected="false" text="Funktion für Berechtigung" key="funktion" />
+        <ViewSettingsItem selected="false" text="Typ der Entität" key="typ" />
+        <ViewSettingsItem selected="false" text="Entität" key="entit" />
+        <ViewSettingsItem selected="false" text="Wert" key="wert" />        
+    </groupItems>    
+</ViewSettingsDialog>
+</c:FragmentDefinition>
