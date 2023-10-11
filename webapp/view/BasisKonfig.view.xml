@@ -38,11 +38,9 @@
                                 header="{i18n>basisGenTile3Header}"                                                                
                                 press="onNavToHAUPARZL">                    
                         <TileContent id="t4">                            
-                                <NumericContent value="{
-                                                    path: '/HAUPARZL/$count'
-                                                }"                                                                                                 
+                                <NumericContent value=""                                                                                                 
                                                 scale="Einträge" 
-                                                id="n3" 
+                                                id="numericCont2" 
                                                 icon="sap-icon://menu2"/>                            
                         </TileContent>                    
                 </GenericTile>

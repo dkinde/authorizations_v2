@@ -4,7 +4,7 @@
             xmlns:l="sap.ui.layout"
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
-            controllerName="authorizationsv2.controller.HAUPF001">
+            controllerName="auth.controller.HAUPF001">
 
     <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
 			<f:title>

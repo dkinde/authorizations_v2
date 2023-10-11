@@ -69,10 +69,7 @@
                         id="table1" 
                         mode="SingleSelectLeft" 
                         items="{
-                            path: '/HAUPLPHA',
-                            parameters: {
-                                $count: true                                    
-                            }    
+                            path: '/HAUPLPHA'   
                         }"
                         fixedLayout="false"
                         alternateRowColors="true"

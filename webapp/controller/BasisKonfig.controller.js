@@ -12,28 +12,49 @@ sap.ui.define([
             onInit: function () {
                 sap.ui.getCore().getConfiguration().setLanguage("de");
                 sap.ui.getCore().applyChanges();
+                this._oModel = this.getOwnerComponent().getModel();
+                var that = this;
 
-                var sUrl1 = this.getOwnerComponent().getModel().sServiceUrl + "/AUDMART",
-                    sUrl2 = this.getOwnerComponent().getModel().sServiceUrl + "/AUMPVDM";
+                var promise1 = new Promise(function (resolve, reject) {
+                    this._oModel.read("/AUDMART", {
+                        success: function (oData, oResponse) {
+                            resolve(oData.results);
+                        },
+                        error: function (oError) {
+                            reject(oError);
+                        }
+                    });
+                }.bind(this));
 
-                $.ajax({
-                    url: sUrl1,
-                    method: "GET",
-                    success: function (dataEntit1) {
-                        $.ajax({
-                            url: sUrl2,
-                            method: "GET",
-                            success: function (dataEntit2) {
-                                var Total = dataEntit1.value.length + dataEntit2.value.length;
-                                this.getView().byId("numericCont1").setValue(Total.toString());
-                            }.bind(this),
-                            error: function (errorEntit2) {
-                                console.log("Fehler bei der Abfrage von Entität 2:", errorEntit2);
-                            }
-                        });
-                    }.bind(this),
-                    error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+                var promise2 = new Promise(function (resolve, reject) {
+                    this._oModel.read("/AUMPVDM", {
+                        success: function (oData, oResponse) {
+                            resolve(oData.results);
+                        },
+                        error: function (oError) {
+                            reject(oError);
+                        }
+                    });
+                }.bind(this));
+
+                Promise.all([promise1, promise2])
+                    .then(function (results) {
+                        var dataEntit1 = results[0],
+                            dataEntit2 = results[1],
+                            Total = dataEntit1.length + dataEntit2.length;
+
+                        that.getView().byId("numericCont1").setValue(Total.toString());
+                    })
+                    .catch(function (error) {
+                        console.error("Error al recuperar datos:", error);
+                    });
+
+                this._oModel.read("/HAUPARZL", {
+                    success: function (oData, oResponse) {
+                        that.getView().byId("numericCont2").setValue(oData.results.length.toString());
+                    },
+                    error: function (oError) {
+                        console.error("Error al recuperar datos:", oError);
                     }
                 });
             },
@@ -44,17 +65,11 @@ sap.ui.define([
             onNavToAUDMART: function () {
                 this.getRouter().navTo("RouteAUDMART");
             },
-            /* onNavToAUMPVDM: function () {
-                this.getRouter().navTo("RouteAUMPVDM");                
-            }, */
             onNavToHAUPARZL: function () {
                 this.getRouter().navTo("RouteHAUPARZL");
             },
             getRouter: function () {
                 return this.getOwnerComponent().getRouter();
-            },
-            /* getTotalCount: function() {
-                return entities && entities.length || 0;
-            } */
+            }
         });
     });

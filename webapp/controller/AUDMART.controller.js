@@ -27,7 +27,7 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorizationsv2.controller.AUDMART", {
+    return Controller.extend("auth.controller.AUDMART", {
         onBeforeRendering: function () {
         },
         onInit: function () {

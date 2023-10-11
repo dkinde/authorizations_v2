@@ -29,7 +29,7 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorizationsv2.controller.MasterPersFKT", {
+    return Controller.extend("auth.controller.MasterPersFKT", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
             sap.ui.getCore().getConfiguration().setLanguage("de");

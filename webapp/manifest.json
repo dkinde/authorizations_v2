@@ -152,6 +152,55 @@
           "target": [
             "TargetHAUPLPHA"
           ]
+        },
+        {
+          "name": "RouteAUDMART",
+          "pattern": "BasisKonfig/AUDMART",
+          "target": [
+            "TargetAUDMART"
+          ]
+        },
+        {
+          "name": "RouteAUMPVDM",
+          "pattern": "BasisKonfig/AUMPVDM",
+          "target": [
+            "TargetAUMPVDM"
+          ]
+        },
+        {
+          "name": "RouteHAUPARZL",
+          "pattern": "BasisKonfig/HAUPARZL",
+          "target": [
+            "TargetHAUPARZL"
+          ]
+        },
+        {
+          "name": "RouteHAUPF001",
+          "pattern": "Funktion/HAUPF001",
+          "target": [
+            "TargetHAUPF001"
+          ]
+        },
+        {
+          "name": "RouteMasterPersFKT",
+          "pattern": "Funktion/HAUPF001",
+          "target": [
+            "TargetMasterPersFKT"
+          ]
+        },
+        {
+          "name": "RouteDetailPersFKT",
+          "pattern": "Funktion/HAUPF001/{funktion}/{layout}",
+          "target": [
+            "TargetDetailPersFKT"
+          ]
+        },
+        {
+          "name": "RouteHAUFW001",
+          "pattern": "Funktion/HAUFW001",
+          "target": [
+            "TargetHAUFW001"
+          ]
         }
       ],
       "targets": {
@@ -196,6 +245,55 @@
           "viewId": "HAUPLPHA",
           "viewName": "HAUPLPHA",
           "viewLevel": 1,
+          "transition": "slide"
+        },
+        "TargetAUDMART": {
+          "viewType": "XML",
+          "viewId": "AUDMART",
+          "viewName": "AUDMART",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetAUMPVDM": {
+          "viewType": "XML",
+          "viewId": "AUMPVDM",
+          "viewName": "AUMPVDM",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetHAUPARZL": {
+          "viewType": "XML",
+          "viewId": "HAUPARZL",
+          "viewName": "HAUPARZL",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetHAUPF001": {
+          "viewType": "XML",
+          "viewId": "HAUPF001",
+          "viewName": "HAUPF001",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetHAUFW001": {
+          "viewType": "XML",
+          "viewId": "HAUFW001",
+          "viewName": "HAUFW001",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetMasterPersFKT": {
+          "viewType": "XML",
+          "viewId": "MasterPersFKT",
+          "viewName": "MasterPersFKT",
+          "viewLevel": 2,
+          "transition": "slide"
+        },
+        "TargetDetailPersFKT": {
+          "viewType": "XML",
+          "viewId": "DetailPersFKT",
+          "viewName": "DetailPersFKT",
+          "viewLevel": 2,
           "transition": "slide"
         }
       }

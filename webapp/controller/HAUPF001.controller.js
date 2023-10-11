@@ -29,7 +29,7 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("authorizationsv2.controller.HAUPF001", {
+    return Controller.extend("auth.controller.HAUPF001", {
         onInit: function () {
             this._oModel = this.getOwnerComponent().getModel();
             this._mViewSettingsDialogs = {};
@@ -245,7 +245,7 @@ sap.ui.define([
 
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
-        },        
+        },
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");

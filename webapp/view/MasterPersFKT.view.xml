@@ -2,7 +2,7 @@
             displayBlock="true"
             xmlns="sap.f"             
             height="100%"
-            controllerName="authorizationsv2.controller.MasterPersFKT">
+            controllerName="auth.controller.MasterPersFKT">
 
 	<FlexibleColumnLayout   id="flexibleColumnLayout" 
                             backgroundDesign="Solid" 

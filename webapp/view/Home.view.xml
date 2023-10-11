@@ -45,14 +45,9 @@
                             header="{i18n>homepageGenTile4Header}" 
                             subheader="{i18n>homepageGenTile4Content}"                                
                             press="onNavToKontroll">                    
-                        <TileContent id="t5">                            
-                            <!-- <FeedContent    contentText="{i18n>homepageGenTile4Content}" 
-                                            value="{
-                                                path: '/HAUKB001/$count'
-                                            }" /> -->  
-                            <NumericContent value="{
-                                                path: '/HAUKB001/$count'
-                                            }" 
+                        <TileContent id="t5">                                                        
+                            <NumericContent value="" 
+                                            id="numericCont1"
                                             scale="Einträge"
                                             icon="sap-icon://menu2" 
                                             withMargin="false" />   
@@ -64,14 +59,9 @@
                             header="{i18n>homepageGenTile5Header}" 
                             subheader="{i18n>homepageGenTile5Content}"                                
                             press="onNavToPersPlan">                    
-                        <TileContent id="t6">                            
-                            <!-- <FeedContent    contentText="{i18n>homepageGenTile4Content}" 
-                                            value="{
-                                                path: '/HAUPLPHA/$count'
-                                            }" /> -->  
-                            <NumericContent value="{
-                                                path: '/HAUPLPHA/$count'
-                                            }" 
+                        <TileContent id="t6">                                                        
+                            <NumericContent value="" 
+                                            id="numericCont2"
                                             scale="Einträge"
                                             icon="sap-icon://menu2" 
                                             withMargin="false" />   
