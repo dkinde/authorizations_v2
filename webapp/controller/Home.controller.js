@@ -13,7 +13,6 @@ sap.ui.define([
                 sap.ui.getCore().applyChanges();
                 this._oModel = this.getOwnerComponent().getModel();
                 var that = this,
-                    totalCount = 0,
                     batchSize = 0;
 
                 /* this._oModel.read("/HAUPLPHA", {

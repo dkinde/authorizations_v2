@@ -40,44 +40,93 @@ sap.ui.define([
             this.aIOBJ_Sondern = [];
 
             this.aValue = [];
+            this.aEntit = [];
 
             this._oPage = this.byId("dynamicPage1");
 
             sap.ui.getCore().getConfiguration().setLanguage("de");
 
             var that = this,
+                batchSize = 0,
                 iSkip = 0;
 
-            /* function retrieveData(sUrl) {
-                    that._oModel.read(sUrl, {
-                        urlParameters: {
-                            "$skiptoken": batchSize
-                        },
-                        success: function (oData, oResponse) {
-                            totalCount += oData.results.length;
-                            console.log(oData);
-                            console.log(oResponse);
-                            console.log(totalCount);
-                            console.log(oData.__next);
+            function retrieveData(sUrl) {
+                that._oModel.read(sUrl, {
+                    urlParameters: {
+                        "$skiptoken": batchSize
+                    },
+                    success: function (oData, oResponse) {
+                        console.log(oData);
+                        console.log(oResponse);
+                        console.log(oData.__next);
 
-                            if (oData.__next) {
-                                // Si hay más páginas, continúa recuperando datos
-                                batchSize += 100;
-                                retrieveData(sUrl);
-                            } else {
-                                // Ya no hay más páginas, muestra el resultado
-                                that.getView().byId("numericCont1").setValue(totalCount.toString());
-                            }
-                        },
-                        error: function (oError) {
-                            console.error("Error al recuperar datos:", oError);
+                        if (oData && oData.results) {
+                            that.aValue = that.aValue.concat(oData.results.map(function (item) {
+                                return item;
+                            }));
                         }
-                    });
-                }
+                        if (oData.__next) {
+                            batchSize += 100;
+                            retrieveData(sUrl);
+                        } else {
+                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
 
-                retrieveData("/HAUKB001"); */
+                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.typ === oItem.typ; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
 
-            function getEntit() {
+                            var aDistinctItems2 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.entit === oItem.entit; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems3 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.wert === oItem.wert; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var oDistinctModel = new sap.ui.model.json.JSONModel({
+                                distinctItems: aDistinctItems
+                            });
+                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
+                                distinctItems1: aDistinctItems1
+                            });
+                            var oDistinctModel2 = new sap.ui.model.json.JSONModel({
+                                distinctItems2: aDistinctItems2
+                            });
+                            var oDistinctModel3 = new sap.ui.model.json.JSONModel({
+                                distinctItems3: aDistinctItems3
+                            });
+
+                            that.getView().byId("multiFunktion").setModel(oDistinctModel);
+                            that.getView().byId("multiTyp").setModel(oDistinctModel1);
+                            that.getView().byId("multiEntit").setModel(oDistinctModel2);
+                            that.getView().byId("multiWert").setModel(oDistinctModel3);
+
+                            that._oPage.setBusy(false);
+                            return;
+                        }
+                    },
+                    error: function (oError) {
+                        console.error("Error al recuperar datos:", oError);
+                    }
+                });
+            }
+            retrieveData("/HAUFW001");
+
+            /* function getEntit() {
                 $.ajax({
                     url: that.getOwnerComponent().getModel().sServiceUrl + "/ENTITAT",
                     method: "GET",
@@ -94,9 +143,40 @@ sap.ui.define([
                     }
                 });
             }
-            getEntit();
+            getEntit(); */
 
-            function getData() {
+            function retrieveEntit(sUrl) {
+                that._oModel.read(sUrl, {
+                    urlParameters: {
+                        "$skiptoken": batchSize
+                    },
+                    success: function (oData, oResponse) {
+                        totalCount += oData.results.length;
+                        console.log(oData);
+                        console.log(oResponse);
+                        console.log(totalCount);
+                        console.log(oData.__next);
+
+                        if (oData && oData.results) {
+                            that.aEntit = that.aEntit.concat(oData.results.map(function (item) {
+                                return item;
+                            }));
+                        }
+                        if (oData.__next) {
+                            batchSize += 100;
+                            retrieveData(sUrl);
+                        } else {
+
+                        }
+                    },
+                    error: function (oError) {
+                        console.error("Error al recuperar datos:", oError);
+                    }
+                });
+            }
+            retrieveEntit("/ENTITAT");
+
+            /* function getData() {
                 $.ajax({
                     url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUFW001" + "?$top=500" + "&$skip=" + iSkip,
                     method: "GET",
@@ -166,7 +246,7 @@ sap.ui.define([
                     }
                 });
             }
-            getData();
+            getData(); */
 
             /* this.oSmartVariantManagement = this.getView().byId("svm"); */
             this.oFilterBar = this.getView().byId("filterbar");

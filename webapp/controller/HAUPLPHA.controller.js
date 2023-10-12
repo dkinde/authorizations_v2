@@ -41,9 +41,65 @@ sap.ui.define([
             this._oPage = this.byId("dynamicPage1");
 
             var that = this,
+                batchSize = 0,
                 iSkip = 0;
 
-            function getData() {
+            function retrieveData(sUrl) {
+                that._oModel.read(sUrl, {
+                    urlParameters: {
+                        "$skiptoken": batchSize
+                    },
+                    success: function (oData, oResponse) {
+                        console.log(oData);
+                        console.log(oResponse);
+                        console.log(oData.__next);
+
+                        if (oData && oData.results) {
+                            that.aValue = that.aValue.concat(oData.results.map(function (item) {
+                                return item;
+                            }));
+                        }
+                        if (oData.__next) {
+                            batchSize += 100;
+                            retrieveData(sUrl);
+                        } else {
+                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.pla_pha === oItem.pla_pha; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var oDistinctModel = new sap.ui.model.json.JSONModel({
+                                distinctItems: aDistinctItems
+                            });
+                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
+                                distinctItems1: aDistinctItems1
+                            });
+                            that.aPhase = aDistinctItems1;
+
+                            that.getView().byId("multiPersonal").setModel(oDistinctModel);
+                            that.getView().byId("multiPla_pha").setModel(oDistinctModel1);
+
+                            that._oPage.setBusy(false);
+                            return;
+                        }
+                    },
+                    error: function (oError) {
+                        console.error("Error al recuperar datos:", oError);
+                    }
+                });
+            }
+            retrieveData("/HAUPLPHA");
+
+            /* function getData() {
                 $.ajax({
                     url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPLPHA" + "?$top=500" + "&$skip=" + iSkip,
                     method: "GET",
@@ -91,7 +147,7 @@ sap.ui.define([
                     }
                 });
             }
-            getData();
+            getData(); */
 
             /* this.oSmartVariantManagement = this.getView().byId("svm"); */
             this.oFilterBar = this.getView().byId("filterbar");
