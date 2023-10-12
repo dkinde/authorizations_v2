@@ -48,11 +48,41 @@ sap.ui.define([
             var that = this,
                 iSkip = 0;
 
+            /* function retrieveData(sUrl) {
+                    that._oModel.read(sUrl, {
+                        urlParameters: {
+                            "$skiptoken": batchSize
+                        },
+                        success: function (oData, oResponse) {
+                            totalCount += oData.results.length;
+                            console.log(oData);
+                            console.log(oResponse);
+                            console.log(totalCount);
+                            console.log(oData.__next);
+
+                            if (oData.__next) {
+                                // Si hay más páginas, continúa recuperando datos
+                                batchSize += 100;
+                                retrieveData(sUrl);
+                            } else {
+                                // Ya no hay más páginas, muestra el resultado
+                                that.getView().byId("numericCont1").setValue(totalCount.toString());
+                            }
+                        },
+                        error: function (oError) {
+                            console.error("Error al recuperar datos:", oError);
+                        }
+                    });
+                }
+
+                retrieveData("/HAUKB001"); */
+
             function getEntit() {
                 $.ajax({
                     url: that.getOwnerComponent().getModel().sServiceUrl + "/ENTITAT",
                     method: "GET",
                     success: function (data) {
+                        console.log(data);
                         if (data && data.value) {
                             that.aEntit = that.aEntit.concat(data.value.map(function (item) {
                                 return item;
@@ -71,6 +101,7 @@ sap.ui.define([
                     url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUFW001" + "?$top=500" + "&$skip=" + iSkip,
                     method: "GET",
                     success: function (data) {
+                        console.log(data);
                         if (data && data.value) {
                             that.aValue = that.aValue.concat(data.value.map(function (item) {
                                 return item;
@@ -307,7 +338,7 @@ sap.ui.define([
             var oSelectedItem = this.byId("table5").getSelectedItem(),
                 oContext = oSelectedItem.getBindingContext(),
                 iFunktion = oContext.getProperty("funktion"),
-                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, iFunktion);
+                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.EQ, iFunktion);
 
             this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
 

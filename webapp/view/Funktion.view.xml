@@ -29,10 +29,8 @@
                                 header="{i18n>funktionGenTile1Header}"                             
                                 press="onNavToHAUFW001">                   
                     <TileContent id="t2">                            
-                        <NumericContent value="{
-                                            path: '/HAUFW001/$count'
-                                        }"                                                                                          
-                                        id="n1" 
+                        <NumericContent value=""                                                                            
+                                        id="numericCont1" 
                                         scale="Einträge"
                                         icon="sap-icon://menu2"/>                            
                     </TileContent>                    
@@ -42,11 +40,9 @@
                                 header="{i18n>funktionGenTile2Header}"                                 
                                 press="onNavToMasterPersFKT">                    
                     <TileContent id="t3">                            
-                        <NumericContent value="{
-                                            path: '/HAUPF001/$count'
-                                        }"                 
+                        <NumericContent value=""                 
                                         scale="Einträge"                       
-                                        id="n2" 
+                                        id="numericCont2" 
                                         icon="sap-icon://menu2"/>                            
                     </TileContent>                    
                 </GenericTile>               

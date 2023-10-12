@@ -49,14 +49,24 @@ sap.ui.define([
                         console.error("Error al recuperar datos:", error);
                     });
 
-                this._oModel.read("/HAUPARZL", {
+                $.ajax({
+                    url: that._oModel.sServiceUrl + "/HAUPARZL" + "/$count",
+                    method: "GET",
+                    success: function (data) {
+                        that.getView().byId("numericCont2").setValue(data.toString());
+                    }.bind(this),
+                    error: function (errorEntit1) {
+                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+                    }
+                });
+                /* this._oModel.read("/HAUPARZL", {
                     success: function (oData, oResponse) {
                         that.getView().byId("numericCont2").setValue(oData.results.length.toString());
                     },
                     error: function (oError) {
                         console.error("Error al recuperar datos:", oError);
                     }
-                });
+                }); */
             },
             onNavButtonPressed: function () {
                 var oRouter = UIComponent.getRouterFor(this);

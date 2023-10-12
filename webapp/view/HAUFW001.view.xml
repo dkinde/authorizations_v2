@@ -4,7 +4,7 @@
             xmlns:l="sap.ui.layout"
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
-            controllerName="authorizationsv2.controller.HAUFW001">
+            controllerName="auth.controller.HAUFW001">
 
     <f:DynamicPage id="dynamicPage1" headerExpanded="true" >
 			<f:title>
@@ -19,10 +19,12 @@
 						<Label id="snappedLabel" text="No filters active" />
 					</f:snappedContent>
                     <f:actions>
-                        <Button text="Schließen" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                        <Button text="Schließen" type="Reject" icon="sap-icon://decline" 
+                                press="onNavButtonPressed"></Button>
                     </f:actions>
                     <f:navigationActions>
-                        <Button text="zur Menü-Sondernfunktion" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                        <Button text="zur Menü-Sondernfunktion" icon="sap-icon://decline" 
+                                press="onNavButtonPressed"></Button>
                     </f:navigationActions>
 				</f:DynamicPageTitle>
 			</f:title>
@@ -32,9 +34,11 @@
 						<fb:FilterBar   id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" 
                                         filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
 							<fb:filterGroupItems>
-								<fb:FilterGroupItem name="funktion" label="{i18n>colAUFKT}" groupName="Group1" visibleInFilterBar="true">
+								<fb:FilterGroupItem name="funktion" label="{i18n>colAUFKT}" 
+                                                    groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
-										<MultiComboBox  id="multiFunktion" name="funktion" selectionChange=".onSelectionChange"
+										<MultiComboBox  id="multiFunktion" name="funktion" 
+                                                        selectionChange=".onSelectionChange"
                                                         showSecondaryValues= "true"
                                                         items="{
                                                             path: '/distinctItems',
@@ -47,7 +51,8 @@
 								<fb:FilterGroupItem name="typ" label="{i18n>colAUENTTYP}" groupName="Group1" 
                                                     visibleInFilterBar="true">
 									<fb:control>
-										<MultiComboBox  id="multiTyp" name="typ"	selectionChange=".onSelectionChange"
+										<MultiComboBox  id="multiTyp" name="typ"	
+                                                        selectionChange=".onSelectionChange"
                                                         items="{
                                                             path: '/distinctItems1',
 												            templateShareable: true
@@ -59,7 +64,8 @@
                                 <fb:FilterGroupItem name="entit" label="{i18n>colAUENT}" groupName="Group1" 
                                                     visibleInFilterBar="true">
 									<fb:control>
-										<MultiComboBox  id="multiEntit" name="entit"	selectionChange=".onSelectionChange"
+										<MultiComboBox  id="multiEntit" name="entit"	
+                                                        selectionChange=".onSelectionChange"
                                                         items="{
                                                             path: '/distinctItems2',
 												            templateShareable: true
@@ -71,7 +77,8 @@
                                 <fb:FilterGroupItem name="wert" label="{i18n>colAUWERT}" groupName="Group1" 
                                                     visibleInFilterBar="true">
 									<fb:control>
-										<MultiComboBox  id="multiWert" name="wert"	selectionChange=".onSelectionChange"
+										<MultiComboBox  id="multiWert" name="wert"	
+                                                        selectionChange=".onSelectionChange"
                                                         items="{
                                                             path: '/distinctItems3',
 												            templateShareable: true
@@ -96,10 +103,7 @@
                         alternateRowColors="true"     
                         sticky="ColumnHeaders,HeaderToolbar"                 
                         items="{
-                            path: '/FKT_TXT',
-                            parameters: {
-                                $count: true                                    
-                            }                                                                   
+                            path: '/FKT_TXT'                                                                  
                         }"
                         class="sapFDynamicPageAlignContent"
 					    width="auto"

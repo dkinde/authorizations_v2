@@ -47,6 +47,7 @@ sap.ui.define([
                     url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPF001" + "?$top=500" + "&$skip=" + iSkip,
                     method: "GET",
                     success: function (data) {
+                        console.log(data);
                         if (data && data.value) {
                             that.aValue = that.aValue.concat(data.value.map(function (item) {
                                 return item;

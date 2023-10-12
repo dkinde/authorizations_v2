@@ -16,12 +16,32 @@ sap.ui.define([
                     totalCount = 0,
                     batchSize = 0;
 
-                this._oModel.read("/HAUPLPHA", {
+                /* this._oModel.read("/HAUPLPHA", {
                     success: function (oData, oResponse) {
                         that.getView().byId("numericCont2").setValue(oData.results.length.toString());
                     },
                     error: function (oError) {
                         console.error("Error al recuperar datos:", oError);
+                    }
+                }); */
+                $.ajax({
+                    url: that._oModel.sServiceUrl + "/HAUKB001" + "/$count",
+                    method: "GET",
+                    success: function (data) {
+                        that.getView().byId("numericCont1").setValue(data.toString());
+                    }.bind(this),
+                    error: function (errorEntit1) {
+                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+                    }
+                });
+                $.ajax({
+                    url: that._oModel.sServiceUrl + "/HAUPLPHA" + "/$count",
+                    method: "GET",
+                    success: function (data) {
+                        that.getView().byId("numericCont2").setValue(data.toString());
+                    }.bind(this),
+                    error: function (errorEntit1) {
+                        console.log("Fehler bei der Abfrage von Entität 2:", errorEntit1);
                     }
                 });
 
@@ -54,16 +74,15 @@ sap.ui.define([
 
                 retrieveData("/HAUKB001"); */
 
-                this._oModel.read("/HAUKB001", {
+                /* this._oModel.read("/HAUKB001", {
                     success: function (oData, oResponse) {
-                        console.log(oData);
-                        console.log(oResponse);
                         that.getView().byId("numericCont1").setValue(oData.results.length.toString());
                     },
                     error: function (oError) {
                         console.error("Error al recuperar datos:", oError);
                     }
-                });
+                }); */
+
             },
             onNavToBasisKonfig: function () {
                 this.getRouter().navTo("RouteBasisKonfig");
