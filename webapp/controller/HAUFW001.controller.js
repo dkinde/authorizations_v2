@@ -56,10 +56,6 @@ sap.ui.define([
                         "$skiptoken": batchSize
                     },
                     success: function (oData, oResponse) {
-                        console.log(oData);
-                        console.log(oResponse);
-                        console.log(oData.__next);
-
                         if (oData && oData.results) {
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
@@ -126,37 +122,12 @@ sap.ui.define([
             }
             retrieveData("/HAUFW001");
 
-            /* function getEntit() {
-                $.ajax({
-                    url: that.getOwnerComponent().getModel().sServiceUrl + "/ENTITAT",
-                    method: "GET",
-                    success: function (data) {
-                        console.log(data);
-                        if (data && data.value) {
-                            that.aEntit = that.aEntit.concat(data.value.map(function (item) {
-                                return item;
-                            }));
-                        }
-                    }.bind(this),
-                    error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
-                    }
-                });
-            }
-            getEntit(); */
-
             function retrieveEntit(sUrl) {
                 that._oModel.read(sUrl, {
                     urlParameters: {
                         "$skiptoken": batchSize
                     },
                     success: function (oData, oResponse) {
-                        totalCount += oData.results.length;
-                        console.log(oData);
-                        console.log(oResponse);
-                        console.log(totalCount);
-                        console.log(oData.__next);
-
                         if (oData && oData.results) {
                             that.aEntit = that.aEntit.concat(oData.results.map(function (item) {
                                 return item;
@@ -165,9 +136,10 @@ sap.ui.define([
                         if (oData.__next) {
                             batchSize += 100;
                             retrieveData(sUrl);
-                        } else {
-
                         }
+                        /* else {
+
+                        } */
                     },
                     error: function (oError) {
                         console.error("Error al recuperar datos:", oError);
@@ -175,78 +147,6 @@ sap.ui.define([
                 });
             }
             retrieveEntit("/ENTITAT");
-
-            /* function getData() {
-                $.ajax({
-                    url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUFW001" + "?$top=500" + "&$skip=" + iSkip,
-                    method: "GET",
-                    success: function (data) {
-                        console.log(data);
-                        if (data && data.value) {
-                            that.aValue = that.aValue.concat(data.value.map(function (item) {
-                                return item;
-                            }));
-                        }
-                        if (data.value.length === 500) {
-                            iSkip += 500;
-                            getData();
-                        } else {
-                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.typ === oItem.typ; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems2 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.entit === oItem.entit; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems3 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.wert === oItem.wert; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var oDistinctModel = new sap.ui.model.json.JSONModel({
-                                distinctItems: aDistinctItems
-                            });
-                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
-                                distinctItems1: aDistinctItems1
-                            });
-                            var oDistinctModel2 = new sap.ui.model.json.JSONModel({
-                                distinctItems2: aDistinctItems2
-                            });
-                            var oDistinctModel3 = new sap.ui.model.json.JSONModel({
-                                distinctItems3: aDistinctItems3
-                            });
-
-                            that.getView().byId("multiFunktion").setModel(oDistinctModel);
-                            that.getView().byId("multiTyp").setModel(oDistinctModel1);
-                            that.getView().byId("multiEntit").setModel(oDistinctModel2);
-                            that.getView().byId("multiWert").setModel(oDistinctModel3);
-
-                            that._oPage.setBusy(false);
-                            return;
-                        }
-                    }.bind(this),
-                    error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
-                    }
-                });
-            }
-            getData(); */
 
             /* this.oSmartVariantManagement = this.getView().byId("svm"); */
             this.oFilterBar = this.getView().byId("filterbar");
@@ -263,12 +163,11 @@ sap.ui.define([
         },
         onExit: function () {
             //Controller.prototype.onExit.apply(this, arguments);
-            var oFilter = [],
-                oSelectedItem = this.byId("table5").getSelectedItem();
-
+            // var oFilter = [];
+            // oSelectedItem = this.byId("table5").getSelectedItem();
             // oSelectedItem.blur();
-            this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
 
+            this.byId("table1").getBinding("items").filter([], sap.ui.model.FilterType.Application);
         },
         onNavButtonPressed: function () {
             var oFilter = [],
@@ -408,10 +307,12 @@ sap.ui.define([
         onCloseEditDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
-            this.byId("__editCRUD0").setValue("");
-            this.byId("__editCRUD2").setValue("");
+            this.byId("__inputEditFunktion").setText("");
+            // this.byId("__editCRUD2").setValue("");
             this.byId("__editCRUD3").setValue("");
             this.byId("selecttyp1").setSelectedKey(null);
+            this.byId("selectentit1").setSelectedKey(null);
+
             this.oDialogEdit.close();
         },
         onFunktionPress: function () {
@@ -424,12 +325,11 @@ sap.ui.define([
 
         },
         onCleanFilter: function () {
-            var oFilter = [],
-                oSelectedItem = this.byId("table5").getSelectedItem();
-
+            /* var oFilter = [],
+                oSelectedItem = this.byId("table5").getSelectedItem(); */
             // oSelectedItem.blur();
-            this.byId("table1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
 
+            this.byId("table1").getBinding("items").filter([], sap.ui.model.FilterType.Application);
         },
         filterTyp: function () {
             var selTyp = this.byId("selecttyp").getSelectedItem().getText(),
@@ -447,10 +347,26 @@ sap.ui.define([
             this.getView().byId("selectentit").setSelectedKey(null);
             this.createValidation();
         },
+        filterTyp1: function () {
+            var selTyp = this.byId("selecttyp1").getSelectedItem().getText(),
+                selEnt = this.byId("selectentit1");
+
+            selEnt.removeAllItems();
+            this.aEntit.forEach(item => {
+                if (item.typ == selTyp) {
+                    selEnt.addItem(new sap.ui.core.Item({
+                        key: item.entit,
+                        text: item.entit
+                    }));
+                }
+            });
+            this.getView().byId("selectentit1").setSelectedKey(null);
+            this.editValidation();
+        },
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsHAUFW001",
+                    name: "auth.fragment.InputFieldsHAUFW001",
                     controller: this
                 });
             }
@@ -716,91 +632,105 @@ sap.ui.define([
             }
         },
         editValidation: function () {
-            var iInput1 = this.byId("__editCRUD0").getValue(),
-                sInput3 = this.byId("__editCRUD2").getValue(),
-                sInput4 = this.byId("__editCRUD3").getValue(),
-                oInput1 = this.byId("__editCRUD0"),
-                oInput3 = this.byId("__editCRUD2"),
-                oInput4 = this.byId("__editCRUD3");
+            var sInput1 = this.byId("__editCRUD3").getValue(),
+                selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
+                selectEntit = this.getView().byId("selectentit1").getSelectedKey(),
+                oInput1 = this.byId("__editCRUD3");
 
-            // validation single inputs	
-            if (iInput1.length < 4 && iInput1.length > 0) {
+            // validation single inputs	            
+            if (sInput1.length > 0 && sInput1.length < 61) {
                 oInput1.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput1.setValueState(sap.ui.core.ValueState.Error);
             }
-            if (isNaN(sInput3) && sInput3.length < 61) {
-                oInput3.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput3.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput4) && sInput4.length < 61) {
-                oInput4.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput4.setValueState(sap.ui.core.ValueState.Error);
-            }
 
-            // validation all inputs - next button
-            if (iInput1.length < 4 && iInput1.length > 0 && isNaN(sInput3) && sInput3.length < 61 && isNaN(sInput4) && sInput4.length < 61) {
-                this.byId("editButton").setVisible(true);
-            } else {
-                this.byId("editButton").setVisible(false);
+            if (sInput1 == '')
+                oInput1.setValueState(sap.ui.core.ValueState.None);
+
+            // validation all inputs - create button
+            if (selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
+                this.byId("editButton").setEnabled(true);
             }
+            else
+                this.byId("editButton").setEnabled(false);
+
         },
         onUpdateEditPress: function () {
             var oUpdateEntry = {},
                 oContext = this.byId("table1").getSelectedItem().getBindingContext(),
                 fnSucces = function () {
-                    this._setBusy(false);
+                    // this._setBusy(false);
                     sap.m.MessageToast.show("Objekt erfolgreich aktualisiert");
                     var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
+                    /* oList.getItems().some(function (oItem) {
                         if (oItem.getBindingContext() === oContext) {
                             oItem.focus();
                             oItem.setSelected(true);
                             return true;
                         }
-                    });
-                    this._setUIChanges(false);
+                    }); */
+                    // this._setUIChanges(false);
                 }.bind(this),
                 fnError = function (oError) {
-                    this._setBusy(false);
+                    // this._setBusy(false);
                     sap.m.MessageBox.error(oError.message);
-                    this._setUIChanges(false);
+                    // this._setUIChanges(false);
                 }.bind(this),
-                iIndex = oContext.getIndex();
+                sFunktion = oContext.getProperty("funktion"),
+                sEntitat = oContext.getProperty("entit"),
+                sTyp = oContext.getProperty("typ"),
+                sWert = oContext.getProperty("wert");
+            // iIndex = oContext.getIndex();
 
-            oUpdateEntry.funktion = this.getView().byId("__editCRUD0").getValue();
-            oUpdateEntry.typ = this.getView().byId("selecttyp1").getSelectedItem().getText();
-            oUpdateEntry.entit = this.getView().byId("__editCRUD2").getValue();
-            oUpdateEntry.wert = this.getView().byId("__editCRUD3").getValue();
+            if (sEntitat === this.byId("selectentit1").getSelectedItem().getText() &&
+                sTyp === this.byId("selecttyp1").getSelectedItem().getText() &&
+                sWert === this.byId("__editCRUD3").getValue()) {
+                sap.m.MessageBox.warning("Es gibt keine Änderungen zur Aktualisierung der Funktion");
+            } else {
+                var sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntitat + "',wert='" + sWert + "')",
+                    that = this;
+                // "/HAUFW001(funktion='2',typ='D',entit='DATAMART',wert='DB')"
+                oUpdateEntry = {
+                    funktion: this.byId("__inputEditFunktion").getText(),
+                    typ: this.byId("selecttyp1").getSelectedItem().getText(),
+                    entit: this.byId("selectentit1").getSelectedItem().getText(),
+                    wert: this.byId("__editCRUD3").getValue()
+                };
 
-            //oContext.setProperty("InfoAuthName",oUpdateEntry.InfoAuthName,"$auto",false);     
-            //oContext.setProperty("NameCube",oUpdateEntry.NameCube,"$auto",false);
-            //oContext.setProperty("InfoName",oUpdateEntry.InfoName,"$auto",false);
-            //oContext.setProperty("InfoTyp",oUpdateEntry.InfoTyp,"$auto",false);
-            //oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,"$auto",false);  
+                console.log(oUpdateEntry);
+                console.log(sURL);
 
-            //oContext.requestProperty("Sequenz").then(oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,)) ;
+                this._oModel.update(sURL, oUpdateEntry, {
+                    success: function () {
+                        console.log("Registro actualizado exitosamente.");
+                        sap.m.MessageToast.show("Objekt erfolgreich aktualisiert");
+                        that._oModel.submitChanges();
+                        that.byId("dialog2").close();
+                    },
+                    error: function (error) {
+                        console.error("Error al actualizar el registro: " + error);
+                    }
+                });
+            }
 
-            oContext.setProperty("Sequenz", oUpdateEntry.Sequenz);
-            this._oModel.submitChanges();
+            //oContext.setProperty("Sequenz", oUpdateEntry.Sequenz);
+
+            // this._oModel.submitChanges();
 
             //this._setBusy(false);
-            //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));                     
-            //this._bTechnicalErrors = false;            
-            //this.byId("table1").getBinding("items").refresh();  
+            //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
+            //this._bTechnicalErrors = false;
+            //this.byId("table1").getBinding("items").refresh();
 
 
-            if (oContext.hasPendingChanges()) {
+            /* if (oContext.hasPendingChanges()) {
                 this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 sap.m.MessageToast.show("Kann aufgrund von anstehenden Änderungen nicht aktualisiert werden");
             }
             else {
-                //this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 oContext.refresh();
                 this.byId("dialog2").close();
-            }
+            } */
 
             //this._oModel.resetChanges();                                    
             //var oContext = this.byId("table1").getBinding("items").update();
@@ -815,7 +745,7 @@ sap.ui.define([
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit) {
                     this._oDialogEdit = this.loadFragment({
-                        name: "authorization.fragment.EditDialogHAUFW001",
+                        name: "auth.fragment.EditDialogHAUFW001",
                         controller: this
                     });
                 }
@@ -827,15 +757,17 @@ sap.ui.define([
                     });
                     this.oDialogEdit.open();
 
-                    this.byId("__editCRUD0").setValue(oEntry.funktion);
-                    //this.byId("__editCRUD1").setValue(oEntry.typ);
-                    this.byId("__editCRUD2").setValue(oEntry.entit);
+                    this.byId("__inputEditFunktion").setText(oEntry.funktion);
+                    this.byId("selecttyp1").setSelectedKey(oEntry.typ);
+                    this.filterTyp1();
+                    this.byId("selectentit1").setSelectedKey(oEntry.entit);
                     this.byId("__editCRUD3").setValue(oEntry.wert);
+                    this.editValidation();
 
                 }.bind(this));
 
             } else {
-                sap.m.MessageBox.warning("Es wurde kein Element zur Aktualisierung ausgewählt");
+                sap.m.MessageBox.warning("Es wurde kein Funktion zur Aktualisierung ausgewählt");
             }
         },
         onDeletePress: function () {
@@ -891,19 +823,19 @@ sap.ui.define([
             this.groupReset = true;
         },
         handleSortButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogHAUFW001")
+            this.getViewSettingsDialog("auth.fragment.SortDialogHAUFW001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUFW001")
+            this.getViewSettingsDialog("auth.fragment.FilterDialogHAUFW001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUFW001")
+            this.getViewSettingsDialog("auth.fragment.GroupDialogHAUFW001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });

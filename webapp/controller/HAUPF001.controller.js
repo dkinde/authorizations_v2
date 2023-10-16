@@ -181,8 +181,6 @@ sap.ui.define([
             console.log()
             this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
 
-            console.log(oEvent.getSource().getBindingContext().getPath());
-
             var funktionPath = oEvent.getSource().getBindingContext().getPath(),
                 funktion = funktionPath.match(/funktion='(\d+)'/);
 
@@ -284,7 +282,7 @@ sap.ui.define([
                     aFilters = aSelectedKeys.map(function (sSelectedKey) {
                         return new sap.ui.model.Filter({
                             path: oFilterGroupItem.getName(),
-                            operator: sap.ui.model.FilterOperator.Contains,
+                            operator: sap.ui.model.FilterOperator.EQ,
                             value1: sSelectedKey
                         });
                     });
@@ -319,7 +317,7 @@ sap.ui.define([
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsHAUPF001",
+                    name: "auth.fragment.InputFieldsHAUPF001",
                     controller: this
                 });
             }
@@ -331,18 +329,23 @@ sap.ui.define([
         onCreatePress: function () {
             var oNewEntry = {},
                 aItems = this.byId("table1").getItems(),
-                fnSucces = function () {
-                    sap.m.MessageToast.show("Element erfolgreich erstellt");
+                fnSucces = function (oData) {
+                    sap.m.MessageToast.show("Personalnummer erfolgreich erstellt");
                     var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
+                    console.log("Element erfolgreich erstellt");
+                    oList.setSelectedItem(oData);
+                    oList.focus(oData);
+                    console.log(oData);
+                    /* oList.getItems().some(function (oItem) {
                         if (oItem.getBindingContext() === oContext) {
                             oItem.focus();
                             oItem.setSelected(true);
                             return true;
                         }
-                    });
+                    }); */
                 }.bind(this),
                 fnError = function (oError) {
+                    console.log("Fehler");
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
@@ -361,7 +364,13 @@ sap.ui.define([
                         throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
                     }
                 }
-                var oContext = this.byId("table1").getBinding("items").create({
+
+                this._oModel.create("/HAUPF001", oNewEntry, {
+                    success: fnSucces,
+                    error: fnError
+                });
+
+                /* var oContext = this.byId("table1").getBinding("items").create({ 
                     personalnummer: oNewEntry.personalnummer,
                     funktion: oNewEntry.funktion
                 });
@@ -369,12 +378,15 @@ sap.ui.define([
                     if (!oError.canceled) {
                         throw oError;
                     }
-                });
-                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                }); */
+                // this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
-                if (error instanceof TypeError)
+                if (error instanceof TypeError) {
+                    console.log(error.message);
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                }
+
                 if (error.message == "DuplicatedKey")
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
@@ -510,7 +522,7 @@ sap.ui.define([
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit) {
                     this._oDialogEdit = this.loadFragment({
-                        name: "authorization.fragment.EditDialogHAUPF001",
+                        name: "auth.fragment.EditDialogHAUPF001",
                         controller: this
                     });
                 }
@@ -531,7 +543,7 @@ sap.ui.define([
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 fnSucces = function () {
-                    sap.m.MessageToast.show("Element (" + sPersNummer + ") erfolgreich gelöscht");
+                    sap.m.MessageToast.show("Personalnummer (" + sPersNummer + ") erfolgreich gelöscht");
                 },
                 fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
@@ -539,10 +551,15 @@ sap.ui.define([
 
             if (oSelectedItem) {
                 var oContext = oSelectedItem.getBindingContext(),
-                    sPersNummer = oContext.getProperty("personalnummer");
+                    sPersNummer = oContext.getProperty("personalnummer"),
+                    sFunktion = oContext.getProperty("funktion"),
+                    sURL = "/HAUPF001(personalnummer='" + sPersNummer + "',funktion='" + sFunktion + "')";
 
-                oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
-
+                this._oModel.remove(sURL, {
+                    success: fnSucces,
+                    error: fnError
+                });
+                //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
             } else {
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
             }
@@ -579,19 +596,19 @@ sap.ui.define([
             this.groupReset = true;
         },
         handleSortButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogHAUPF001")
+            this.getViewSettingsDialog("auth.fragment.SortDialogHAUPF001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUPF001")
+            this.getViewSettingsDialog("auth.fragment.FilterDialogHAUPF001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUPF001")
+            this.getViewSettingsDialog("auth.fragment.GroupDialogHAUPF001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });

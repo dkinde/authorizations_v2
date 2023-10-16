@@ -300,7 +300,7 @@ sap.ui.define([
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsHAUPLPHA",
+                    name: "auth.fragment.InputFieldsHAUPLPHA",
                     controller: this
                 });
             }
@@ -495,7 +495,7 @@ sap.ui.define([
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit) {
                     this._oDialogEdit = this.loadFragment({
-                        name: "authorization.fragment.EditDialogHAUPLPHA",
+                        name: "auth.fragment.EditDialogHAUPLPHA",
                         controller: this
                     });
                 }
@@ -564,19 +564,19 @@ sap.ui.define([
             this.groupReset = true;
         },
         handleSortButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogHAUPLPHA")
+            this.getViewSettingsDialog("auth.fragment.SortDialogHAUPLPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUPLPHA")
+            this.getViewSettingsDialog("auth.fragment.FilterDialogHAUPLPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUPLPHA")
+            this.getViewSettingsDialog("auth.fragment.GroupDialogHAUPLPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });

@@ -103,7 +103,7 @@ sap.ui.define([
         onOpenDialog1: function () {
             if (!this._oDialogCRUD1) {
                 this._oDialogCRUD1 = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsAUDMART",
+                    name: "auth.fragment.InputFieldsAUDMART",
                     controller: this
                 });
             }
@@ -118,7 +118,7 @@ sap.ui.define([
 
             if (!this._oDialogCRUD2) {
                 this._oDialogCRUD2 = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsAUMPVDM",
+                    name: "auth.fragment.InputFieldsAUMPVDM",
                     controller: this
                 });
             }
@@ -394,7 +394,7 @@ sap.ui.define([
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit1) {
                     this._oDialogEdit1 = this.loadFragment({
-                        name: "authorization.fragment.EditDialogAUDMART",
+                        name: "auth.fragment.EditDialogAUDMART",
                         controller: this
                     });
                 }
@@ -423,7 +423,7 @@ sap.ui.define([
                     oEntry = oContext.getObject();
                 if (!this._oDialogEdit2) {
                     this._oDialogEdit2 = this.loadFragment({
-                        name: "authorization.fragment.EditDialogAUMPVDM",
+                        name: "auth.fragment.EditDialogAUMPVDM",
                         controller: this
                     });
                 }
@@ -617,37 +617,37 @@ sap.ui.define([
             this.groupReset = true;
         },
         handleSortButtonPressed1: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogAUDMART")
+            this.getViewSettingsDialog("auth.fragment.SortDialogAUDMART")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleSortButtonPressed2: function () {
-            this.getViewSettingsDialog("authorization.fragment.SortDialogAUMPVDM")
+            this.getViewSettingsDialog("auth.fragment.SortDialogAUMPVDM")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed1: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogAUDMART")
+            this.getViewSettingsDialog("auth.fragment.FilterDialogAUDMART")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleFilterButtonPressed2: function () {
-            this.getViewSettingsDialog("authorization.fragment.FilterDialogAUMPVDM")
+            this.getViewSettingsDialog("auth.fragment.FilterDialogAUMPVDM")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed1: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogAUDMART")
+            this.getViewSettingsDialog("auth.fragment.GroupDialogAUDMART")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
         handleGroupButtonPressed2: function () {
-            this.getViewSettingsDialog("authorization.fragment.GroupDialogAUMPVDM")
+            this.getViewSettingsDialog("auth.fragment.GroupDialogAUMPVDM")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
