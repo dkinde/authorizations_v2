@@ -1,9 +1,69 @@
 <core:FragmentDefinition    xmlns="sap.m"
 	                        xmlns:core="sap.ui.core"
                             xmlns:form="sap.ui.layout.form">
-<Dialog title="{i18n>editDialogTitle}" id="dialog2" >
+<Dialog title="{i18n>editDialogTitle}" id="dialog2"
+        contentHeight="700px" contentWidth="750px" resizable="true" >
     <content>
-        <form:SimpleForm editable="true">
+        <Table  id="table6" 
+        		mode="SingleSelectMaster"
+				headerText="IOBJ/Sondern hinzufügen"
+				fixedLayout="false">
+				<headerToolbar>
+								<Toolbar>
+									<content>
+										<Button id="addButton3"
+												enabled="false"
+												icon="sap-icon://add" 
+												text="{i18n>tableToolbarButtonAdd}" 
+												press="onAddPress3" 
+												type="Accept"/>                                                                                               
+										<Button id="deleteButton3"
+												icon="sap-icon://delete" 
+												type="Reject" 
+												text="{i18n>tableToolbarButtonDelete}" 
+												press="onDeletePress3"/>                                                                                            
+									</content>
+								</Toolbar>
+							</headerToolbar>
+							<columns>
+								<Column>
+									<Text text="{i18n>colAUFKT}" />
+								</Column>
+								<Column>
+									<Text text="{i18n>colAUENTTYP}" />
+								</Column>
+								<Column>
+									<Text text="{i18n>colAUENT}" />
+								</Column>
+								<Column>
+									<Text text="{i18n>colAUWERT}" />
+								</Column>                                                                       
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text   id="__inputEditFunktion" />
+										<Select id="selecttyp1" 
+												change="filterTyp1"
+												forceSelection="false">		
+                                            <core:Item key="D" text="D" />    					
+											<core:Item key="I" text="I" />
+											<core:Item key="S" text="S" />                                                        
+										</Select>
+										<Select id="selectentit1" 
+												change="editValidation" 												
+												forceSelection="false">
+											<core:Item key="" text=""/>                                                                                           
+										</Select>
+										<Input  id="__editCRUD3" 
+												liveChange="editValidation" 
+												valueLiveUpdate="true" 
+												valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>										                                                                                                                                   
+									</cells>                                        
+								</ColumnListItem>
+							</items>                                
+						</Table>
+        <!-- <form:SimpleForm editable="true">
             <form:content>                
                 <Label text="{i18n>colAUFKT}" required="true"/>
                 <Text  id="__inputEditFunktion" />                
@@ -27,7 +87,7 @@
                         valueLiveUpdate="true" 
                         valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>
             </form:content>							
-        </form:SimpleForm>			
+        </form:SimpleForm> -->			
     </content>
     <beginButton>
         <Button id="editButton" text="{i18n>editDialogBeginButton}" type="Accept" press=".onUpdateEditPress"/>

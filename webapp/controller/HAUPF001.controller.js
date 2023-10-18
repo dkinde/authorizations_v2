@@ -49,10 +49,6 @@ sap.ui.define([
                         "$skiptoken": batchSize
                     },
                     success: function (oData, oResponse) {
-                        console.log(oData);
-                        console.log(oResponse);
-                        console.log(oData.__next);
-
                         if (oData && oData.results) {
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;

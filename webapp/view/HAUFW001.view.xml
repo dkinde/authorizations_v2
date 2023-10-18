@@ -150,7 +150,7 @@
                             }    
                         }"
                         fixedLayout="false"
-                        alternateRowColors="true"
+                        alternateRowColors="false"
                         class="sapFDynamicPageAlignContent"
 					    width="auto"
                         inset="false">
@@ -185,7 +185,7 @@
                         </Toolbar>
                     </headerToolbar>
                     <columns>
-                        <Column mergeDuplicates="false">
+                        <Column mergeDuplicates="true">
                             <Text text="{i18n>colAUFKT}" />
                         </Column>
                         <!-- <Column mergeDuplicates="false">

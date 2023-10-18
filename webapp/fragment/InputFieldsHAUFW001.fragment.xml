@@ -21,7 +21,7 @@
 							showSecondaryValues= "true"
 							showSelectAll="true"
 							selectionChange="createValidation"
-							selectionFinish="handleSelectionFinish"
+							selectionFinish="handleSelectionFinish"							
 							width="500px"
 							items="{
 								path: '/AUDMART',
