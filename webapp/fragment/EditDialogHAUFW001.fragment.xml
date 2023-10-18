@@ -54,10 +54,10 @@
 												change="editValidation" 												
 												forceSelection="false">
 											<core:Item key="" text=""/>                                                                                           
-										</Select>
+										</Select>												
 										<Input  id="__editCRUD3" 
-												liveChange="editValidation" 
-												showSuggestion="true"
+												liveChange="editValidation" 												
+												autocomplete="false"
 												suggest=".onSuggest"
 												suggestionItems="{/AUDMART}"
 												valueLiveUpdate="true" 

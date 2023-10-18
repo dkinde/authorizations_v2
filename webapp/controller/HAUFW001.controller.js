@@ -376,10 +376,10 @@ sap.ui.define([
             this.editValidation();
         },
         onSuggest: function (oEvent) {
-            if (this.byId("selecttyp1").getSelectedItem().getText() === "D" ||
+            /* if (this.byId("selecttyp1").getSelectedItem().getText() === "D" ||
                 this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
 
-            }
+            } */
         },
         onOpenDialog: function () {
             if (!this._oDialogCRUD) {
@@ -626,7 +626,7 @@ sap.ui.define([
                             } */
                         });
 
-                        this.aEntit.forEach(item1 => {
+                        /* this.aEntit.forEach(item1 => {
                             if (item1.typ == this.byId("selecttyp1").getSelectedItem().getText()) {
                                 oSelect1.addItem(new sap.ui.core.Item({
                                     key: item1.entit,
@@ -638,11 +638,11 @@ sap.ui.define([
                         oColumnListItem.addCell(oSelect);
                         oColumnListItem.addCell(oSelect1);
                         oColumnListItem.addCell(oInput);
-                        oTable.addItem(oColumnListItem);
+                        oTable.addItem(oColumnListItem); */
                         break;
                     case "I":
                         oSelect.addItem(new sap.ui.core.Item({ key: "I", text: "I" }));
-                        this.aEntit.forEach(item1 => {
+                        /* this.aEntit.forEach(item1 => {
                             if (item1.typ == this.byId("selecttyp1").getSelectedItem().getText()) {
                                 oSelect1.addItem(new sap.ui.core.Item({
                                     key: item1.entit,
@@ -654,11 +654,11 @@ sap.ui.define([
                         oColumnListItem.addCell(oSelect);
                         oColumnListItem.addCell(oSelect1);
                         oColumnListItem.addCell(oInput);
-                        oTable.addItem(oColumnListItem);
+                        oTable.addItem(oColumnListItem); */
                         break;
                     case "S":
                         oSelect.addItem(new sap.ui.core.Item({ key: "S", text: "S" }));
-                        this.aEntit.forEach(item1 => {
+                        /* this.aEntit.forEach(item1 => {
                             if (item1.typ == this.byId("selecttyp1").getSelectedItem().getText()) {
                                 oSelect1.addItem(new sap.ui.core.Item({
                                     key: item1.entit,
@@ -670,14 +670,14 @@ sap.ui.define([
                         oColumnListItem.addCell(oSelect);
                         oColumnListItem.addCell(oSelect1);
                         oColumnListItem.addCell(oInput);
-                        oTable.addItem(oColumnListItem);
+                        oTable.addItem(oColumnListItem); */
                         break;
                     default:
 
                         break;
                 }
 
-                /* this.aEntit.forEach(item1 => {
+                this.aEntit.forEach(item1 => {
                     if (item1.typ == this.byId("selecttyp1").getSelectedItem().getText()) {
                         oSelect1.addItem(new sap.ui.core.Item({
                             key: item1.entit,
@@ -689,7 +689,7 @@ sap.ui.define([
                 oColumnListItem.addCell(oSelect);
                 oColumnListItem.addCell(oSelect1);
                 oColumnListItem.addCell(oInput);
-                oTable.addItem(oColumnListItem); */
+                oTable.addItem(oColumnListItem);
 
                 // oTable.addItem(oTemplate);
                 sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
@@ -883,10 +883,34 @@ sap.ui.define([
             }
         },
         editValidation: function () {
-            var sInput1 = this.byId("__editCRUD3").getValue(),
+            var sInput1 = this.byId("__editCRUD3").getValue().toUpperCase(),
                 selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
                 selectEntit = this.getView().byId("selectentit1").getSelectedKey(),
-                oInput1 = this.byId("__editCRUD3");
+                oInput1 = this.byId("__editCRUD3"),
+                lettersOnly = /^[A-Za-z]+$/;
+
+            if (lettersOnly.test(sInput1)) {
+                oInput1.setValue(sInput1);
+            }
+
+            if (selectTyp) {
+                if (this.byId("selecttyp1").getSelectedItem().getText() === "D") {
+                    this.byId("__editCRUD3").setShowSuggestion(true);
+                    this.byId("__editCRUD3").setAutocomplete(true);
+                } else {
+                    this.byId("__editCRUD3").setAutocomplete(false);
+                    this.byId("__editCRUD3").setShowSuggestion(false);
+                }
+            }
+            if (selectEntit) {
+                if (this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
+                    this.byId("__editCRUD3").setShowSuggestion(true);
+                    this.byId("__editCRUD3").setAutocomplete(true);
+                } else {
+                    this.byId("__editCRUD3").setAutocomplete(false);
+                    this.byId("__editCRUD3").setShowSuggestion(false);
+                }
+            }
 
             // validation input
             if (sInput1.length > 0 && sInput1.length < 61)
@@ -1138,7 +1162,7 @@ sap.ui.define([
                                                     }
                                                 }); */
 
-                                                var oInput1 = new sap.m.Input({
+                                                var oInput = new sap.m.Input({
                                                     suggestionItems: {
                                                         path: "/AUDMART",
                                                         sorter: { path: 'datamart' },
@@ -1174,14 +1198,7 @@ sap.ui.define([
                                                     template: oItemTemplate
                                                 });
                                                 oMultiComboBox.addItem(oItemTemplate); */
-                                                that.aEntit.forEach(item1 => {
-                                                    if (item1.typ == item.typ) {
-                                                        oSelect1.addItem(new sap.ui.core.Item({
-                                                            key: item1.entit,
-                                                            text: item1.entit
-                                                        }));
-                                                    }
-                                                });
+
                                                 /* if (item.wert === "*") {
                                                     var aItems = oMultiComboBox.getItems();
                                                     console.log(aItems);
@@ -1196,14 +1213,21 @@ sap.ui.define([
                                                 } else {
                                                     oMultiComboBox.setSelectedKeys(item.wert);
                                                 } */
-                                                console.log(item.wert);
+                                                /* that.aEntit.forEach(item1 => {
+                                                    if (item1.typ == item.typ) {
+                                                        oSelect1.addItem(new sap.ui.core.Item({
+                                                            key: item1.entit,
+                                                            text: item1.entit
+                                                        }));
+                                                    }
+                                                });                                              
                                                 oColumnListItem.addCell(oText);
                                                 oColumnListItem.addCell(oSelect);
                                                 oColumnListItem.addCell(oSelect1);
-                                                oColumnListItem.addCell(oInput1);
+                                                oColumnListItem.addCell(oInput);
+                                                oTable.addItem(oColumnListItem); */
                                                 // oColumnListItem.addCell(oMultiComboBox);
                                                 // oColumnListItem.addCell(oSelect2);
-                                                oTable.addItem(oColumnListItem);
                                                 /* var oTable2 = this.byId("table2");
                                                     oTable2.bindItems({
                                                         path: "/AUMPVDM",
@@ -1212,7 +1236,7 @@ sap.ui.define([
                                                 break;
                                             case "I":
                                                 oSelect.addItem(new sap.ui.core.Item({ key: "I", text: "I" }));
-                                                that.aEntit.forEach(item1 => {
+                                                /* that.aEntit.forEach(item1 => {
                                                     if (item1.typ == item.typ) {
                                                         oSelect1.addItem(new sap.ui.core.Item({
                                                             key: item1.entit,
@@ -1224,11 +1248,11 @@ sap.ui.define([
                                                 oColumnListItem.addCell(oSelect);
                                                 oColumnListItem.addCell(oSelect1);
                                                 oColumnListItem.addCell(oInput);
-                                                oTable.addItem(oColumnListItem);
+                                                oTable.addItem(oColumnListItem); */
                                                 break;
                                             case "S":
                                                 oSelect.addItem(new sap.ui.core.Item({ key: "S", text: "S" }));
-                                                that.aEntit.forEach(item1 => {
+                                                /* that.aEntit.forEach(item1 => {
                                                     if (item1.typ == item.typ) {
                                                         oSelect1.addItem(new sap.ui.core.Item({
                                                             key: item1.entit,
@@ -1240,13 +1264,13 @@ sap.ui.define([
                                                 oColumnListItem.addCell(oSelect);
                                                 oColumnListItem.addCell(oSelect1);
                                                 oColumnListItem.addCell(oInput);
-                                                oTable.addItem(oColumnListItem);
+                                                oTable.addItem(oColumnListItem); */
                                                 break;
                                             default:
 
                                                 break;
                                         }
-                                        /* that.aEntit.forEach(item1 => {
+                                        that.aEntit.forEach(item1 => {
                                             if (item1.typ == item.typ) {
                                                 oSelect1.addItem(new sap.ui.core.Item({
                                                     key: item1.entit,
@@ -1258,7 +1282,7 @@ sap.ui.define([
                                         oColumnListItem.addCell(oSelect);
                                         oColumnListItem.addCell(oSelect1);
                                         oColumnListItem.addCell(oInput);
-                                        oTable.addItem(oColumnListItem); */
+                                        oTable.addItem(oColumnListItem);
                                     });
                                 }
                             },
