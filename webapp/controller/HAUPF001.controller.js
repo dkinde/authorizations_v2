@@ -59,7 +59,9 @@ sap.ui.define([
                             retrieveData(sUrl);
                         } else {
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
+                                if (!aUnique.some(function (obj) {
+                                    return obj.personalnummer === oItem.personalnummer;
+                                })) {
                                     aUnique.push(oItem);
                                 }
                                 return aUnique;
@@ -109,7 +111,8 @@ sap.ui.define([
                             getData();
                         } else {
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
+                                if (!aUnique.some(function (obj) { 
+                                    return obj.personalnummer === oItem.personalnummer; })) {
                                     aUnique.push(oItem);
                                 }
                                 return aUnique;
@@ -189,7 +192,10 @@ sap.ui.define([
 
             // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
             // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
-            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", { layout: sap.f.LayoutType.TwoColumnsMidExpanded, funktion: funktion[1] });
+            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", {
+                layout: sap.f.LayoutType.TwoColumnsMidExpanded,
+                funktion: funktion[1]
+            });
         },
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
@@ -554,6 +560,7 @@ sap.ui.define([
                 this._oModel.remove(sURL, {
                     success: fnSucces,
                     error: fnError
+
                 });
                 //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
             } else {

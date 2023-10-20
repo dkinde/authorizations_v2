@@ -545,16 +545,21 @@ sap.ui.define([
                     var sWert = this.byId("__editCRUD3").getValue().toUpperCase();
                     this.byId("__editCRUD3").setValue(sWert);
                     //überprufen wenn den wert, ein vorhandene Datamart ist                    
-                    this.aDatamart.forEach(item => {
-                        if (this.byId("__editCRUD3").getValue() === item.datamart) {
-                            bDatamart = true;
-                            return;
-                        }
-                    });
                     if (this.byId("__editCRUD3").getValue() === "*")
                         bDatamart = true;
-                    if (!bDatamart)
+                    else {
+                        this.aDatamart.forEach(item => {
+                            if (this.byId("__editCRUD3").getValue() === item.datamart) {
+                                bDatamart = true;
+                                return;
+                            }
+                        });
+                    }
+                    if (!bDatamart) {
+                        this.byId("__editCRUD3").setValueStateText("Dieser Datamart existiert nicht");
+                        this.byId("__editCRUD3").setValueState(sap.ui.core.ValueState.Error);
                         throw new sap.ui.base.Exception("DatamartNoExistException", "Falsche Definition");
+                    }
                 }
 
                 var oColumnListItem = new sap.m.ColumnListItem(),
@@ -573,32 +578,12 @@ sap.ui.define([
                         valueLiveUpdate: true,
                         valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
                         liveChange: this.editValidation.bind(this)
+                        // liveChange: this.liveChangeInput.bind(this)
                     });
 
                 switch (this.byId("selecttyp1").getSelectedItem().getText()) {
                     case "D":
                         oSelect.addItem(new sap.ui.core.Item({ key: "D", text: "D" }));
-                        /* var oMultiComboBox = new sap.m.MultiComboBox({
-                            showSecondaryValues: true,
-                            showSelectAll: true,
-                            selectionChange: this.editValidation.bind(this),
-                            selectionFinish: this.handleSelectionFinish1.bind(this),
-                            width: "500px",
-                            items: {
-                                path: "/AUDMART",
-                                sorter: { path: 'datamart' }
-                            }
-                        });
-                        var oItemTemplate = new sap.ui.core.ListItem({
-                            key: "{datamart}",
-                            text: "{datamart}",
-                            additionalText: "{Txtlg}"
-                        });
-                        oMultiComboBox.setModel(this._oModel);
-                        oMultiComboBox.bindAggregation("items", {
-                            path: "/AUDMART",
-                            template: oItemTemplate
-                        });*/
                         var oInput = new sap.m.Input({
                             suggestionItems: {
                                 path: "/AUDMART",
@@ -625,52 +610,12 @@ sap.ui.define([
                                 }
                             } */
                         });
-
-                        /* this.aEntit.forEach(item1 => {
-                            if (item1.typ == this.byId("selecttyp1").getSelectedItem().getText()) {
-                                oSelect1.addItem(new sap.ui.core.Item({
-                                    key: item1.entit,
-                                    text: item1.entit
-                                }));
-                            }
-                        });
-                        oColumnListItem.addCell(oText);
-                        oColumnListItem.addCell(oSelect);
-                        oColumnListItem.addCell(oSelect1);
-                        oColumnListItem.addCell(oInput);
-                        oTable.addItem(oColumnListItem); */
                         break;
                     case "I":
                         oSelect.addItem(new sap.ui.core.Item({ key: "I", text: "I" }));
-                        /* this.aEntit.forEach(item1 => {
-                            if (item1.typ == this.byId("selecttyp1").getSelectedItem().getText()) {
-                                oSelect1.addItem(new sap.ui.core.Item({
-                                    key: item1.entit,
-                                    text: item1.entit
-                                }));
-                            }
-                        });
-                        oColumnListItem.addCell(oText);
-                        oColumnListItem.addCell(oSelect);
-                        oColumnListItem.addCell(oSelect1);
-                        oColumnListItem.addCell(oInput);
-                        oTable.addItem(oColumnListItem); */
                         break;
                     case "S":
                         oSelect.addItem(new sap.ui.core.Item({ key: "S", text: "S" }));
-                        /* this.aEntit.forEach(item1 => {
-                            if (item1.typ == this.byId("selecttyp1").getSelectedItem().getText()) {
-                                oSelect1.addItem(new sap.ui.core.Item({
-                                    key: item1.entit,
-                                    text: item1.entit
-                                }));
-                            }
-                        });
-                        oColumnListItem.addCell(oText);
-                        oColumnListItem.addCell(oSelect);
-                        oColumnListItem.addCell(oSelect1);
-                        oColumnListItem.addCell(oInput);
-                        oTable.addItem(oColumnListItem); */
                         break;
                     default:
 
@@ -691,7 +636,6 @@ sap.ui.define([
                 oColumnListItem.addCell(oInput);
                 oTable.addItem(oColumnListItem);
 
-                // oTable.addItem(oTemplate);
                 sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 
                 this.editValidation();
@@ -930,9 +874,21 @@ sap.ui.define([
                 this.byId("addButton3").setEnabled(false);
             }
         },
+        liveChangeInput: function (oEvent) {
+            console.log(oEvent.getSource());
+            var oInput = oEvent.getSource(),
+                sInput = oInput.getValue().toUpperCase(),
+                lettersOnly = /^[A-Za-z]+$/;
+
+            if (lettersOnly.test(sInput)) {
+                oInput.setValue(sInput);
+            }
+            oInput.setValueState(sap.ui.core.ValueState.None);
+        },
         onUpdateEditPress: function () {
             var oUpdateEntry = {},
-                bDatamart = false,
+                bEinDatamart = false,
+                bExistDatamrt = false,
                 iItems = this.byId("table6").getItems(),
                 oContext = this.byId("table1").getSelectedItem().getBindingContext(),
                 fnSucces = function () {
@@ -959,21 +915,63 @@ sap.ui.define([
                 sWert = oContext.getProperty("wert");
             // iIndex = oContext.getIndex();
 
-            console.log(this.byId("table6").getItems());
-            for (let i = 1; i < iItems.length; i++) {
-                console.log(iItems[i].getCells()[1].getSelectedItem().getText());
-                if (iItems[i].getCells()[1].getSelectedItem().getText() === "D") {
-                    bDatamart = true;
-                    return;
+            try {
+                for (let i = 1; i < iItems.length; i++) {
+                    /* console.log(iItems[i].getCells()[3].getValue());
+                    console.log(this.aDatamart); */
+                    if (iItems[i].getCells()[1].getSelectedItem().getText() === "D") {
+                        bEinDatamart = true;
+                        var oInput = iItems[i].getCells()[3],
+                            sInput = oInput.getValue();
+                        // return;
+                        console.log(sInput);
+                        if (sInput === "*") {
+                            bExistDatamrt = true;
+                            // return;
+                        } else {
+                            this.aDatamart.forEach(item => {
+                                if (sInput === item.datamart) {
+                                    bExistDatamrt = true;
+                                    // return;
+                                }
+                            });
+                        }
+                    }
+                    if (!bExistDatamrt) {
+                        oInput.setValueStateText("Dieser Datamart existiert nicht");
+                        oInput.setValueState(sap.ui.core.ValueState.Error);
+                        // throw new sap.ui.base.Exception("FalscheDatamartException", "Falsche Definition");
+                    }
+                    /* if (this.byId("selecttyp1").getSelectedItem().getText() === "D" ||
+                        this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
+                        var sWert = this.byId("__editCRUD3").getValue().toUpperCase();
+                        this.byId("__editCRUD3").setValue(sWert);
+                        //überprufen wenn den wert, ein vorhandene Datamart ist                    
+                        this.aDatamart.forEach(item => {
+                            if (this.byId("__editCRUD3").getValue() === item.datamart) {
+                                bDatamart = true;
+                                return;
+                            }
+                        });
+                        if (!bDatamart)
+                            throw new sap.ui.base.Exception("DatamartNoExistException", "Falsche Definition");
+                    } */
                 }
-                /* var typ = iItems[i].getCells()[4].getText();
-                if (typ >= this.maxTyp)
-                    this.maxTyp = parseInt(typ, 10) + 1; */
-            }
-            if (bDatamart) {
+                console.log(bExistDatamrt);
+                if (!bExistDatamrt)
+                    throw new sap.ui.base.Exception("FalscheDatamartException", "Falsche Definition");
 
-            } else {
-                sap.m.MessageBox.warning("Die Funktion, die Sie erstellen möchten, hat keinen Datamart (D)-Typ, der mit ihr verbunden ist");
+                if (!bEinDatamart)
+                    throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
+
+            } catch (error) {
+                console.log(error);
+                if (error instanceof TypeError)
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                if (error.message == "NoDatamartException")
+                    sap.m.MessageBox.warning("Die Funktion, die Sie erstellen möchten, hat keinen Datamart (D)-Typ, der mit ihr verbunden ist");
+                if (error.message == "FalscheDatamartException")
+                    sap.m.MessageBox.warning("Einer der Datamarts, die Sie hinzufügen möchten, existiert nicht");
             }
             // iItems[i].getCells()[4].getText()
 
@@ -1120,48 +1118,12 @@ sap.ui.define([
                                                 value: item.wert,
                                                 valueLiveUpdate: true,
                                                 valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
-                                                liveChange: that.editValidation.bind(that)
+                                                // liveChange: that.editValidation.bind(that)
+                                                liveChange: that.liveChangeInput.bind(that)
                                             });
                                         switch (item.typ) {
                                             case "D":
                                                 oSelect.addItem(new sap.ui.core.Item({ key: "D", text: "D" }));
-                                                /* var oItemTemplate = new sap.ui.core.ListItem({
-                                                    key: "{datamart}",
-                                                    text: "{datamart}",
-                                                    additionalText: "{Txtlg}"
-                                                }); */
-
-                                                /* var oMultiComboBox = new sap.m.MultiComboBox({
-                                                    showSecondaryValues: true,
-                                                    showSelectAll: true,
-                                                    selectionChange: that.editValidation.bind(that),
-                                                    selectionFinish: that.handleSelectionFinish1.bind(that),
-                                                    width: "100px",
-                                                    items: {
-                                                        path: "/AUDMART",
-                                                        sorter: { path: 'datamart' },
-                                                        template: new sap.ui.core.ListItem({
-                                                            key: "{datamart}",
-                                                            text: "{datamart}",
-                                                            additionalText: "{Txtlg}"
-                                                        })
-                                                    }
-                                                }); */
-
-                                                /* var oSelect2 = new sap.m.Select({
-                                                    width: "100px",
-                                                    change: that.editValidation.bind(that),
-                                                    selectedKey: item.wert,
-                                                    items: {
-                                                        path: "/AUDMART",
-                                                        sorter: { path: 'datamart' },
-                                                        template: new sap.ui.core.ListItem({
-                                                            key: "{datamart}",
-                                                            text: "{datamart}"
-                                                        })
-                                                    }
-                                                }); */
-
                                                 var oInput = new sap.m.Input({
                                                     suggestionItems: {
                                                         path: "/AUDMART",
@@ -1176,7 +1138,8 @@ sap.ui.define([
                                                     showSuggestion: true,
                                                     value: item.wert,
                                                     valueLiveUpdate: true,
-                                                    liveChange: that.editValidation.bind(that),
+                                                    // liveChange: that.editValidation.bind(that),
+                                                    liveChange: that.liveChangeInput.bind(that),
                                                     valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
                                                     /* suggestionItemSelected: function (oEvent) {
                                                         var oSelectedItem = oEvent.getParameter("selectedItem");
@@ -1187,84 +1150,12 @@ sap.ui.define([
                                                         }
                                                     } */
                                                 });
-
-                                                // oMultiComboBox.setModel(that._oModel);
-                                                /* oMultiComboBox.bindItems({
-                                                    path: "/AUDMART",
-                                                    template: oMultiComboBox.getBindingInfo("items").template
-                                                }); */
-                                                /* oMultiComboBox.bindAggregation("items", {
-                                                    path: "/AUDMART",
-                                                    template: oItemTemplate
-                                                });
-                                                oMultiComboBox.addItem(oItemTemplate); */
-
-                                                /* if (item.wert === "*") {
-                                                    var aItems = oMultiComboBox.getItems();
-                                                    console.log(aItems);
-
-                                                    addSelectedItem()
-                                                    addSelectedKeys()
-
-                                                    aItems.forEach(function (oItem) {
-                                                        oItem.setSelectedkeys(true);
-                                                    });
-                                                    oMultiComboBox.setSelected(true);
-                                                } else {
-                                                    oMultiComboBox.setSelectedKeys(item.wert);
-                                                } */
-                                                /* that.aEntit.forEach(item1 => {
-                                                    if (item1.typ == item.typ) {
-                                                        oSelect1.addItem(new sap.ui.core.Item({
-                                                            key: item1.entit,
-                                                            text: item1.entit
-                                                        }));
-                                                    }
-                                                });                                              
-                                                oColumnListItem.addCell(oText);
-                                                oColumnListItem.addCell(oSelect);
-                                                oColumnListItem.addCell(oSelect1);
-                                                oColumnListItem.addCell(oInput);
-                                                oTable.addItem(oColumnListItem); */
-                                                // oColumnListItem.addCell(oMultiComboBox);
-                                                // oColumnListItem.addCell(oSelect2);
-                                                /* var oTable2 = this.byId("table2");
-                                                    oTable2.bindItems({
-                                                        path: "/AUMPVDM",
-                                                        template: oTable2.getBindingInfo("items").template
-                                                    }); */
                                                 break;
                                             case "I":
                                                 oSelect.addItem(new sap.ui.core.Item({ key: "I", text: "I" }));
-                                                /* that.aEntit.forEach(item1 => {
-                                                    if (item1.typ == item.typ) {
-                                                        oSelect1.addItem(new sap.ui.core.Item({
-                                                            key: item1.entit,
-                                                            text: item1.entit
-                                                        }));
-                                                    }
-                                                });
-                                                oColumnListItem.addCell(oText);
-                                                oColumnListItem.addCell(oSelect);
-                                                oColumnListItem.addCell(oSelect1);
-                                                oColumnListItem.addCell(oInput);
-                                                oTable.addItem(oColumnListItem); */
                                                 break;
                                             case "S":
                                                 oSelect.addItem(new sap.ui.core.Item({ key: "S", text: "S" }));
-                                                /* that.aEntit.forEach(item1 => {
-                                                    if (item1.typ == item.typ) {
-                                                        oSelect1.addItem(new sap.ui.core.Item({
-                                                            key: item1.entit,
-                                                            text: item1.entit
-                                                        }));
-                                                    }
-                                                });
-                                                oColumnListItem.addCell(oText);
-                                                oColumnListItem.addCell(oSelect);
-                                                oColumnListItem.addCell(oSelect1);
-                                                oColumnListItem.addCell(oInput);
-                                                oTable.addItem(oColumnListItem); */
                                                 break;
                                             default:
 
