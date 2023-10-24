@@ -43,6 +43,9 @@ sap.ui.define([
             this.aEntit = [];
             this.aDefinition = [];
             this.aDatamart = [];
+            this.aCreate = [];
+            this.aUpdate = [];
+            this.aDelete = [];
 
             this._oPage = this.byId("dynamicPage1");
 
@@ -318,6 +321,9 @@ sap.ui.define([
             this.byId("selecttyp1").setSelectedKey(null);
             this.byId("selectentit1").setSelectedKey(null);
             this.aDefinition = [];
+            this.aCreate = [];
+            this.aUpdate = [];
+            this.aDelete = [];
 
             var oTable = this.getView().byId("table6"),
                 aItems = oTable.getItems();
@@ -521,13 +527,9 @@ sap.ui.define([
         onAddPress3: function () {
             try {
                 var oTable = this.byId("table6"),
+                    aItems = oTable.getItems(),
                     bDatamart = false,
-                    oTemplate = new sap.m.ColumnListItem({
-                        cells: [new sap.m.Text({ text: this.byId("__inputEditFunktion").getText() }),
-                        new sap.m.Text({ text: this.byId("selecttyp1").getSelectedItem().getText() }),
-                        new sap.m.Text({ text: this.byId("selectentit1").getSelectedItem().getText() }),
-                        new sap.m.Text({ text: this.byId("__editCRUD3").getValue() })]
-                    });
+                    foundDuplicate = false;
 
                 if (this.byId("selecttyp1").getSelectedKey() == null ||
                     this.byId("selectentit1").getSelectedKey() == null ||
@@ -538,6 +540,19 @@ sap.ui.define([
                     this.byId("selecttyp1").getSelectedItem().getText() === "S") &&
                     this.byId("__inputEditFunktion").getText() < 5) {
                     throw new sap.ui.base.Exception("OnlyDatamartException", "Falsche Definition");
+                }
+
+                for (var i = 1; i < aItems.length; i++) {
+                    if (
+                        this.byId("__inputEditFunktion").getText() === aItems[i].getCells()[0].getText() &&
+                        this.byId("selecttyp1").getSelectedItem().getText() === aItems[i].getCells()[1].getSelectedKey() &&
+                        this.byId("selectentit1").getSelectedItem().getText() === aItems[i].getCells()[2].getSelectedKey() &&
+                        this.byId("__editCRUD3").getValue() === aItems[i].getCells()[3].getValue()
+                    ) {
+                        foundDuplicate = true;
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                        break;
+                    }
                 }
 
                 if (this.byId("selecttyp1").getSelectedItem().getText() === "D" ||
@@ -561,7 +576,6 @@ sap.ui.define([
                         throw new sap.ui.base.Exception("DatamartNoExistException", "Falsche Definition");
                     }
                 }
-
                 var oColumnListItem = new sap.m.ColumnListItem(),
                     oText = new sap.m.Text({ text: this.byId("__inputEditFunktion").getText() }),
                     oSelect = new sap.m.Select({
@@ -636,6 +650,14 @@ sap.ui.define([
                 oColumnListItem.addCell(oInput);
                 oTable.addItem(oColumnListItem);
 
+                var sFunktion = this.byId("__inputEditFunktion").getText(),
+                    sTyp = this.byId("selecttyp1").getSelectedItem().getText(),
+                    sEntit = this.byId("selectentit1").getSelectedItem().getText(),
+                    sWert = this.byId("__editCRUD3").getValue(),
+                    aRow = [sFunktion, sTyp, sEntit, sWert];
+
+                this.aCreate.push(aRow);
+                console.log(this.aCreate);
                 sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 
                 this.editValidation();
@@ -687,6 +709,27 @@ sap.ui.define([
                 else {
                     iIndex -= 1;
                     // this.aIOBJ_Sondern.splice(iIndex, 1);
+                    var sFunktion = oSelectedItem.getCells()[0].getText(),
+                        sTyp = oSelectedItem.getCells()[1].getSelectedItem().getText(),
+                        sEntit = oSelectedItem.getCells()[2].getSelectedItem().getText(),
+                        sWert = oSelectedItem.getCells()[3].getValue(),
+                        aRow = [sFunktion, sTyp, sEntit, sWert],
+                        bDelete = false;
+
+                    for (var i = this.aCreate.length - 1; i >= 0; i--) {
+                        if (JSON.stringify(this.aCreate[i]) === JSON.stringify(aRow)) {
+                            this.aCreate.splice(i, 1);
+                            bDelete = true;
+                            break;
+                        }
+                    }
+                    console.log("aCreate: " + this.aCreate);
+
+                    // console.log(oSelectedItem);
+                    if (!bDelete)
+                        this.aDelete.push(aRow);
+
+                    console.log("aDelete: " + this.aDelete);
                     oSelectedItem.destroy();
                     sap.m.MessageToast.show("Element erfolgreich gelöscht");
                     this.editValidation();
@@ -888,7 +931,7 @@ sap.ui.define([
         onUpdateEditPress: function () {
             var oUpdateEntry = {},
                 bEinDatamart = false,
-                bExistDatamrt = false,
+                bExistDatamrt = true,
                 iItems = this.byId("table6").getItems(),
                 oContext = this.byId("table1").getSelectedItem().getBindingContext(),
                 fnSucces = function () {
@@ -913,51 +956,31 @@ sap.ui.define([
                 sEntitat = oContext.getProperty("entit"),
                 sTyp = oContext.getProperty("typ"),
                 sWert = oContext.getProperty("wert");
-            // iIndex = oContext.getIndex();
 
             try {
                 for (let i = 1; i < iItems.length; i++) {
-                    /* console.log(iItems[i].getCells()[3].getValue());
-                    console.log(this.aDatamart); */
                     if (iItems[i].getCells()[1].getSelectedItem().getText() === "D") {
-                        bEinDatamart = true;
                         var oInput = iItems[i].getCells()[3],
-                            sInput = oInput.getValue();
-                        // return;
-                        console.log(sInput);
+                            sInput = oInput.getValue(),
+                            bDatamartOK = false;
+
+                        bEinDatamart = true;
                         if (sInput === "*") {
-                            bExistDatamrt = true;
-                            // return;
+                            bDatamartOK = true;
                         } else {
                             this.aDatamart.forEach(item => {
                                 if (sInput === item.datamart) {
-                                    bExistDatamrt = true;
-                                    // return;
+                                    bDatamartOK = true;
                                 }
                             });
                         }
                     }
-                    if (!bExistDatamrt) {
+                    if (!bDatamartOK) {
+                        bExistDatamrt = false;
                         oInput.setValueStateText("Dieser Datamart existiert nicht");
                         oInput.setValueState(sap.ui.core.ValueState.Error);
-                        // throw new sap.ui.base.Exception("FalscheDatamartException", "Falsche Definition");
                     }
-                    /* if (this.byId("selecttyp1").getSelectedItem().getText() === "D" ||
-                        this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
-                        var sWert = this.byId("__editCRUD3").getValue().toUpperCase();
-                        this.byId("__editCRUD3").setValue(sWert);
-                        //überprufen wenn den wert, ein vorhandene Datamart ist                    
-                        this.aDatamart.forEach(item => {
-                            if (this.byId("__editCRUD3").getValue() === item.datamart) {
-                                bDatamart = true;
-                                return;
-                            }
-                        });
-                        if (!bDatamart)
-                            throw new sap.ui.base.Exception("DatamartNoExistException", "Falsche Definition");
-                    } */
                 }
-                console.log(bExistDatamrt);
                 if (!bExistDatamrt)
                     throw new sap.ui.base.Exception("FalscheDatamartException", "Falsche Definition");
 
@@ -973,8 +996,6 @@ sap.ui.define([
                 if (error.message == "FalscheDatamartException")
                     sap.m.MessageBox.warning("Einer der Datamarts, die Sie hinzufügen möchten, existiert nicht");
             }
-            // iItems[i].getCells()[4].getText()
-
             /* if (sEntitat === this.byId("selectentit1").getSelectedItem().getText() &&
                 sTyp === this.byId("selecttyp1").getSelectedItem().getText() &&
                 sWert === this.byId("__editCRUD3").getValue()) {
@@ -1051,13 +1072,10 @@ sap.ui.define([
                     });
                     this.oDialogEdit.open();
                     var batchSize = 0,
-                        that = this;
-
-                    console.log(oEntry.funktion);
-                    var oTable = this.byId("table6");
+                        that = this,
+                        oTable = this.byId("table6");
 
                     oTable.addStyleClass("firstRow");
-
                     function retrieveEntit(sUrl) {
                         that._oModel.read(sUrl, {
                             urlParameters: {
@@ -1074,7 +1092,7 @@ sap.ui.define([
                                     retrieveData(sUrl);
                                 }
                                 else {
-                                    console.log(that.aDatamart);
+                                    // console.log(that.aDatamart);
                                 }
                             },
                             error: function (oError) {
