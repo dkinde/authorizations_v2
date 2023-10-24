@@ -333,11 +333,9 @@ sap.ui.define([
                 aItems = this.byId("table1").getItems(),
                 fnSucces = function (oData) {
                     sap.m.MessageToast.show("Personalnummer erfolgreich erstellt");
-                    var oList = this.byId("table1");
-                    console.log("Element erfolgreich erstellt");
+                    var oList = this.byId("table1");                    
                     oList.setSelectedItem(oData);
-                    oList.focus(oData);
-                    console.log(oData);
+                    oList.focus(oData);                    
                     /* oList.getItems().some(function (oItem) {
                         if (oItem.getBindingContext() === oContext) {
                             oItem.focus();
@@ -346,8 +344,7 @@ sap.ui.define([
                         }
                     }); */
                 }.bind(this),
-                fnError = function (oError) {
-                    console.log("Fehler");
+                fnError = function (oError) {                    
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
@@ -544,7 +541,7 @@ sap.ui.define([
         },
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
-                fnSucces = function () {
+                fnSuccess = function () {
                     sap.m.MessageToast.show("Personalnummer (" + sPersNummer + ") erfolgreich gelöscht");
                 },
                 fnError = function (oError) {
@@ -558,7 +555,7 @@ sap.ui.define([
                     sURL = "/HAUPF001(personalnummer='" + sPersNummer + "',funktion='" + sFunktion + "')";
 
                 this._oModel.remove(sURL, {
-                    success: fnSucces,
+                    success: fnSuccess,
                     error: fnError
 
                 });

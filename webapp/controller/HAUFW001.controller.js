@@ -387,7 +387,7 @@ sap.ui.define([
 
             } */
         },
-        onOpenDialog: function () {
+        onOpenCreateDialog: function () {
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
                     name: "auth.fragment.InputFieldsHAUFW001",
@@ -440,6 +440,61 @@ sap.ui.define([
                 });
             }
             getData("/HAUFW001");
+
+        },
+        onOpenDeleteDialog: function () {
+            if (!this._oDialogDelete) {
+                this._oDialogDelete = this.loadFragment({
+                    name: "auth.fragment.DeleteDialogHAUFW001",
+                    controller: this
+                });
+            }
+            this._oDialogDelete.then(function (oDialog) {
+                this.oDialog = oDialog;
+                this.oDialog.open();
+                // this.byId("table2").addStyleClass("firstRow");
+            }.bind(this));
+
+            // this.maxFunktion = 1;
+
+            /* var that = this,
+                batchSize = 0,
+                iSkip = 0;
+
+            function getData(sUrl) {
+                that._oModel.read(sUrl, {
+                    urlParameters: {
+                        "$skiptoken": batchSize
+                    },
+                    success: function (oData, oResponse) {
+                        if (oData && oData.results) {
+                            that.aFunktion = that.aFunktion.concat(oData.results.map(function (item) {
+                                return item;
+                            }));
+                        }
+                        if (oData.__next) {
+                            batchSize += 100;
+                            getData(sUrl);
+                        } else {
+                            that.byId("dialog1").setBusy(false);
+                            that.aFunktion.forEach(item => {
+                                if (item.funktion > that.maxFunktion) {
+                                    that.maxFunktion = parseInt(item.funktion, 10);
+                                }
+                            });
+                            that.maxFunktion += 1;
+                            that.byId("__inputFunktion1").setText(that.maxFunktion.toString());
+                            that.byId("__inputFunktion2").setText(that.byId("__inputFunktion1").getText());
+                            return;
+                        }
+                    },
+                    error: function (oError) {
+                        console.error("Error al recuperar datos:", oError);
+                        that.byId("dialog1").setBusy(false);
+                    }
+                });
+            }
+            getData("/HAUFW001"); */
 
         },
         handleSelectionFinish: function (oEvent) {
@@ -708,7 +763,6 @@ sap.ui.define([
                 }
                 else {
                     iIndex -= 1;
-                    // this.aIOBJ_Sondern.splice(iIndex, 1);
                     var sFunktion = oSelectedItem.getCells()[0].getText(),
                         sTyp = oSelectedItem.getCells()[1].getSelectedItem().getText(),
                         sEntit = oSelectedItem.getCells()[2].getSelectedItem().getText(),
@@ -723,13 +777,9 @@ sap.ui.define([
                             break;
                         }
                     }
-                    console.log("aCreate: " + this.aCreate);
-
-                    // console.log(oSelectedItem);
                     if (!bDelete)
                         this.aDelete.push(aRow);
 
-                    console.log("aDelete: " + this.aDelete);
                     oSelectedItem.destroy();
                     sap.m.MessageToast.show("Element erfolgreich gelöscht");
                     this.editValidation();
@@ -742,18 +792,19 @@ sap.ui.define([
         onCreatePress: function () {
             var oNewEntryDatamart = {},
                 oNewEntryTyp = {},
-                fnSucces = function () {
+                fnSuccess = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                     var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
+                    /* oList.getItems().some(function (oItem) {
                         if (oItem.getBindingContext() === oContext) {
                             oItem.focus();
                             oItem.setSelected(true);
                             return true;
                         }
-                    });
+                    }); */
                 }.bind(this),
                 fnError = function (oError) {
+                    console.log(oError);
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
@@ -764,42 +815,47 @@ sap.ui.define([
 
                 if (this.bAlleDatamart) {
                     oNewEntryDatamart.wert = '*';
-                    var oContext = this.byId("table1").getBinding("items").create({
-                        funktion: oNewEntryDatamart.funktion,
-                        typ: oNewEntryDatamart.typ,
-                        entit: oNewEntryDatamart.entit,
-                        wert: oNewEntryDatamart.wert
+                    this._oModel.create("/HAUFW001", oNewEntryDatamart, {
+                        success: fnSuccess,
+                        error: fnError
                     });
-                    oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                        if (!oError.canceled) {
-                            throw oError;
-                        }
-                    });
-                    this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                    this.byId("table1").getBinding("items").refresh();
                 } else {
                     this.aNewEntryDatamart.forEach(item => {
-                        var oContext = this.byId("table1").getBinding("items").create({
+                        var oNewEntryDatamart1 = {
                             funktion: oNewEntryDatamart.funktion,
                             typ: oNewEntryDatamart.typ,
                             entit: oNewEntryDatamart.entit,
                             wert: item
+                        };
+                        this._oModel.create("/HAUFW001", oNewEntryDatamart1, {
+                            success: fnSuccess,
+                            error: fnError
                         });
-                        oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                            if (!oError.canceled) {
-                                throw oError;
-                            }
-                        });
-                        this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                     });
+                    this.byId("table1").getBinding("items").refresh();
                 }
 
+                console.log(this.aIOBJ_Sondern);
                 this.aIOBJ_Sondern.forEach(item => {
                     oNewEntryTyp.funktion = item[0];
                     oNewEntryTyp.typ = item[1];
                     oNewEntryTyp.entit = item[2];
                     oNewEntryTyp.wert = item[3];
 
-                    var oContext = this.byId("table1").getBinding("items").create({
+                    console.log(item);
+                    console.log(oNewEntryTyp);
+
+                    this._oModel.create("/HAUFW001", {
+                        funktion: item[0],
+                        typ: item[1],
+                        entit: item[2],
+                        wert: item[3]
+                    }, {
+                        success: fnSuccess,
+                        error: fnError
+                    });
+                    /* var oContext = this.byId("table1").getBinding("items").create({
                         funktion: oNewEntryTyp.funktion,
                         typ: oNewEntryTyp.typ,
                         entit: oNewEntryTyp.entit,
@@ -810,14 +866,21 @@ sap.ui.define([
                             throw oError;
                         }
                     });
-                    this._oModel.submitBatch("$auto").then(fnSucces, fnError);
+                    this._oModel.submitBatch("$auto").then(fnSucces, fnError); */
+
+                    /* this._oModel.create("/HAUFW001", oNewEntryTyp, {
+                        success: fnSuccess,
+                        error: fnError
+                    }); */
                 });
 
                 this.byId("table1").getBinding("items").refresh();
 
             } catch (error) {
-                if (error instanceof TypeError)
+                console.log(error);
+                if (error instanceof TypeError) {
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                }
                 if (error.message == "DuplicatedKey")
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
@@ -829,6 +892,13 @@ sap.ui.define([
             this.byId("selecttyp").setSelectedKey(null);
             this.byId("selectentit").setSelectedKey(null);
             this.byId("__inputWert").setValue("");
+
+            var aItems = this.byId("table2").getItems();
+            for (let i = 1; i < aItems.length; i++) {
+                this.byId("table2").removeItem(aItems[i]);
+            }
+            this.aNewEntryDatamart = [];
+            this.aIOBJ_Sondern = [];
 
             this.byId("dialog1").close();
         },
@@ -918,7 +988,6 @@ sap.ui.define([
             }
         },
         liveChangeInput: function (oEvent) {
-            console.log(oEvent.getSource());
             var oInput = oEvent.getSource(),
                 sInput = oInput.getValue().toUpperCase(),
                 lettersOnly = /^[A-Za-z]+$/;
@@ -987,8 +1056,10 @@ sap.ui.define([
                 if (!bEinDatamart)
                     throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
 
+
+
+
             } catch (error) {
-                console.log(error);
                 if (error instanceof TypeError)
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 if (error.message == "NoDatamartException")
@@ -1225,10 +1296,17 @@ sap.ui.define([
 
             if (oSelectedItem) {
                 var oContext = oSelectedItem.getBindingContext(),
-                    sFunktion = oContext.getProperty("funktion");
-
+                    sFunktion = oContext.getProperty("funktion"),
+                    sTyp = oContext.getProperty("typ"),
+                    sEntit = oContext.getProperty("entit"),
+                    sWert = oContext.getProperty("wert"),
+                    sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntit + "',wert='" + sWert + "')";
+                // sURL = "/HAUFW001(personalnummer='" + sPersNummer + "',funktion='" + sFunktion + "')";
+                this._oModel.remove(sURL, {
+                    success: fnSucces,
+                    error: fnError
+                });
                 // oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
-
             } else {
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
             }
