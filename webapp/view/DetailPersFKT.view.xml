@@ -132,7 +132,7 @@
                                                 <m:items>
                                                     <m:ColumnListItem>
                                                         <m:cells>
-                                                            <m:ObjectIdentifier title="{personalnummer}" text="{Txtmd}" />
+                                                            <m:ObjectIdentifier title="{personalnummer}" text="{txt}" />
                                                             <m:ObjectIdentifier title="{funktion}" />                                                            
                                                         </m:cells>
                                                     </m:ColumnListItem>

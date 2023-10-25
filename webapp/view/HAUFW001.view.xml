@@ -169,7 +169,7 @@
                                 <Button icon="sap-icon://delete" 
                                         type="Reject" 
                                         text="{i18n>tableToolbarButtonDelete}" 
-                                        press="onOpenDeleteDialog"/>
+                                        press="onDeletePress"/>
                                 <ToolbarSpacer/>                                
                                 <Button id="sortUsersButton"
                                         icon="sap-icon://sort"

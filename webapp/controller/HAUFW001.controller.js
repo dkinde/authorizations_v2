@@ -333,6 +333,10 @@ sap.ui.define([
 
             this.oDialogEdit.close();
         },
+        onCloseDeleteDialog: function () {
+            sap.m.MessageToast.show("Aktion abgebrochen");
+            this.oDialogDelete.close();
+        },
         onFunktionPress: function () {
             var oSelectedItem = this.byId("table5").getSelectedItem(),
                 oContext = oSelectedItem.getBindingContext(),
@@ -443,24 +447,74 @@ sap.ui.define([
 
         },
         onOpenDeleteDialog: function () {
-            if (!this._oDialogDelete) {
-                this._oDialogDelete = this.loadFragment({
-                    name: "auth.fragment.DeleteDialogHAUFW001",
-                    controller: this
-                });
+            var oSelectedItem = this.byId("table1").getSelectedItem(),
+                iIndex = this.byId("table1").indexOfItem(oSelectedItem),
+                oView = this.getView();
+
+            if (oSelectedItem) {
+                if (!this._oDialogDelete) {
+                    this._oDialogDelete = this.loadFragment({
+                        name: "auth.fragment.DeleteDialogHAUFW001",
+                        controller: this
+                    });
+                }
+                this._oDialogDelete.then(function (oDialog) {
+                    this.oDialogDelete = oDialog;
+                    oView.addDependent(this.oDialogDelete);
+                    this.oDialogDelete.bindElement({
+                        path: '/HAUPF001'
+                    });
+                    this.oDialogDelete.open();
+
+                    var oContext = oSelectedItem.getBindingContext(),
+                        sFunktion = oContext.getProperty("funktion"),
+                        sTyp = oContext.getProperty("typ"),
+                        sEntit = oContext.getProperty("entit"),
+                        sWert = oContext.getProperty("wert"),
+                        filter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.EQ, sFunktion);
+
+                    this.byId("table3").getBinding("items").filter(filter, sap.ui.model.FilterType.Application);
+                    this.byId("__textFunktion").setText(sFunktion);
+                    this.byId("__textTyp").setText(sTyp);
+                    this.byId("__textEntit").setText(sEntit);
+                    this.byId("__textWert").setText(sWert);
+
+                    // this.byId("table2").addStyleClass("firstRow");
+                }.bind(this));
+
+
+
+                /* var sFunktion = oSelectedItem.getCells()[0].getText(),
+                    sTyp = oSelectedItem.getCells()[1].getSelectedItem().getText(),
+                    sEntit = oSelectedItem.getCells()[2].getSelectedItem().getText(),
+                    sWert = oSelectedItem.getCells()[3].getValue(),
+                    aRow = [sFunktion, sTyp, sEntit, sWert],
+                    bDelete = false;
+
+                for (var i = this.aCreate.length - 1; i >= 0; i--) {
+                    if (JSON.stringify(this.aCreate[i]) === JSON.stringify(aRow)) {
+                        this.aCreate.splice(i, 1);
+                        bDelete = true;
+                        break;
+                    }
+                }
+                if (!bDelete)
+                    this.aDelete.push(aRow);
+
+                oSelectedItem.destroy();
+                sap.m.MessageToast.show("Element erfolgreich gelöscht");
+                this.editValidation(); */
+            } else {
+                sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
             }
-            this._oDialogDelete.then(function (oDialog) {
-                this.oDialog = oDialog;
-                this.oDialog.open();
-                // this.byId("table2").addStyleClass("firstRow");
-            }.bind(this));
+            // this.editValidation();
+
+
 
             // this.maxFunktion = 1;
-
             /* var that = this,
                 batchSize = 0,
                 iSkip = 0;
-
             function getData(sUrl) {
                 that._oModel.read(sUrl, {
                     urlParameters: {
@@ -583,8 +637,9 @@ sap.ui.define([
             try {
                 var oTable = this.byId("table6"),
                     aItems = oTable.getItems(),
-                    bDatamart = false,
-                    foundDuplicate = false;
+                    bDatamart = false
+                    // ,foundDuplicate = false
+                    ;
 
                 if (this.byId("selecttyp1").getSelectedKey() == null ||
                     this.byId("selectentit1").getSelectedKey() == null ||
@@ -604,7 +659,7 @@ sap.ui.define([
                         this.byId("selectentit1").getSelectedItem().getText() === aItems[i].getCells()[2].getSelectedKey() &&
                         this.byId("__editCRUD3").getValue() === aItems[i].getCells()[3].getValue()
                     ) {
-                        foundDuplicate = true;
+                        // foundDuplicate = true;
                         throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
                         break;
                     }
@@ -1292,9 +1347,22 @@ sap.ui.define([
                 },
                 fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
-                };
+                },
+                that = this;
 
             if (oSelectedItem) {
+                sap.m.MessageBox.information("Möchten Sie die gesamte Funktion löschen?", {
+                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    emphasizedAction: sap.m.MessageBox.Action.NO,
+                    onClose: function (sAction) {
+                        // sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
+                        if (sAction === sap.m.MessageBox.Action.YES) {
+                            that.onOpenDeleteDialog();
+                        } else {
+                            console.log(sAction);
+                        }
+                    }
+                });
                 var oContext = oSelectedItem.getBindingContext(),
                     sFunktion = oContext.getProperty("funktion"),
                     sTyp = oContext.getProperty("typ"),
@@ -1302,10 +1370,10 @@ sap.ui.define([
                     sWert = oContext.getProperty("wert"),
                     sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntit + "',wert='" + sWert + "')";
                 // sURL = "/HAUFW001(personalnummer='" + sPersNummer + "',funktion='" + sFunktion + "')";
-                this._oModel.remove(sURL, {
+                /* this._oModel.remove(sURL, {
                     success: fnSucces,
                     error: fnError
-                });
+                }); */
                 // oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
             } else {
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
