@@ -9,3 +9,8 @@
 .errorStepBorder {
     border: 3px solid #e60c0c;
 }
+
+.confirmMessageBox {
+    width: 350px;
+    height: 60px;
+}

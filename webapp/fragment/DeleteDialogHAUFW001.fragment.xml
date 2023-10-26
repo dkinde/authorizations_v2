@@ -3,7 +3,7 @@
 						 xmlns:form="sap.ui.layout.form" 
 						 xmlns:l="sap.ui.layout"
                          width="100%">
-    <Dialog title="{i18n>inputFieldDialogTitleFunktion}" id="dialog3" busy="false" 
+    <Dialog title="Sonderfunktion vollständig entfernen " id="dialog3" busy="false" 
 			contentHeight="700px" contentWidth="750px" resizable="true">
 		<content>			
 			<VBox   class="sapUiSmallMargin">
@@ -62,7 +62,7 @@
 					text="Sonderfunktion Löschen" 
 					type="Reject"  
 					icon="sap-icon://delete" 
-					press=".onDeletePress" />
+					press=".onDeleteAllPress" />
 		</beginButton>
 		<endButton>
 			<Button text="{i18n>inputFieldDialogEndButton}"  

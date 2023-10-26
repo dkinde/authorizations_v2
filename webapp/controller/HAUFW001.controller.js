@@ -42,6 +42,8 @@ sap.ui.define([
             this.aValue = [];
             this.aEntit = [];
             this.aDefinition = [];
+            this.aDefinitionDelete = [];
+            this.aPersNumm = [];
             this.aDatamart = [];
             this.aCreate = [];
             this.aUpdate = [];
@@ -335,6 +337,8 @@ sap.ui.define([
         },
         onCloseDeleteDialog: function () {
             sap.m.MessageToast.show("Aktion abgebrochen");
+            this.aDefinitionDelete = [];
+            this.aPersNumm = [];
             this.oDialogDelete.close();
         },
         onFunktionPress: function () {
@@ -405,10 +409,8 @@ sap.ui.define([
             }.bind(this));
 
             this.maxFunktion = 1;
-
             var that = this,
-                batchSize = 0,
-                iSkip = 0;
+                batchSize = 0;
 
             function getData(sUrl) {
                 that._oModel.read(sUrl, {
@@ -465,7 +467,6 @@ sap.ui.define([
                         path: '/HAUPF001'
                     });
                     this.oDialogDelete.open();
-
                     var oContext = oSelectedItem.getBindingContext(),
                         sFunktion = oContext.getProperty("funktion"),
                         sTyp = oContext.getProperty("typ"),
@@ -478,78 +479,10 @@ sap.ui.define([
                     this.byId("__textTyp").setText(sTyp);
                     this.byId("__textEntit").setText(sEntit);
                     this.byId("__textWert").setText(sWert);
-
-                    // this.byId("table2").addStyleClass("firstRow");
                 }.bind(this));
-
-
-
-                /* var sFunktion = oSelectedItem.getCells()[0].getText(),
-                    sTyp = oSelectedItem.getCells()[1].getSelectedItem().getText(),
-                    sEntit = oSelectedItem.getCells()[2].getSelectedItem().getText(),
-                    sWert = oSelectedItem.getCells()[3].getValue(),
-                    aRow = [sFunktion, sTyp, sEntit, sWert],
-                    bDelete = false;
-
-                for (var i = this.aCreate.length - 1; i >= 0; i--) {
-                    if (JSON.stringify(this.aCreate[i]) === JSON.stringify(aRow)) {
-                        this.aCreate.splice(i, 1);
-                        bDelete = true;
-                        break;
-                    }
-                }
-                if (!bDelete)
-                    this.aDelete.push(aRow);
-
-                oSelectedItem.destroy();
-                sap.m.MessageToast.show("Element erfolgreich gelöscht");
-                this.editValidation(); */
             } else {
                 sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
             }
-            // this.editValidation();
-
-
-
-            // this.maxFunktion = 1;
-            /* var that = this,
-                batchSize = 0,
-                iSkip = 0;
-            function getData(sUrl) {
-                that._oModel.read(sUrl, {
-                    urlParameters: {
-                        "$skiptoken": batchSize
-                    },
-                    success: function (oData, oResponse) {
-                        if (oData && oData.results) {
-                            that.aFunktion = that.aFunktion.concat(oData.results.map(function (item) {
-                                return item;
-                            }));
-                        }
-                        if (oData.__next) {
-                            batchSize += 100;
-                            getData(sUrl);
-                        } else {
-                            that.byId("dialog1").setBusy(false);
-                            that.aFunktion.forEach(item => {
-                                if (item.funktion > that.maxFunktion) {
-                                    that.maxFunktion = parseInt(item.funktion, 10);
-                                }
-                            });
-                            that.maxFunktion += 1;
-                            that.byId("__inputFunktion1").setText(that.maxFunktion.toString());
-                            that.byId("__inputFunktion2").setText(that.byId("__inputFunktion1").getText());
-                            return;
-                        }
-                    },
-                    error: function (oError) {
-                        console.error("Error al recuperar datos:", oError);
-                        that.byId("dialog1").setBusy(false);
-                    }
-                });
-            }
-            getData("/HAUFW001"); */
-
         },
         handleSelectionFinish: function (oEvent) {
             var selectedItems = oEvent.getParameter("selectedItems"),
@@ -767,7 +700,6 @@ sap.ui.define([
                     aRow = [sFunktion, sTyp, sEntit, sWert];
 
                 this.aCreate.push(aRow);
-                console.log(this.aCreate);
                 sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 
                 this.editValidation();
@@ -891,16 +823,7 @@ sap.ui.define([
                     this.byId("table1").getBinding("items").refresh();
                 }
 
-                console.log(this.aIOBJ_Sondern);
                 this.aIOBJ_Sondern.forEach(item => {
-                    oNewEntryTyp.funktion = item[0];
-                    oNewEntryTyp.typ = item[1];
-                    oNewEntryTyp.entit = item[2];
-                    oNewEntryTyp.wert = item[3];
-
-                    console.log(item);
-                    console.log(oNewEntryTyp);
-
                     this._oModel.create("/HAUFW001", {
                         funktion: item[0],
                         typ: item[1],
@@ -910,23 +833,6 @@ sap.ui.define([
                         success: fnSuccess,
                         error: fnError
                     });
-                    /* var oContext = this.byId("table1").getBinding("items").create({
-                        funktion: oNewEntryTyp.funktion,
-                        typ: oNewEntryTyp.typ,
-                        entit: oNewEntryTyp.entit,
-                        wert: oNewEntryTyp.wert
-                    });
-                    oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                        if (!oError.canceled) {
-                            throw oError;
-                        }
-                    });
-                    this._oModel.submitBatch("$auto").then(fnSucces, fnError); */
-
-                    /* this._oModel.create("/HAUFW001", oNewEntryTyp, {
-                        success: fnSuccess,
-                        error: fnError
-                    }); */
                 });
 
                 this.byId("table1").getBinding("items").refresh();
@@ -1058,7 +964,7 @@ sap.ui.define([
                 bExistDatamrt = true,
                 iItems = this.byId("table6").getItems(),
                 oContext = this.byId("table1").getSelectedItem().getBindingContext(),
-                fnSucces = function () {
+                fnSuccess = function () {
                     // this._setBusy(false);
                     sap.m.MessageToast.show("Batch erfolgreich aktualisiert");
                     var oList = this.byId("table1");
@@ -1111,7 +1017,42 @@ sap.ui.define([
                 if (!bEinDatamart)
                     throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
 
+                console.log(this.aDefinition);
+                this.aDefinition.forEach(item => {
+                    var sURL = "/HAUFW001(funktion='" + item.funktion + "',typ='" + item.typ + "',entit='" + item.entit + "',wert='" + item.wert + "')";
+                    this._oModel.remove(sURL, {
+                        success: fnSuccess,
+                        error: fnError
+                    });
+                });
 
+                for (let i = 1; i < iItems.length; i++) {
+                    /* if (iItems[i].getCells()[1].getSelectedItem().getText() === "D") {
+                        var oInput = iItems[i].getCells()[3],
+                            sInput = oInput.getValue(),
+                            bDatamartOK = false;
+
+                        bEinDatamart = true;
+                        if (sInput === "*") {
+                            bDatamartOK = true;
+                        } else {
+                            this.aDatamart.forEach(item => {
+                                if (sInput === item.datamart) {
+                                    bDatamartOK = true;
+                                }
+                            });
+                        }
+                    } */
+                    this._oModel.create("/HAUFW001", {
+                        funktion: iItems[i].getCells()[0].getText(),
+                        typ: iItems[i].getCells()[1].getSelectedItem().getText(),
+                        entit: iItems[i].getCells()[2].getSelectedItem().getText(),
+                        wert: iItems[i].getCells()[3].getValue()
+                    }, {
+                        success: fnSuccess,
+                        error: fnError
+                    });
+                }
 
 
             } catch (error) {
@@ -1342,7 +1283,7 @@ sap.ui.define([
         },
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
-                fnSucces = function () {
+                fnSuccess = function () {
                     sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
                 },
                 fnError = function (oError) {
@@ -1351,33 +1292,124 @@ sap.ui.define([
                 that = this;
 
             if (oSelectedItem) {
-                sap.m.MessageBox.information("Möchten Sie die gesamte Funktion löschen?", {
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
-                    emphasizedAction: sap.m.MessageBox.Action.NO,
+                sap.m.MessageBox.confirm("Möchten Sie die gesamte Funktion löschen?", {
+                    title: "Sonderfunktion löschen",
+                    actions: [sap.m.MessageBox.Action.YES, "Nur dieses Element", sap.m.MessageBox.Action.CANCEL],
+                    emphasizedAction: "Nur dieses Element",
+                    styleClass: "confirmMessageBox",
                     onClose: function (sAction) {
                         // sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
                         if (sAction === sap.m.MessageBox.Action.YES) {
                             that.onOpenDeleteDialog();
+                        } else if (sAction === "Nur dieses Element") {
+                            var oContext = oSelectedItem.getBindingContext(),
+                                sFunktion = oContext.getProperty("funktion"),
+                                sTyp = oContext.getProperty("typ"),
+                                sEntit = oContext.getProperty("entit"),
+                                sWert = oContext.getProperty("wert"),
+                                sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntit + "',wert='" + sWert + "')";
+                            this._oModel.remove(sURL, {
+                                success: fnSuccess,
+                                error: fnError
+                            });
                         } else {
                             console.log(sAction);
                         }
                     }
                 });
-                var oContext = oSelectedItem.getBindingContext(),
-                    sFunktion = oContext.getProperty("funktion"),
-                    sTyp = oContext.getProperty("typ"),
-                    sEntit = oContext.getProperty("entit"),
-                    sWert = oContext.getProperty("wert"),
-                    sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntit + "',wert='" + sWert + "')";
-                // sURL = "/HAUFW001(personalnummer='" + sPersNummer + "',funktion='" + sFunktion + "')";
-                /* this._oModel.remove(sURL, {
-                    success: fnSucces,
-                    error: fnError
-                }); */
-                // oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
             } else {
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
             }
+        },
+        onDeleteAllPress: function () {
+            var oSelectedItem = this.byId("table1").getSelectedItem(),
+                fnSuccess = function () {
+                    sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
+                },
+                fnError = function (oError) {
+                    sap.m.MessageBox.error(oError.message);
+                },
+                oContext = oSelectedItem.getBindingContext(),
+                sFunktion = oContext.getProperty("funktion"),
+                /* sTyp = oContext.getProperty("typ"),
+                sEntit = oContext.getProperty("entit"),
+                sWert = oContext.getProperty("wert"), */
+                sURLFunktion = "/HAUFW001(funktion='" + sFunktion + "')",
+                sURLPersNumm = "/HAUPF001(funktion='" + sFunktion + "')",
+                sFilterFunktion = "funktion eq" + sFunktion,
+                that = this,
+                batchSize = 0,
+                batchSize1 = 0;
+
+            function getFunktion(sUrl) {
+                that._oModel.read(sUrl, {
+                    urlParameters: {
+                        "$skiptoken": batchSize,
+                    },
+                    success: function (oData, oResponse) {
+                        if (oData && oData.results) {
+                            oData.results.forEach(item => {
+                                if (item.funktion === sFunktion) {
+                                    that.aDefinitionDelete = that.aDefinitionDelete.concat(item);
+                                }
+                            });
+                        }
+                        if (oData.__next) {
+                            batchSize += 100;
+                            getFunktion(sUrl);
+                        }
+                        else {
+                            that.aDefinitionDelete.forEach(item => {
+                                var sURL = "/HAUFW001(funktion='" + item.funktion + "',typ='" + item.typ + "',entit='" + item.entit + "',wert='" + item.wert + "')";
+                                that._oModel.remove(sURL, {
+                                    success: fnSuccess,
+                                    error: fnError
+                                });
+                            });
+                        }
+                    },
+                    error: function (oError) {
+                        console.error("Error al recuperar datos:", oError);
+                    }
+                });
+            }
+            getFunktion("/HAUFW001");
+
+            function getPersNumm(sUrl) {
+                that._oModel.read(sUrl, {
+                    urlParameters: {
+                        "$skiptoken": batchSize1,
+                    },
+                    success: function (oData, oResponse) {
+                        if (oData && oData.results) {
+                            oData.results.forEach(item => {
+                                if (item.funktion === sFunktion) {
+                                    that.aPersNumm = that.aPersNumm.concat(item);
+                                }
+                            });
+                        }
+                        if (oData.__next) {
+                            batchSize1 += 100;
+                            getFunktion(sUrl);
+                        }
+                        else {
+                            that.aPersNumm.forEach(item => {
+                                var sURL = "/HAUPF001(personalnummer='" + item.personalnummer + "',funktion='" + item.funktion + "')";
+                                that._oModel.remove(sURL, {
+                                    success: fnSuccess,
+                                    error: fnError
+                                });
+                            });
+                        }
+                    },
+                    error: function (oError) {
+                        console.error("Error al recuperar datos:", oError);
+                    }
+                });
+            }
+            getPersNumm("/HAUPF001");
+
+            this.onCloseDeleteDialog();
         },
         onSearch1: function (oEvent) {
             var aFilters = [],
