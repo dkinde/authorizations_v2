@@ -11,7 +11,11 @@
 				<form:SimpleForm id="form1" editable="false" width="600px" >
 					<form:content>						
 						<Label text="{i18n>colAUFKT}" id="text9" required="true"/>					
-						<Text  id="__inputFunktion1"  />
+						<!-- <Text  id="__inputFunktion1"  /> -->
+						<Input  id="__inputFunktion1" 
+								liveChange="createValidation" 
+								valueLiveUpdate="true" 
+								valueStateText="Geben Sie nicht mehr als 2 Ziffern ein"/>
 						<Label 	text="{i18n>colAUENTTYP}"  id="text10" required="true"/>
 						<Text 	id="__inputTyp1"  text="D"/>						
 						<Label 	text="{i18n>colAUENT}"  id="text11" required="true"/>	

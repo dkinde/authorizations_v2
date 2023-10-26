@@ -164,7 +164,7 @@
                                         type="Accept"/> 
                                 <Button icon="sap-icon://edit" 
                                         text="{i18n>tableToolbarFunktionEdit}" 
-                                        press="onUpdatePress"
+                                        press="onOpenUpdateDialog"
                                         type="Emphasized"/> 
                                 <Button icon="sap-icon://delete" 
                                         type="Reject" 

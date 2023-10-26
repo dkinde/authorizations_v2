@@ -294,53 +294,6 @@ sap.ui.define([
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
         },
-        onCloseViewDialog: function () {
-            this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
-            this.byId("dialog1").setBusy(true);
-            this.byId("__inputWert").setValue("");
-            this.byId("__inputFunktion1").setText("");
-            this.byId("__inputFunktion2").setText("");
-            this.byId("comboDatamart").setSelectedKeys(null);
-            this.byId("selecttyp").setSelectedKey(null);
-            this.byId("selectentit").setSelectedKey(null);
-
-            this.aNewEntryDatamart = [];
-            this.aIOBJ_Sondern = [];
-
-            var aItems = this.byId("table2").getItems();
-            for (let i = 1; i < aItems.length; i++) {
-                this.byId("table2").removeItem(aItems[i]);
-            }
-
-            this.oDialog.close();
-        },
-        onCloseEditDialog: function () {
-            this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
-            this.byId("__inputEditFunktion").setText("");
-            this.byId("__editCRUD3").setValue("");
-            this.byId("selecttyp1").setSelectedKey(null);
-            this.byId("selectentit1").setSelectedKey(null);
-            this.aDefinition = [];
-            this.aCreate = [];
-            this.aUpdate = [];
-            this.aDelete = [];
-
-            var oTable = this.getView().byId("table6"),
-                aItems = oTable.getItems();
-            for (var i = aItems.length - 1; i > 0; i--) {
-                oTable.removeItem(aItems[i]);
-            }
-
-            this.oDialogEdit.close();
-        },
-        onCloseDeleteDialog: function () {
-            sap.m.MessageToast.show("Aktion abgebrochen");
-            this.aDefinitionDelete = [];
-            this.aPersNumm = [];
-            this.oDialogDelete.close();
-        },
         onFunktionPress: function () {
             var oSelectedItem = this.byId("table5").getSelectedItem(),
                 oContext = oSelectedItem.getBindingContext(),
@@ -389,11 +342,84 @@ sap.ui.define([
             this.getView().byId("selectentit1").setSelectedKey(null);
             this.editValidation();
         },
+        liveChangeInput: function (oEvent) {
+            var oInput = oEvent.getSource(),
+                sInput = oInput.getValue().toUpperCase(),
+                lettersOnly = /^[A-Za-z]+$/;
+
+            if (lettersOnly.test(sInput)) {
+                oInput.setValue(sInput);
+            }
+            oInput.setValueState(sap.ui.core.ValueState.None);
+        },
         onSuggest: function (oEvent) {
             /* if (this.byId("selecttyp1").getSelectedItem().getText() === "D" ||
                 this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
 
             } */
+        },
+        handleSelectionFinish: function (oEvent) {
+            var selectedItems = oEvent.getParameter("selectedItems"),
+                aItems = this.byId("comboDatamart").getItems();
+
+            this.aNewEntryDatamart = [];
+
+            for (let i = 0; i < selectedItems.length; i++)
+                this.aNewEntryDatamart.push(selectedItems[i].getText());
+
+            if (selectedItems.length === aItems.length)
+                this.bAlleDatamart = true;
+            else
+                this.bAlleDatamart = false;
+
+            this.createValidation();
+        },
+        onCloseViewDialog: function () {
+            this._oModel.resetChanges();
+            sap.m.MessageToast.show("Aktion abgebrochen");
+            this.byId("dialog1").setBusy(true);
+            this.byId("__inputWert").setValue("");
+            this.byId("__inputFunktion1").setText("");
+            this.byId("__inputFunktion2").setText("");
+            this.byId("comboDatamart").setSelectedKeys(null);
+            this.byId("selecttyp").setSelectedKey(null);
+            this.byId("selectentit").setSelectedKey(null);
+
+            this.aNewEntryDatamart = [];
+            this.aIOBJ_Sondern = [];
+
+            var aItems = this.byId("table2").getItems();
+            for (let i = 1; i < aItems.length; i++) {
+                this.byId("table2").removeItem(aItems[i]);
+            }
+
+            this.oDialog.close();
+        },
+        onCloseEditDialog: function () {
+            this._oModel.resetChanges();
+            sap.m.MessageToast.show("Aktion abgebrochen");
+            this.byId("__inputEditFunktion").setText("");
+            this.byId("__editCRUD3").setValue("");
+            this.byId("selecttyp1").setSelectedKey(null);
+            this.byId("selectentit1").setSelectedKey(null);
+            this.aDefinition = [];
+            this.aCreate = [];
+            this.aUpdate = [];
+            this.aDelete = [];
+
+            var oTable = this.getView().byId("table6"),
+                aItems = oTable.getItems();
+            for (var i = aItems.length - 1; i > 0; i--) {
+                oTable.removeItem(aItems[i]);
+            }
+
+            this.oDialogEdit.close();
+        },
+        onCloseDeleteDialog: function () {
+            sap.m.MessageToast.show("Aktion abgebrochen");
+            this.aDefinitionDelete = [];
+            this.aPersNumm = [];
+            this.oDialogDelete.close();
         },
         onOpenCreateDialog: function () {
             if (!this._oDialogCRUD) {
@@ -448,6 +474,168 @@ sap.ui.define([
             getData("/HAUFW001");
 
         },
+        onOpenUpdateDialog: function () {
+            var oSelectedItem = this.byId("table1").getSelectedItem();
+            if (oSelectedItem) {
+                var oView = this.getView(),
+                    oContext = oSelectedItem.getBindingContext(),
+                    oEntry = oContext.getObject();
+                if (!this._oDialogEdit) {
+                    this._oDialogEdit = this.loadFragment({
+                        name: "auth.fragment.EditDialogHAUFW001",
+                        controller: this
+                    });
+                }
+                this._oDialogEdit.then(function (oDialog) {
+                    this.oDialogEdit = oDialog;
+                    oView.addDependent(this.oDialogEdit);
+                    this.oDialogEdit.bindElement({
+                        path: '/HAUFW001'
+                    });
+                    this.oDialogEdit.open();
+                    var batchSize = 0,
+                        that = this,
+                        oTable = this.byId("table6");
+
+                    oTable.addStyleClass("firstRow");
+                    function retrieveEntit(sUrl) {
+                        that._oModel.read(sUrl, {
+                            urlParameters: {
+                                "$skiptoken": batchSize
+                            },
+                            success: function (oData, oResponse) {
+                                if (oData && oData.results) {
+                                    that.aDatamart = that.aDatamart.concat(oData.results.map(function (item) {
+                                        return item;
+                                    }));
+                                }
+                                if (oData.__next) {
+                                    batchSize += 100;
+                                    retrieveData(sUrl);
+                                }
+                                else {
+                                    // console.log(that.aDatamart);
+                                }
+                            },
+                            error: function (oError) {
+                                console.error("Error al recuperar datos:", oError);
+                            }
+                        });
+                    }
+                    retrieveEntit("/AUDMART");
+
+                    function getFunktion(sUrl) {
+                        that._oModel.read(sUrl, {
+                            urlParameters: {
+                                "$skiptoken": batchSize,
+                            },
+                            success: function (oData, oResponse) {
+                                if (oData && oData.results) {
+                                    oData.results.forEach(item => {
+                                        if (item.funktion === oEntry.funktion) {
+                                            that.aDefinition = that.aDefinition.concat(item);
+                                        }
+                                    });
+                                }
+                                if (oData.__next) {
+                                    batchSize += 100;
+                                    getFunktion(sUrl);
+                                }
+                                else {
+                                    that.aDefinition.forEach(item => {
+                                        var oColumnListItem = new sap.m.ColumnListItem(),
+                                            oText = new sap.m.Text({ text: item.funktion }),
+                                            oSelect = new sap.m.Select({
+                                                forceSelection: false,
+                                                selectedKey: item.typ
+                                            }),
+                                            oSelect1 = new sap.m.Select({
+                                                selectedKey: item.entit,
+                                                forceSelection: false,
+                                                change: that.editValidation.bind(that)
+                                            }),
+                                            oInput = new sap.m.Input({
+                                                value: item.wert,
+                                                valueLiveUpdate: true,
+                                                valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
+                                                // liveChange: that.editValidation.bind(that)
+                                                liveChange: that.liveChangeInput.bind(that)
+                                            });
+                                        switch (item.typ) {
+                                            case "D":
+                                                oSelect.addItem(new sap.ui.core.Item({ key: "D", text: "D" }));
+                                                var oInput = new sap.m.Input({
+                                                    suggestionItems: {
+                                                        path: "/AUDMART",
+                                                        sorter: { path: 'datamart' },
+                                                        template: new sap.ui.core.ListItem({
+                                                            key: "{datamart}",
+                                                            text: "{datamart}",
+                                                            additionalText: "{Txtlg}"
+                                                        })
+                                                    },
+                                                    placeholder: "Geben Sie nur vorhandene Datamarts ein",
+                                                    showSuggestion: true,
+                                                    value: item.wert,
+                                                    valueLiveUpdate: true,
+                                                    // liveChange: that.editValidation.bind(that),
+                                                    liveChange: that.liveChangeInput.bind(that),
+                                                    valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
+                                                    /* suggestionItemSelected: function (oEvent) {
+                                                        var oSelectedItem = oEvent.getParameter("selectedItem");
+                                                        if (oSelectedItem) {                                                            
+                                                            var sKey = oSelectedItem.getKey();
+                                                            var sText = oSelectedItem.getText();
+                                                            var sAdditionalText = oSelectedItem.getAdditionalText();                                                            
+                                                        }
+                                                    } */
+                                                });
+                                                break;
+                                            case "I":
+                                                oSelect.addItem(new sap.ui.core.Item({ key: "I", text: "I" }));
+                                                break;
+                                            case "S":
+                                                oSelect.addItem(new sap.ui.core.Item({ key: "S", text: "S" }));
+                                                break;
+                                            default:
+
+                                                break;
+                                        }
+                                        that.aEntit.forEach(item1 => {
+                                            if (item1.typ == item.typ) {
+                                                oSelect1.addItem(new sap.ui.core.Item({
+                                                    key: item1.entit,
+                                                    text: item1.entit
+                                                }));
+                                            }
+                                        });
+                                        oColumnListItem.addCell(oText);
+                                        oColumnListItem.addCell(oSelect);
+                                        oColumnListItem.addCell(oSelect1);
+                                        oColumnListItem.addCell(oInput);
+                                        oTable.addItem(oColumnListItem);
+                                    });
+                                }
+                            },
+                            error: function (oError) {
+                                console.error("Error al recuperar datos:", oError);
+                            }
+                        });
+                    }
+                    getFunktion("/HAUFW001");
+                    this.byId("__inputEditFunktion").setText(oEntry.funktion);
+                    /*  this.byId("selecttyp1").setSelectedKey(oEntry.typ);
+                        this.filterTyp1(); 
+                        this.byId("selectentit1").setSelectedKey(oEntry.entit);
+                        this.byId("__editCRUD3").setValue(oEntry.wert); */
+                    this.editValidation();
+
+                }.bind(this));
+
+            } else {
+                sap.m.MessageBox.warning("Es wurde kein Funktion zur Aktualisierung ausgewählt");
+            }
+        },
         onOpenDeleteDialog: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 iIndex = this.byId("table1").indexOfItem(oSelectedItem),
@@ -484,37 +672,90 @@ sap.ui.define([
                 sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
             }
         },
-        handleSelectionFinish: function (oEvent) {
-            var selectedItems = oEvent.getParameter("selectedItems"),
-                aItems = this.byId("comboDatamart").getItems();
+        createValidation: function () {
+            var sInput1 = this.byId("__inputWert").getValue(),
+                aItems = this.getView().byId("table2").getItems(),
+                selectTyp = this.getView().byId("selecttyp").getSelectedKey(),
+                selectEntit = this.getView().byId("selectentit").getSelectedKey(),
+                oInput1 = this.byId("__inputWert");
 
-            this.aNewEntryDatamart = [];
+            // validation single inputs	            
+            if (sInput1.length > 0 && sInput1.length < 61) {
+                oInput1.setValueState(sap.ui.core.ValueState.None);
+            } else {
+                oInput1.setValueState(sap.ui.core.ValueState.Error);
+            }
 
-            for (let i = 0; i < selectedItems.length; i++)
-                this.aNewEntryDatamart.push(selectedItems[i].getText());
+            if (sInput1 == '') {
+                oInput1.setValueState(sap.ui.core.ValueState.None);
+            }
 
-            if (selectedItems.length === aItems.length)
-                this.bAlleDatamart = true;
+            if (this.aNewEntryDatamart != '')
+                this.byId("addButton2").setEnabled(true);
             else
-                this.bAlleDatamart = false;
+                this.byId("addButton2").setEnabled(false);
 
-            this.createValidation();
+            if (aItems.length > 1)
+                this.byId("deleteButton2").setEnabled(true);
+            else
+                this.byId("deleteButton2").setEnabled(false);
+
+
+            // validation all inputs - create button
+            if (this.aNewEntryDatamart != '' && aItems.length > 1 &&
+                selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
+                this.byId("createButton").setEnabled(true);
+            } else {
+                this.byId("createButton").setEnabled(false);
+            }
         },
-        handleSelectionFinish1: function (oEvent) {
-            /* var selectedItems = oEvent.getParameter("selectedItems"),
-                aItems = this.byId("comboDatamart").getItems();
+        editValidation: function () {
+            var sInput1 = this.byId("__editCRUD3").getValue().toUpperCase(),
+                selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
+                selectEntit = this.getView().byId("selectentit1").getSelectedKey(),
+                oInput1 = this.byId("__editCRUD3"),
+                lettersOnly = /^[A-Za-z]+$/;
 
-            this.aNewEntryDatamart = [];
+            if (lettersOnly.test(sInput1)) {
+                oInput1.setValue(sInput1);
+            }
 
-            for (let i = 0; i < selectedItems.length; i++)
-                this.aNewEntryDatamart.push(selectedItems[i].getText());
+            if (selectTyp) {
+                if (this.byId("selecttyp1").getSelectedItem().getText() === "D") {
+                    this.byId("__editCRUD3").setShowSuggestion(true);
+                    this.byId("__editCRUD3").setAutocomplete(true);
+                } else {
+                    this.byId("__editCRUD3").setAutocomplete(false);
+                    this.byId("__editCRUD3").setShowSuggestion(false);
+                }
+            }
+            if (selectEntit) {
+                if (this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
+                    this.byId("__editCRUD3").setShowSuggestion(true);
+                    this.byId("__editCRUD3").setAutocomplete(true);
+                } else {
+                    this.byId("__editCRUD3").setAutocomplete(false);
+                    this.byId("__editCRUD3").setShowSuggestion(false);
+                }
+            }
 
-            if (selectedItems.length === aItems.length)
-                this.bAlleDatamart = true;
+            // validation input
+            if (sInput1.length > 0 && sInput1.length < 61)
+                oInput1.setValueState(sap.ui.core.ValueState.None);
             else
-                this.bAlleDatamart = false;
+                oInput1.setValueState(sap.ui.core.ValueState.Error);
 
-            this.createValidation(); */
+            if (sInput1 == '')
+                oInput1.setValueState(sap.ui.core.ValueState.None);
+
+            // validation all inputs - edit & add button
+            if (selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
+                // this.byId("editButton").setEnabled(true);
+                this.byId("addButton3").setEnabled(true);
+            } else {
+                // this.byId("editButton").setEnabled(false);
+                this.byId("addButton3").setEnabled(false);
+            }
         },
         onAddPress2: function () {
             try {
@@ -863,129 +1104,17 @@ sap.ui.define([
 
             this.byId("dialog1").close();
         },
-        createValidation: function () {
-            var sInput1 = this.byId("__inputWert").getValue(),
-                aItems = this.getView().byId("table2").getItems(),
-                selectTyp = this.getView().byId("selecttyp").getSelectedKey(),
-                selectEntit = this.getView().byId("selectentit").getSelectedKey(),
-                oInput1 = this.byId("__inputWert");
-
-            // validation single inputs	            
-            if (sInput1.length > 0 && sInput1.length < 61) {
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-            }
-
-            if (sInput1 == '') {
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            }
-
-            if (this.aNewEntryDatamart != '')
-                this.byId("addButton2").setEnabled(true);
-            else
-                this.byId("addButton2").setEnabled(false);
-
-            if (aItems.length > 1)
-                this.byId("deleteButton2").setEnabled(true);
-            else
-                this.byId("deleteButton2").setEnabled(false);
-
-
-            // validation all inputs - create button
-            if (this.aNewEntryDatamart != '' && aItems.length > 1 &&
-                selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
-                this.byId("createButton").setEnabled(true);
-            } else {
-                this.byId("createButton").setEnabled(false);
-            }
-        },
-        editValidation: function () {
-            var sInput1 = this.byId("__editCRUD3").getValue().toUpperCase(),
-                selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
-                selectEntit = this.getView().byId("selectentit1").getSelectedKey(),
-                oInput1 = this.byId("__editCRUD3"),
-                lettersOnly = /^[A-Za-z]+$/;
-
-            if (lettersOnly.test(sInput1)) {
-                oInput1.setValue(sInput1);
-            }
-
-            if (selectTyp) {
-                if (this.byId("selecttyp1").getSelectedItem().getText() === "D") {
-                    this.byId("__editCRUD3").setShowSuggestion(true);
-                    this.byId("__editCRUD3").setAutocomplete(true);
-                } else {
-                    this.byId("__editCRUD3").setAutocomplete(false);
-                    this.byId("__editCRUD3").setShowSuggestion(false);
-                }
-            }
-            if (selectEntit) {
-                if (this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
-                    this.byId("__editCRUD3").setShowSuggestion(true);
-                    this.byId("__editCRUD3").setAutocomplete(true);
-                } else {
-                    this.byId("__editCRUD3").setAutocomplete(false);
-                    this.byId("__editCRUD3").setShowSuggestion(false);
-                }
-            }
-
-            // validation input
-            if (sInput1.length > 0 && sInput1.length < 61)
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            else
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-
-            if (sInput1 == '')
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-
-            // validation all inputs - edit & add button
-            if (selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
-                // this.byId("editButton").setEnabled(true);
-                this.byId("addButton3").setEnabled(true);
-            } else {
-                // this.byId("editButton").setEnabled(false);
-                this.byId("addButton3").setEnabled(false);
-            }
-        },
-        liveChangeInput: function (oEvent) {
-            var oInput = oEvent.getSource(),
-                sInput = oInput.getValue().toUpperCase(),
-                lettersOnly = /^[A-Za-z]+$/;
-
-            if (lettersOnly.test(sInput)) {
-                oInput.setValue(sInput);
-            }
-            oInput.setValueState(sap.ui.core.ValueState.None);
-        },
         onUpdateEditPress: function () {
-            var oUpdateEntry = {},
-                bEinDatamart = false,
+            var bEinDatamart = false,
                 bExistDatamrt = true,
+                that = this,
                 iItems = this.byId("table6").getItems(),
-                oContext = this.byId("table1").getSelectedItem().getBindingContext(),
                 fnSuccess = function () {
-                    // this._setBusy(false);
-                    sap.m.MessageToast.show("Batch erfolgreich aktualisiert");
-                    var oList = this.byId("table1");
-                    /* oList.getItems().some(function (oItem) {
-                        if (oItem.getBindingContext() === oContext) {
-                            oItem.focus();
-                            oItem.setSelected(true);
-                            return true;
-                        }
-                    }); */
-                    // this._setUIChanges(false);
+                    sap.m.MessageToast.show("Funktion erfolgreich aktualisiert");
                 }.bind(this),
                 fnError = function (oError) {
-                    // this._setBusy(false);
                     sap.m.MessageBox.error(oError.message);
-                    // this._setUIChanges(false);
-                }.bind(this),
-                sFunktion = oContext.getProperty("funktion"),
-                sEntitat = oContext.getProperty("entit"),
-                sTyp = oContext.getProperty("typ"),
-                sWert = oContext.getProperty("wert");
+                }.bind(this);
 
             try {
                 for (let i = 1; i < iItems.length; i++) {
@@ -1004,11 +1133,11 @@ sap.ui.define([
                                 }
                             });
                         }
-                    }
-                    if (!bDatamartOK) {
-                        bExistDatamrt = false;
-                        oInput.setValueStateText("Dieser Datamart existiert nicht");
-                        oInput.setValueState(sap.ui.core.ValueState.Error);
+                        if (!bDatamartOK) {
+                            bExistDatamrt = false;
+                            oInput.setValueStateText("Dieser Datamart existiert nicht");
+                            oInput.setValueState(sap.ui.core.ValueState.Error);
+                        }
                     }
                 }
                 if (!bExistDatamrt)
@@ -1017,47 +1146,47 @@ sap.ui.define([
                 if (!bEinDatamart)
                     throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
 
-                console.log(this.aDefinition);
+                var iTotal = this.aDefinition.length,
+                    iTotalSuccess = 0;
                 this.aDefinition.forEach(item => {
                     var sURL = "/HAUFW001(funktion='" + item.funktion + "',typ='" + item.typ + "',entit='" + item.entit + "',wert='" + item.wert + "')";
                     this._oModel.remove(sURL, {
-                        success: fnSuccess,
+                        success: function () {
+                            iTotalSuccess++;
+                            if (iTotalSuccess === iTotal) {
+                                console.log(iItems.length);
+                                var aCreateUpd = [];
+                                for (let i = 1; i < iItems.length; i++) {
+                                    var aRow = [iItems[i].getCells()[0].getText(),
+                                    iItems[i].getCells()[1].getSelectedItem().getText(),
+                                    iItems[i].getCells()[2].getSelectedItem().getText(),
+                                    iItems[i].getCells()[3].getValue()];
+                                    aCreateUpd.push(aRow);
+                                }
+                                aCreateUpd.forEach(item => {
+                                    that._oModel.create("/HAUFW001", {
+                                        funktion: item[0],
+                                        typ: item[1],
+                                        entit: item[2],
+                                        wert: item[3]
+                                    }, {
+                                        success: fnSuccess,
+                                        error: fnError
+                                    });
+                                });
+                                that.oDialogEdit.close();
+                                that.aDefinition = [];
+                                that.byId("table1").getBinding("items").refresh();
+                            }
+                        },
                         error: fnError
                     });
                 });
-
-                for (let i = 1; i < iItems.length; i++) {
-                    /* if (iItems[i].getCells()[1].getSelectedItem().getText() === "D") {
-                        var oInput = iItems[i].getCells()[3],
-                            sInput = oInput.getValue(),
-                            bDatamartOK = false;
-
-                        bEinDatamart = true;
-                        if (sInput === "*") {
-                            bDatamartOK = true;
-                        } else {
-                            this.aDatamart.forEach(item => {
-                                if (sInput === item.datamart) {
-                                    bDatamartOK = true;
-                                }
-                            });
-                        }
-                    } */
-                    this._oModel.create("/HAUFW001", {
-                        funktion: iItems[i].getCells()[0].getText(),
-                        typ: iItems[i].getCells()[1].getSelectedItem().getText(),
-                        entit: iItems[i].getCells()[2].getSelectedItem().getText(),
-                        wert: iItems[i].getCells()[3].getValue()
-                    }, {
-                        success: fnSuccess,
-                        error: fnError
-                    });
-                }
-
-
             } catch (error) {
-                if (error instanceof TypeError)
+                if (error instanceof TypeError) {
+                    console.log(error);
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                }
                 if (error.message == "NoDatamartException")
                     sap.m.MessageBox.warning("Die Funktion, die Sie erstellen möchten, hat keinen Datamart (D)-Typ, der mit ihr verbunden ist");
                 if (error.message == "FalscheDatamartException")
@@ -1077,12 +1206,6 @@ sap.ui.define([
                     entit: this.byId("selectentit1").getSelectedItem().getText(),
                     wert: this.byId("__editCRUD3").getValue()
                 };
-
-                console.log(oUpdateEntry);
-                console.log(sURL);
-                console.log(oContext);
-                console.log(this._oModel);
-
                 this._oModel.update(sURL, oUpdateEntry, {                    
                     success: function (data, response) {
                         console.log("funktion aktualisiert!");
@@ -1101,185 +1224,6 @@ sap.ui.define([
                     }
                 }); 
             } */
-
-            // this._oModel.submitChanges();
-            //this._setBusy(false);
-            //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
-            //this._bTechnicalErrors = false;
-            //this.byId("table1").getBinding("items").refresh();
-
-            /* if (oContext.hasPendingChanges()) {
-                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
-                sap.m.MessageToast.show("Kann aufgrund von anstehenden Änderungen nicht aktualisiert werden");
-            }
-            else {
-                oContext.refresh();
-                this.byId("dialog2").close();
-            } 
-            this._oModel.resetChanges();                                    
-            var oContext = this.byId("table1").getBinding("items").update();*/
-        },
-        onUpdatePress: function () {
-            var oSelectedItem = this.byId("table1").getSelectedItem();
-            if (oSelectedItem) {
-                var oView = this.getView(),
-                    oContext = oSelectedItem.getBindingContext(),
-                    oEntry = oContext.getObject();
-                if (!this._oDialogEdit) {
-                    this._oDialogEdit = this.loadFragment({
-                        name: "auth.fragment.EditDialogHAUFW001",
-                        controller: this
-                    });
-                }
-                this._oDialogEdit.then(function (oDialog) {
-                    this.oDialogEdit = oDialog;
-                    oView.addDependent(this.oDialogEdit);
-                    this.oDialogEdit.bindElement({
-                        path: '/HAUFW001'
-                    });
-                    this.oDialogEdit.open();
-                    var batchSize = 0,
-                        that = this,
-                        oTable = this.byId("table6");
-
-                    oTable.addStyleClass("firstRow");
-                    function retrieveEntit(sUrl) {
-                        that._oModel.read(sUrl, {
-                            urlParameters: {
-                                "$skiptoken": batchSize
-                            },
-                            success: function (oData, oResponse) {
-                                if (oData && oData.results) {
-                                    that.aDatamart = that.aDatamart.concat(oData.results.map(function (item) {
-                                        return item;
-                                    }));
-                                }
-                                if (oData.__next) {
-                                    batchSize += 100;
-                                    retrieveData(sUrl);
-                                }
-                                else {
-                                    // console.log(that.aDatamart);
-                                }
-                            },
-                            error: function (oError) {
-                                console.error("Error al recuperar datos:", oError);
-                            }
-                        });
-                    }
-                    retrieveEntit("/AUDMART");
-
-                    function getFunktion(sUrl) {
-                        that._oModel.read(sUrl, {
-                            urlParameters: {
-                                "$skiptoken": batchSize,
-                            },
-                            success: function (oData, oResponse) {
-                                if (oData && oData.results) {
-                                    oData.results.forEach(item => {
-                                        if (item.funktion === oEntry.funktion) {
-                                            that.aDefinition = that.aDefinition.concat(item);
-                                        }
-                                    });
-                                }
-                                if (oData.__next) {
-                                    batchSize += 100;
-                                    getFunktion(sUrl);
-                                }
-                                else {
-                                    that.aDefinition.forEach(item => {
-                                        var oColumnListItem = new sap.m.ColumnListItem(),
-                                            oText = new sap.m.Text({ text: item.funktion }),
-                                            oSelect = new sap.m.Select({
-                                                forceSelection: false,
-                                                selectedKey: item.typ
-                                            }),
-                                            oSelect1 = new sap.m.Select({
-                                                selectedKey: item.entit,
-                                                forceSelection: false,
-                                                change: that.editValidation.bind(that)
-                                            }),
-                                            oInput = new sap.m.Input({
-                                                value: item.wert,
-                                                valueLiveUpdate: true,
-                                                valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
-                                                // liveChange: that.editValidation.bind(that)
-                                                liveChange: that.liveChangeInput.bind(that)
-                                            });
-                                        switch (item.typ) {
-                                            case "D":
-                                                oSelect.addItem(new sap.ui.core.Item({ key: "D", text: "D" }));
-                                                var oInput = new sap.m.Input({
-                                                    suggestionItems: {
-                                                        path: "/AUDMART",
-                                                        sorter: { path: 'datamart' },
-                                                        template: new sap.ui.core.ListItem({
-                                                            key: "{datamart}",
-                                                            text: "{datamart}",
-                                                            additionalText: "{Txtlg}"
-                                                        })
-                                                    },
-                                                    placeholder: "Geben Sie nur vorhandene Datamarts ein",
-                                                    showSuggestion: true,
-                                                    value: item.wert,
-                                                    valueLiveUpdate: true,
-                                                    // liveChange: that.editValidation.bind(that),
-                                                    liveChange: that.liveChangeInput.bind(that),
-                                                    valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
-                                                    /* suggestionItemSelected: function (oEvent) {
-                                                        var oSelectedItem = oEvent.getParameter("selectedItem");
-                                                        if (oSelectedItem) {                                                            
-                                                            var sKey = oSelectedItem.getKey();
-                                                            var sText = oSelectedItem.getText();
-                                                            var sAdditionalText = oSelectedItem.getAdditionalText();                                                            
-                                                        }
-                                                    } */
-                                                });
-                                                break;
-                                            case "I":
-                                                oSelect.addItem(new sap.ui.core.Item({ key: "I", text: "I" }));
-                                                break;
-                                            case "S":
-                                                oSelect.addItem(new sap.ui.core.Item({ key: "S", text: "S" }));
-                                                break;
-                                            default:
-
-                                                break;
-                                        }
-                                        that.aEntit.forEach(item1 => {
-                                            if (item1.typ == item.typ) {
-                                                oSelect1.addItem(new sap.ui.core.Item({
-                                                    key: item1.entit,
-                                                    text: item1.entit
-                                                }));
-                                            }
-                                        });
-                                        oColumnListItem.addCell(oText);
-                                        oColumnListItem.addCell(oSelect);
-                                        oColumnListItem.addCell(oSelect1);
-                                        oColumnListItem.addCell(oInput);
-                                        oTable.addItem(oColumnListItem);
-                                    });
-                                }
-                            },
-                            error: function (oError) {
-                                console.error("Error al recuperar datos:", oError);
-                            }
-                        });
-                    }
-                    getFunktion("/HAUFW001");
-                    this.byId("__inputEditFunktion").setText(oEntry.funktion);
-                    /*  this.byId("selecttyp1").setSelectedKey(oEntry.typ);
-                        this.filterTyp1(); 
-                        this.byId("selectentit1").setSelectedKey(oEntry.entit);
-                        this.byId("__editCRUD3").setValue(oEntry.wert); */
-                    this.editValidation();
-
-                }.bind(this));
-
-            } else {
-                sap.m.MessageBox.warning("Es wurde kein Funktion zur Aktualisierung ausgewählt");
-            }
         },
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
@@ -1298,7 +1242,6 @@ sap.ui.define([
                     emphasizedAction: "Nur dieses Element",
                     styleClass: "confirmMessageBox",
                     onClose: function (sAction) {
-                        // sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
                         if (sAction === sap.m.MessageBox.Action.YES) {
                             that.onOpenDeleteDialog();
                         } else if (sAction === "Nur dieses Element") {
@@ -1313,6 +1256,7 @@ sap.ui.define([
                                 error: fnError
                             });
                         } else {
+                            sap.m.MessageToast.show("Aktion abgebrochen");
                             console.log(sAction);
                         }
                     }
@@ -1331,12 +1275,9 @@ sap.ui.define([
                 },
                 oContext = oSelectedItem.getBindingContext(),
                 sFunktion = oContext.getProperty("funktion"),
-                /* sTyp = oContext.getProperty("typ"),
-                sEntit = oContext.getProperty("entit"),
-                sWert = oContext.getProperty("wert"), */
-                sURLFunktion = "/HAUFW001(funktion='" + sFunktion + "')",
+                /* sURLFunktion = "/HAUFW001(funktion='" + sFunktion + "')",
                 sURLPersNumm = "/HAUPF001(funktion='" + sFunktion + "')",
-                sFilterFunktion = "funktion eq" + sFunktion,
+                sFilterFunktion = "funktion eq" + sFunktion, */
                 that = this,
                 batchSize = 0,
                 batchSize1 = 0;
