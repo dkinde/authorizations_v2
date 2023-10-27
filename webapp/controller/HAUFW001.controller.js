@@ -48,6 +48,7 @@ sap.ui.define([
             this.aCreate = [];
             this.aUpdate = [];
             this.aDelete = [];
+            this.aDistinctFunktion = [];
 
             this._oPage = this.byId("dynamicPage1");
 
@@ -358,6 +359,31 @@ sap.ui.define([
 
             } */
         },
+        onInputFunktionLiveChange: function (oEvent) {
+            console.log(oEvent.getSource());
+            var oInput = this.byId("__inputFunktion1"),
+                iInput = this.byId("__inputFunktion1").getValue(),
+                bExistFunktion = false;
+            this.byId("__inputFunktion2").setText(iInput.toString());
+            console.log(iInput);
+
+            this.aDistinctFunktion.forEach(item => {
+                if (item.funktion === iInput) {
+                    bExistFunktion = true;
+                    return;
+                }
+            });
+            if (bExistFunktion) {
+                console.log("funktion exist");
+                oInput.setValueState(sap.ui.core.ValueState.Error);
+                oInput.setValueStateText("Diese Funktion ist bereits vorhanden");
+            } else {
+                oInput.setValueState(sap.ui.core.ValueState.None);
+                oInput.setValueStateText("Geben Sie nicht mehr als 2 Ziffern ein");
+            }
+            console.log(oInput.getValueStateText());
+            this.createValidation();
+        },
         handleSelectionFinish: function (oEvent) {
             var selectedItems = oEvent.getParameter("selectedItems"),
                 aItems = this.byId("comboDatamart").getItems();
@@ -379,14 +405,21 @@ sap.ui.define([
             sap.m.MessageToast.show("Aktion abgebrochen");
             this.byId("dialog1").setBusy(true);
             this.byId("__inputWert").setValue("");
-            this.byId("__inputFunktion1").setText("");
+            this.byId("__inputFunktion1").setValue("");
             this.byId("__inputFunktion2").setText("");
             this.byId("comboDatamart").setSelectedKeys(null);
             this.byId("selecttyp").setSelectedKey(null);
             this.byId("selectentit").setSelectedKey(null);
 
+            this.byId("__inputFunktion1").setEditable(true);
+            this.byId("createButton").setEnabled(false);
+            this.byId("addButton2").setEnabled(false);
+            this.byId("deleteButton2").setEnabled(false);
+
             this.aNewEntryDatamart = [];
             this.aIOBJ_Sondern = [];
+            this.aFunktion = [];
+            this.aDistinctFunktion = [];
 
             var aItems = this.byId("table2").getItems();
             for (let i = 1; i < aItems.length; i++) {
@@ -453,15 +486,26 @@ sap.ui.define([
                             batchSize += 100;
                             getData(sUrl);
                         } else {
-                            that.byId("dialog1").setBusy(false);
                             that.aFunktion.forEach(item => {
                                 if (item.funktion > that.maxFunktion) {
                                     that.maxFunktion = parseInt(item.funktion, 10);
                                 }
                             });
-                            that.maxFunktion += 1;
-                            that.byId("__inputFunktion1").setText(that.maxFunktion.toString());
-                            that.byId("__inputFunktion2").setText(that.byId("__inputFunktion1").getText());
+                            that.aDistinctFunktion = that.aFunktion.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+                            /* var oDistinctModel = new sap.ui.model.json.JSONModel({
+                                distinctItems: aDistinctItems
+                            }); */
+                            // that.getView().byId("multiFunktion").setModel(oDistinctModel);
+                            // that.maxFunktion += 1;
+                            /* that.byId("__inputFunktion1").setValue(that.maxFunktion.toString());
+                            that.byId("__inputFunktion2").setText(that.byId("__inputFunktion1").getValue()); */
+                            that.byId("dialog1").setBusy(false);
+                            that.createValidation();
                             return;
                         }
                     },
@@ -673,51 +717,71 @@ sap.ui.define([
             }
         },
         createValidation: function () {
-            var sInput1 = this.byId("__inputWert").getValue(),
+            var iInput = this.byId("__inputFunktion1").getValue(),
                 aItems = this.getView().byId("table2").getItems(),
                 selectTyp = this.getView().byId("selecttyp").getSelectedKey(),
                 selectEntit = this.getView().byId("selectentit").getSelectedKey(),
-                oInput1 = this.byId("__inputWert");
+                oInput = this.byId("__inputFunktion1"),
+                bExistFunktion = false,
+                lettersOnly = /^[A-Za-z]+$/;
 
-            // validation single inputs	            
-            if (sInput1.length > 0 && sInput1.length < 61) {
-                oInput1.setValueState(sap.ui.core.ValueState.None);
+            this.byId("__inputFunktion2").setText(iInput.toString());
+            this.aDistinctFunktion.forEach(item => {
+                if (item.funktion === iInput) {
+                    bExistFunktion = true;
+                    return;
+                }
+            });
+
+            if (iInput.length > 0 && iInput.length < 3) {
+                if (bExistFunktion) {
+                    oInput.setValueState(sap.ui.core.ValueState.Error);
+                    oInput.setValueStateText("Diese Funktion ist bereits vorhanden");
+                } else {
+                    oInput.setValueState(sap.ui.core.ValueState.Success);
+                    oInput.setValueStateText("Diese Funktion existiert nicht");
+                }
             } else {
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
+                oInput.setValueState(sap.ui.core.ValueState.Error);
+                oInput.setValueStateText("Geben Sie nicht mehr als 2 Ziffern ein");
+            }
+            // validation single inputs	            
+            if (lettersOnly.test(this.byId("__inputWert").getValue())) {
+                this.byId("__inputWert").setValue(this.byId("__inputWert").getValue().toUpperCase());
+            }
+            if (iInput == '') {
+                oInput.setValueState(sap.ui.core.ValueState.None);
             }
 
-            if (sInput1 == '') {
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            }
-
-            if (this.aNewEntryDatamart != '')
+            if (this.aNewEntryDatamart != '' && oInput.getValueStateText() === "Diese Funktion existiert nicht")
                 this.byId("addButton2").setEnabled(true);
             else
                 this.byId("addButton2").setEnabled(false);
 
-            if (aItems.length > 1)
+            if (aItems.length > 1) {
+                oInput.setEditable(false);
                 this.byId("deleteButton2").setEnabled(true);
-            else
+            }
+            else {
+                oInput.setEditable(true);
                 this.byId("deleteButton2").setEnabled(false);
-
+            }
 
             // validation all inputs - create button
             if (this.aNewEntryDatamart != '' && aItems.length > 1 &&
-                selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
+                selectTyp && selectEntit && oInput.getValueStateText() === "Diese Funktion existiert nicht") {
                 this.byId("createButton").setEnabled(true);
             } else {
                 this.byId("createButton").setEnabled(false);
             }
         },
         editValidation: function () {
-            var sInput1 = this.byId("__editCRUD3").getValue().toUpperCase(),
-                selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
+            var selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
                 selectEntit = this.getView().byId("selectentit1").getSelectedKey(),
-                oInput1 = this.byId("__editCRUD3"),
                 lettersOnly = /^[A-Za-z]+$/;
 
-            if (lettersOnly.test(sInput1)) {
-                oInput1.setValue(sInput1);
+            if (lettersOnly.test(this.byId("__editCRUD3").getValue())) {
+                this.byId("__editCRUD3").setValue(this.byId("__editCRUD3").getValue().toUpperCase());
             }
 
             if (selectTyp) {
@@ -739,17 +803,8 @@ sap.ui.define([
                 }
             }
 
-            // validation input
-            if (sInput1.length > 0 && sInput1.length < 61)
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            else
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-
-            if (sInput1 == '')
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-
             // validation all inputs - edit & add button
-            if (selectTyp && selectEntit && sInput1.length > 0 && sInput1.length < 61) {
+            if (selectTyp && selectEntit) {
                 // this.byId("editButton").setEnabled(true);
                 this.byId("addButton3").setEnabled(true);
             } else {
@@ -811,9 +866,7 @@ sap.ui.define([
             try {
                 var oTable = this.byId("table6"),
                     aItems = oTable.getItems(),
-                    bDatamart = false
-                    // ,foundDuplicate = false
-                    ;
+                    bDatamart = false;
 
                 if (this.byId("selecttyp1").getSelectedKey() == null ||
                     this.byId("selectentit1").getSelectedKey() == null ||
@@ -833,9 +886,7 @@ sap.ui.define([
                         this.byId("selectentit1").getSelectedItem().getText() === aItems[i].getCells()[2].getSelectedKey() &&
                         this.byId("__editCRUD3").getValue() === aItems[i].getCells()[3].getValue()
                     ) {
-                        // foundDuplicate = true;
                         throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
-                        break;
                     }
                 }
 
@@ -1037,7 +1088,7 @@ sap.ui.define([
                 }.bind(this);
 
             try {
-                oNewEntryDatamart.funktion = this.getView().byId("__inputFunktion1").getText();
+                oNewEntryDatamart.funktion = this.getView().byId("__inputFunktion1").getValue();
                 oNewEntryDatamart.typ = this.getView().byId("__inputTyp1").getText();
                 oNewEntryDatamart.entit = this.getView().byId("__inputEntit1").getText();
 
@@ -1087,8 +1138,13 @@ sap.ui.define([
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
 
-            this.byId("__inputFunktion1").setText("");
+            this.byId("__inputFunktion1").setValue("");
+            this.byId("__inputFunktion1").setEditable(true);
+            this.byId("__inputFunktion1").setValueState(sap.ui.core.ValueState.None);
             this.byId("comboDatamart").setSelectedKeys(null);
+            this.byId("createButton").setEnabled(false);
+            this.byId("addButton2").setEnabled(false);
+            this.byId("deleteButton2").setEnabled(false);
 
             this.byId("__inputFunktion2").setText("");
             this.byId("selecttyp").setSelectedKey(null);
@@ -1107,7 +1163,10 @@ sap.ui.define([
         onUpdateEditPress: function () {
             var bEinDatamart = false,
                 bExistDatamrt = true,
+                bEmptyField = false,
                 that = this,
+                iTotal = this.aDefinition.length,
+                iTotalSuccess = 0,
                 iItems = this.byId("table6").getItems(),
                 fnSuccess = function () {
                     sap.m.MessageToast.show("Funktion erfolgreich aktualisiert");
@@ -1139,22 +1198,27 @@ sap.ui.define([
                             oInput.setValueState(sap.ui.core.ValueState.Error);
                         }
                     }
+                    if (iItems[i].getCells()[3].getValue() === "") {
+                        iItems[i].getCells()[3].setValueState(sap.ui.core.ValueState.Error);
+                        iItems[i].getCells()[3].setValueStateText("Dieses Feld ist leer");
+                        bEmptyField = true;
+                    }
                 }
+                if (bEmptyField)
+                    throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition");
+
                 if (!bExistDatamrt)
                     throw new sap.ui.base.Exception("FalscheDatamartException", "Falsche Definition");
 
                 if (!bEinDatamart)
                     throw new sap.ui.base.Exception("NoDatamartException", "Falsche Definition");
 
-                var iTotal = this.aDefinition.length,
-                    iTotalSuccess = 0;
                 this.aDefinition.forEach(item => {
                     var sURL = "/HAUFW001(funktion='" + item.funktion + "',typ='" + item.typ + "',entit='" + item.entit + "',wert='" + item.wert + "')";
                     this._oModel.remove(sURL, {
                         success: function () {
                             iTotalSuccess++;
                             if (iTotalSuccess === iTotal) {
-                                console.log(iItems.length);
                                 var aCreateUpd = [];
                                 for (let i = 1; i < iItems.length; i++) {
                                     var aRow = [iItems[i].getCells()[0].getText(),
@@ -1174,8 +1238,22 @@ sap.ui.define([
                                         error: fnError
                                     });
                                 });
-                                that.oDialogEdit.close();
+
+                                that.byId("__inputEditFunktion").setText("");
+                                that.byId("__editCRUD3").setValue("");
+                                that.byId("selecttyp1").setSelectedKey(null);
+                                that.byId("selectentit1").setSelectedKey(null);
                                 that.aDefinition = [];
+                                that.aCreate = [];
+                                that.aUpdate = [];
+                                that.aDelete = [];
+
+                                var oTable = that.getView().byId("table6"),
+                                    aItems = oTable.getItems();
+                                for (var i = aItems.length - 1; i > 0; i--) {
+                                    oTable.removeItem(aItems[i]);
+                                }
+                                that.oDialogEdit.close();
                                 that.byId("table1").getBinding("items").refresh();
                             }
                         },
@@ -1183,12 +1261,15 @@ sap.ui.define([
                     });
                 });
             } catch (error) {
-                if (error instanceof TypeError) {
-                    console.log(error);
+                if (error instanceof TypeError)
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
-                }
+
+                if (error.message == "EmptyFieldException")
+                    sap.m.MessageBox.warning("Diese Funktion kann nicht aktualisiert werden, da ein leeres Feld vorhanden ist");
+
                 if (error.message == "NoDatamartException")
                     sap.m.MessageBox.warning("Die Funktion, die Sie erstellen möchten, hat keinen Datamart (D)-Typ, der mit ihr verbunden ist");
+
                 if (error.message == "FalscheDatamartException")
                     sap.m.MessageBox.warning("Einer der Datamarts, die Sie hinzufügen möchten, existiert nicht");
             }

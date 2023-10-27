@@ -14,6 +14,8 @@
 						<!-- <Text  id="__inputFunktion1"  /> -->
 						<Input  id="__inputFunktion1" 
 								liveChange="createValidation" 
+								type="Number"
+								maxLength="2"
 								valueLiveUpdate="true" 
 								valueStateText="Geben Sie nicht mehr als 2 Ziffern ein"/>
 						<Label 	text="{i18n>colAUENTTYP}"  id="text10" required="true"/>
@@ -90,7 +92,7 @@
 										<Input  id="__inputWert" 
 												liveChange="createValidation" 
 												valueLiveUpdate="true" 
-												valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>										                                                                                                                                   
+												maxLength="60"/>										                                                                                                                                   
 									</cells>                                        
 								</ColumnListItem>
 							</items>                                

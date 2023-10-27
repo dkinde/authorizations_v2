@@ -57,11 +57,10 @@
 										</Select>												
 										<Input  id="__editCRUD3" 
 												liveChange="editValidation" 												
-												autocomplete="false"
-												suggest=".onSuggest"
+												autocomplete="false"												
 												suggestionItems="{/AUDMART}"
-												valueLiveUpdate="true" 
-												valueStateText="Geben Sie nicht mehr als 60 Zeichen ein">										                                                                                                                                   
+												maxLength="60"
+												valueLiveUpdate="true">										                                                                                                                                   
 											<suggestionItems>
 												<core:ListItem key="{datamart}" text="{datamart}" additionalText="{Txtlg}" />
 											</suggestionItems>	
