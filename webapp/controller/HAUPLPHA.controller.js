@@ -50,10 +50,6 @@ sap.ui.define([
                         "$skiptoken": batchSize
                     },
                     success: function (oData, oResponse) {
-                        console.log(oData);
-                        console.log(oResponse);
-                        console.log(oData.__next);
-
                         if (oData && oData.results) {
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
@@ -286,8 +282,10 @@ sap.ui.define([
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
-            this.getView().byId("selectpersonalnummer").setSelectedKey(null);
-            this.getView().byId("selectphase").setSelectedKey(null);
+            this.byId("selectpersonalnummer1").setSelectedKey(null);
+            this.byId("selectphase1").setSelectedKey(null);
+            this.byId("selectpersonalnummer2").setSelectedKey(null);
+            this.byId("selectphase2").setSelectedKey(null);
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -310,7 +308,10 @@ sap.ui.define([
                 var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                     distinctItems1: this.aPhase
                 });
-                this.byId("selectphase").setModel(oDistinctModel1);
+                this.byId("selectphase1").setModel(oDistinctModel1);
+                this.byId("selectphase1").setSelectedKey(null);
+                this.byId("selectphase2").setModel(oDistinctModel1);
+                this.byId("selectphase2").setSelectedKey(null);
             }.bind(this));
         },
         onCreatePress: function () {
@@ -318,14 +319,14 @@ sap.ui.define([
                 aItems = this.byId("table1").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
-                    var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
+                    /*var oList = this.byId("table1");
+                     oList.getItems().some(function (oItem) {
                         if (oItem.getBindingContext() === oContext) {
                             oItem.focus();
                             oItem.setSelected(true);
                             return true;
                         }
-                    });
+                    }); */
                 }.bind(this),
                 fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
@@ -346,21 +347,15 @@ sap.ui.define([
                         throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
                     }
                 }
-                var oContext = this.byId("table1").getBinding("items").create({
-                    personalnummer: oNewEntry.personalnummer,
-                    pla_pha: oNewEntry.pla_pha
+                this._oModel.create("/HAUPLPHA", oNewEntry, {
+                    success: fnSucces,
+                    error: fnError
                 });
-                oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                    if (!oError.canceled) {
-                        throw oError;
-                    }
-                });
-                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
                 if (error instanceof TypeError)
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
-                if (error.message == "DuplicatedKey")
+                if (error.message === "DuplicatedKey")
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
 
@@ -524,10 +519,13 @@ sap.ui.define([
 
             if (oSelectedItem) {
                 var oContext = oSelectedItem.getBindingContext(),
-                    sPersNummer = oContext.getProperty("personalnummer");
-
-                oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
-
+                    sPersNummer = oContext.getProperty("personalnummer"),
+                    sPhase = oContext.getProperty("pla_pha"),
+                    sURL = "/HAUPLPHA(personalnummer='" + sPersNummer + "',pla_pha='" + sPhase + "')";
+                this._oModel.remove(sURL, {
+                    success: fnSuccess,
+                    error: fnError
+                });
             } else {
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
             }

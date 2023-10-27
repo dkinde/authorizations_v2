@@ -1,38 +1,99 @@
 <core:FragmentDefinition xmlns="sap.m" 
-                         xmlns:core="sap.ui.core"                          
-                         xmlns:html="http://www.w3.org/1999/xhtml"                          
+                         xmlns:core="sap.ui.core"                        
 						 xmlns:form="sap.ui.layout.form" 
-                         width="100%">
-    <Dialog title="{i18n>inputFieldDialogTitle}" id="dialog1">
+						 xmlns:l="sap.ui.layout"
+						 >
+                         <!-- width="100%" -->
+    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="450px" contentHeight="300px">
 		<content>
-			<form:SimpleForm				
-				editable="true">
-				<form:content>
-					<Label text="{i18n>colPIPEPERID}" required="true"/>                    
-					<Select id="selectpersonalnummer"
-                        	forceSelection="false"							
-							change="createValidation"
-                            items="{
-                                path: '/PIPEPERID',
-                                sorter: { 
-                                    path: 'personalnummer' 
-                                }
-                            }">
-                        <core:Item  key="{personalnummer}" 
-						            text="{personalnummer}" />
-                    </Select>
-                    <Label text="{i18n>colCOPLAPHA}" required="true"/>
-					<Select id="selectphase"					
-							change="createValidation"
-                        	forceSelection="false"
-                            items="{
-                                path: '/distinctItems1'                                
-                            }">
-                        <core:Item  key="{pla_pha}" 
-						            text="{pla_pha}" />
-                    </Select>                    
-				</form:content>							
-			</form:SimpleForm>			
+				<MessageStrip
+								text="Es kann nur eine Form der Zuordnung gewählt werden"
+								type="Information"
+								showIcon="true"
+								class="sapUiMediumMarginBottom">
+				</MessageStrip>
+				<!-- defaultIndent="XL2 L2 M2 S2" -->
+			<l:Grid	containerQuery="false"
+					defaultSpan="L6 M6 S12"
+					class="sapUiSmallMarginTop"
+					hSpacing="0.5"
+					position="Center"
+					vSpacing="1"
+					width="100%">
+				<l:content>			
+					<form:SimpleForm	id="formPhasePers"	
+										editable="true" 
+										width="160px" 
+										backgroundDesign="Transparent"
+										layout="ResponsiveGridLayout"
+										labelSpanL="4"
+										labelSpanM="4"
+										labelSpanS="12">
+						<form:content>
+							<Button text="Personalnummer zuordnen" press=".onSelectForm1" type="Emphasized"
+									style="width: 200px; white-space: normal;" />
+							<Label text="{i18n>colPIPEPERID}" required="true"/>                    
+							<Select id="selectpersonalnummer1"
+									forceSelection="false"							
+									change="createValidation"
+									items="{
+										path: '/PIPEPERID',
+										sorter: { 
+											path: 'personalnummer' 
+										}
+									}">
+								<core:Item  key="{personalnummer}" 
+											text="{personalnummer}" />
+							</Select>
+							<Label text="{i18n>colCOPLAPHA}" required="true"/>
+							<Select id="selectphase1"					
+									change="createValidation"
+									forceSelection="false"
+									items="{
+										path: '/distinctItems1'                                
+									}">
+								<core:Item  key="{pla_pha}" 
+											text="{pla_pha}" />
+							</Select>                    
+						</form:content>							
+					</form:SimpleForm>	
+					<form:SimpleForm	id="formPersPhase" 
+										editable="true"	
+										backgroundDesign="Solid"
+										layout="ResponsiveGridLayout"
+										labelSpanL="4"
+										labelSpanM="4"
+										labelSpanS="12"
+										width="160px">
+						<form:content>
+							<Button text="Phase zuordnen" press=".onSelectForm2" type="Emphasized" />
+							<Label text="{i18n>colPIPEPERID}" required="true"/>                    
+							<Select id="selectpersonalnummer2"
+									forceSelection="false"							
+									change="createValidation"
+									items="{
+										path: '/PIPEPERID',
+										sorter: { 
+											path: 'personalnummer' 
+										}
+									}">
+								<core:Item  key="{personalnummer}" 
+											text="{personalnummer}" />
+							</Select>
+							<Label text="{i18n>colCOPLAPHA}" required="true"/>
+							<Select id="selectphase2"					
+									change="createValidation"
+									forceSelection="false"
+									items="{
+										path: '/distinctItems1'                                
+									}">
+								<core:Item  key="{pla_pha}" 
+											text="{pla_pha}" />
+							</Select>                    
+						</form:content>							
+					</form:SimpleForm>						
+				</l:content>
+			</l:Grid>		      		
 		</content>
 		<beginButton>
 			<Button id="createButton" 

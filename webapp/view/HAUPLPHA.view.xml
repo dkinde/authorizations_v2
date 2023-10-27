@@ -80,12 +80,12 @@
                         <Toolbar>
                             <content>                            
                                 <Button icon="sap-icon://add" 
-                                        text="{i18n>tableToolbarButtonAdd}" 
+                                        text="Neue Zuordnung" 
                                         press="onOpenDialog"
                                         type="Accept"/>                                                                           
                                 <Button icon="sap-icon://delete" 
                                         type="Reject" 
-                                        text="{i18n>tableToolbarButtonDelete}" 
+                                        text="Die Zuordnung aufheben" 
                                         press="onDeletePress"/>
                                 <ToolbarSpacer/> 
                                 <SearchField    id="searchField"

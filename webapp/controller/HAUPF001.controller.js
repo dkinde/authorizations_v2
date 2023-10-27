@@ -333,9 +333,9 @@ sap.ui.define([
                 aItems = this.byId("table1").getItems(),
                 fnSucces = function (oData) {
                     sap.m.MessageToast.show("Personalnummer erfolgreich erstellt");
-                    var oList = this.byId("table1");                    
+                    var oList = this.byId("table1");
                     oList.setSelectedItem(oData);
-                    oList.focus(oData);                    
+                    oList.focus(oData);
                     /* oList.getItems().some(function (oItem) {
                         if (oItem.getBindingContext() === oContext) {
                             oItem.focus();
@@ -344,7 +344,7 @@ sap.ui.define([
                         }
                     }); */
                 }.bind(this),
-                fnError = function (oError) {                    
+                fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
@@ -368,17 +368,6 @@ sap.ui.define([
                     success: fnSucces,
                     error: fnError
                 });
-
-                /* var oContext = this.byId("table1").getBinding("items").create({ 
-                    personalnummer: oNewEntry.personalnummer,
-                    funktion: oNewEntry.funktion
-                });
-                oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                    if (!oError.canceled) {
-                        throw oError;
-                    }
-                }); */
-                // this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
                 if (error instanceof TypeError) {
@@ -557,9 +546,7 @@ sap.ui.define([
                 this._oModel.remove(sURL, {
                     success: fnSuccess,
                     error: fnError
-
                 });
-                //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
             } else {
                 sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
             }
