@@ -4,7 +4,7 @@
 						 xmlns:l="sap.ui.layout"
 						 >
                          <!-- width="100%" -->
-    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="450px" contentHeight="300px">
+    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="550px" contentHeight="700px" busy="false">
 		<content>
 				<MessageStrip
 								text="Es kann nur eine Form der Zuordnung gewählt werden"
@@ -16,7 +16,7 @@
 			<l:Grid	containerQuery="false"
 					defaultSpan="L6 M6 S12"
 					class="sapUiSmallMarginTop"
-					hSpacing="0.5"
+					hSpacing="1"
 					position="Center"
 					vSpacing="1"
 					width="100%">
@@ -32,8 +32,22 @@
 						<form:content>
 							<Button text="Personalnummer zuordnen" press=".onSelectForm1" type="Emphasized"
 									style="width: 200px; white-space: normal;" />
-							<Label text="{i18n>colPIPEPERID}" required="true"/>                    
-							<Select id="selectpersonalnummer1"
+							<Label text="{i18n>colPIPEPERID}" required="true"/>    
+							<Button	text="Personalnummer auswählen"
+									press=".onValueHelpRequest"
+									class="sapUiSmallMarginBottom"
+									ariaHasPopup="Dialog" />
+							<!-- <Input	id="persInput"
+									type="Number"
+									value=""
+									placeholder="Geben Sie Personalnummer..."
+									showValueHelp="true"
+									valueHelpOnly="true"
+									valueHelpRequest=".onValueHelpRequest"
+									class="sapUiSmallMarginBottom"
+									width="15rem" /> -->
+
+							<!-- <Select id="selectpersonalnummer1"
 									forceSelection="false"							
 									change="createValidation"
 									items="{
@@ -41,12 +55,23 @@
 										sorter: { 
 											path: 'personalnummer' 
 										}
-									}">
+									}">									
 								<core:Item  key="{personalnummer}" 
 											text="{personalnummer}" />
-							</Select>
+							</Select> -->
 							<Label text="{i18n>colCOPLAPHA}" required="true"/>
-							<Select id="selectphase1"					
+							<MultiComboBox id="selectphase1"
+								showSecondaryValues= "true"
+								showSelectAll="true"
+								selectionChange="createValidation"
+								selectionFinish="handleSelectionFinish"							
+								width="500px"
+								items="{
+									path: '/distinctItems1'
+								}">
+								<core:ListItem key="{pla_pha}" text="{pla_pha}" additionalText="{Txtmd}"/>
+							</MultiComboBox>
+							<!-- <Select id="selectphase1"					
 									change="createValidation"
 									forceSelection="false"
 									items="{
@@ -54,7 +79,7 @@
 									}">
 								<core:Item  key="{pla_pha}" 
 											text="{pla_pha}" />
-							</Select>                    
+							</Select>   -->                  
 						</form:content>							
 					</form:SimpleForm>	
 					<form:SimpleForm	id="formPersPhase" 
@@ -67,8 +92,51 @@
 										width="160px">
 						<form:content>
 							<Button text="Phase zuordnen" press=".onSelectForm2" type="Emphasized" />
-							<Label text="{i18n>colPIPEPERID}" required="true"/>                    
-							<Select id="selectpersonalnummer2"
+							<Label text="{i18n>colCOPLAPHA}" required="true"/>
+							<Select id="selectphase2"					
+									change="createValidation"
+									forceSelection="false"
+									items="{
+										path: '/distinctItems1'                                
+									}">
+								<core:Item  key="{pla_pha}" 
+											text="{pla_pha}" />
+							</Select> 
+							<Label text="{i18n>colPIPEPERID}" required="true"/>		
+							<Button	text="Personalnummer auswählen"
+									press=".onValueHelpRequest"
+									class="sapUiSmallMarginBottom"
+									ariaHasPopup="Dialog" />
+							<!-- <List id="selectpersonalnummer2" 
+									mode="MultiSelect" 
+									multiSelectMode="SelectAll"
+									growingThreshold="3"
+									growing="true"
+									growingScrollToLoad="true"
+									items="{
+										path: '/distinctItems'                                
+									}"
+									selectionChange=".onSelectionChange1">
+									<items>
+										<StandardListItem title="{personalnummer}" description="{Txtmd}" />
+									</items>
+								</List> -->					
+							<!-- <MultiComboBox id="selectpersonalnummer2"
+								showSecondaryValues= "true"
+								showSelectAll="true"
+								selectionChange="createValidation"
+								selectionFinish="handleSelectionFinish"							
+								width="500px"
+								items="{
+										path: '/PIPEPERID',
+										sorter: { 
+											path: 'personalnummer' 
+										}
+									}">									
+								<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtmd}"/>
+							</MultiComboBox> -->
+
+							<!-- <Select id="selectpersonalnummer2"
 									forceSelection="false"							
 									change="createValidation"
 									items="{
@@ -79,17 +147,7 @@
 									}">
 								<core:Item  key="{personalnummer}" 
 											text="{personalnummer}" />
-							</Select>
-							<Label text="{i18n>colCOPLAPHA}" required="true"/>
-							<Select id="selectphase2"					
-									change="createValidation"
-									forceSelection="false"
-									items="{
-										path: '/distinctItems1'                                
-									}">
-								<core:Item  key="{pla_pha}" 
-											text="{pla_pha}" />
-							</Select>                    
+							</Select> -->
 						</form:content>							
 					</form:SimpleForm>						
 				</l:content>

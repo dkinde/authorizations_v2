@@ -1,0 +1,35 @@
+<core:FragmentDefinition xmlns="sap.m" 
+                         xmlns:core="sap.ui.core"    						 						 				 
+                         width="100%">	
+		<!-- <VBox > -->
+		<SelectDialog	id="selectDialogPersonal"
+						noDataText="Keinen Personalnummer gefunden"
+						title="Personalnummer auswählen"
+						search=".onSearchPersonal"
+						searchPlaceholder="Personalnummer suchen"
+						confirm=".onValueHelpDialogClose"
+						cancel=".onValueHelpDialogClose"
+						contentWidth="300px"
+						rememberSelections="true"
+						growingThreshold="10"
+						selectionChange=".onSelectionChange1"
+						multiSelect="true"
+						showClearButton="true"												
+						items="{
+							path: '/PIPEPERID',
+							sorter: {
+								path: 'personalnummer',
+								descending: false
+							}
+						}">
+			<StandardListItem							
+							title="{personalnummer}"
+							description="{Txtmd}"							
+							iconDensityAware="false"
+							iconInset="false"
+							type="Active" />
+		</SelectDialog>	
+
+		<!-- <Text id="selectedItemsText" />			
+		</VBox> -->				
+</core:FragmentDefinition>

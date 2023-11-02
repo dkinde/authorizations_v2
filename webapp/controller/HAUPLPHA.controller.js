@@ -38,7 +38,10 @@ sap.ui.define([
 
             this.aValue = [];
             this.aPhase = [];
+            this.aPers = [];
             this._oPage = this.byId("dynamicPage1");
+            this.aPreviousSelection = [];
+            this.selectedItems = [];
 
             var that = this,
                 batchSize = 0,
@@ -279,12 +282,115 @@ sap.ui.define([
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
         },
+        onValueHelpRequest: function () {
+            var oView = this.getView();
+
+            if (!this._pValueHelpDialog) {
+                this._pValueHelpDialog = sap.ui.core.Fragment.load({
+                    id: oView.getId(),
+                    name: "auth.fragment.ValueHelpDialog",
+                    controller: this
+                }).then(function (oValueHelpDialog) {
+                    oView.addDependent(oValueHelpDialog);
+                    return oValueHelpDialog;
+                });
+            }
+            this._pValueHelpDialog.then(function (oValueHelpDialog) {
+                this._configValueHelpDialog();
+                oValueHelpDialog.open();
+            }.bind(this));
+        },
+        _configValueHelpDialog: function () {
+            var aData = this._oModel.getProperty("/PIPEPERID");
+            var oModel = this.getView().getModel();
+            /* if (aData)
+                this.aPreviousSelection.forEach(function (oSelection) {
+                    var sPersonalnummer = oSelection.personalnummer,
+                        oItem = aData.find(function (oDataItem) {
+                            return oDataItem.personalnummer === sPersonalnummer;
+                        });
+
+                    if (oItem) {
+                        oSelectDialog.setSelectedItem(oItem);
+                    }
+                }); */
+            /* var sInputValue = this.byId("productInput").getValue(),
+                oModel = this.getView().getModel(),
+                aProducts = oModel.getProperty("/ProductCollection");
+
+            aProducts.forEach(function (oProduct) {
+                oProduct.selected = (oProduct.Name === sInputValue);
+            });
+            oModel.setProperty("/ProductCollection", aProducts); */
+        },
+        onClearAllSelection: function (oEvent) {
+            var oSelectDialog = oEvent.getSource();
+
+            // Reinicia o limpia tu arreglo de selección aquí
+            this.selectedItems = [];
+
+            // Actualiza o realiza cualquier otra lógica necesaria
+            // después de limpiar la selección
+        },
+        onSelectionChange1: function (oEvent) {
+            var oSelectDialog = oEvent.getSource(),
+                aListItems = oEvent.getParameter("listItems"),
+                // oText = this.byId("selectedItemsText"),
+                that = this;
+
+            if (aListItems && aListItems.length) {
+                aListItems.forEach(function (oItem) {
+                    var sPersonalnummer = oItem.getTitle(),
+                        index = that.selectedItems.indexOf(sPersonalnummer);
+                    if (index !== -1)
+                        that.selectedItems.splice(index, 1);
+                    else
+                        that.selectedItems.push(sPersonalnummer);
+                });
+                // selectedValues += sPersonalnummer + ", ";
+                // selectedValues = selectedValues.slice(0, -2); // Eliminar la última coma y el espacio
+            }
+            // oText.setText(selectedValues);
+            var selectedValues = "Personalnummer ausgewählt: " + this.selectedItems.join(", ");
+            sap.m.MessageToast.show(selectedValues);
+        },
+        onValueHelpDialogClose: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem"),
+                aContexts = oEvent.getParameter("selectedContexts"),
+                that = this;
+
+            if (aContexts && aContexts.length) {
+                sap.m.MessageToast.show("You have chosen " + aContexts.map(function (oContext) { return oContext.getObject().Name; }).join(", "));
+
+                aContexts.forEach(function (oContext) {
+                    var oSelectedObject = oContext.getObject();
+                    console.log(oSelectedObject);
+                    /* that.aPreviousSelection.push({
+                        personalnummer: oSelectedObject.personalnummer,
+                        Txtmd: oSelectedObject.Txtmd
+                    }); */
+                });
+            } else {
+                sap.m.MessageToast.show("No new item was selected.");
+            }
+            oEvent.getSource().getBinding("items").filter([]);
+        },
+        onSearchPersonal: function (oEvent) {
+            var sValue = oEvent.getParameter("value"),
+                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
+                oBinding = oEvent.getParameter("itemsBinding"),
+                bClear = oEvent.getParameter("clearButtonPressed");
+            console.log(bClear);
+
+            oBinding.filter([oFilter]);
+        },
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
-            this.byId("selectpersonalnummer1").setSelectedKey(null);
-            this.byId("selectphase1").setSelectedKey(null);
-            this.byId("selectpersonalnummer2").setSelectedKey(null);
+
+            // this.byId("selectpersonalnummer1").setSelectedKey(null);
+            // this.byId("selectphase1").setSelectedKey(null);
+            // this.byId("selectpersonalnummer2").setSelectedKey(null);
             this.byId("selectphase2").setSelectedKey(null);
             this.oDialog.close();
         },
@@ -307,12 +413,63 @@ sap.ui.define([
                 this.oDialog.open();
                 var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                     distinctItems1: this.aPhase
-                });
+                }),
+                    that = this,
+                    batchSize = 0;
+
+                /* function retrieveData(sUrl) {
+                    that._oModel.read(sUrl, {
+                        urlParameters: {
+                            "$skiptoken": batchSize
+                        },
+                        success: function (oData, oResponse) {
+                            if (oData && oData.results) {
+                                that.aPers = that.aPers.concat(oData.results.map(function (item) {
+                                    return item;
+                                }));
+                            }
+                            if (oData.__next) {
+                                batchSize += 100;
+                                retrieveData(sUrl);
+                            } else {
+                                var aDistinctItems = that.aPers.reduce(function (aUnique, oItem) {
+                                    if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
+                                        aUnique.push(oItem);
+                                    }
+                                    return aUnique;
+                                }, []);
+
+                                var oDistinctModel = new sap.ui.model.json.JSONModel({
+                                    distinctItems: aDistinctItems
+                                });
+                                // that.aPhase = aDistinctItems1;
+                                console.log(aDistinctItems.length);
+
+                                // that.getView().byId("selectpersonalnummer1").setModel(oDistinctModel);
+                                // that.getView().byId("selectpersonalnummer2").setModel(oDistinctModel);
+
+                                // that._oPage.setBusy(false);
+                                that.byId("dialog1").setBusy(false);
+                                batchSize = 0;
+                                return;
+                            }
+                        },
+                        error: function (oError) {
+                            console.error("Error al recuperar datos:", oError);
+                            that.byId("dialog1").setBusy(false);
+                        }
+                    });
+                }
+                retrieveData("/PIPEPERID"); */
+
                 this.byId("selectphase1").setModel(oDistinctModel1);
-                this.byId("selectphase1").setSelectedKey(null);
+                // this.byId("selectphase1").setSelectedKey(null);
                 this.byId("selectphase2").setModel(oDistinctModel1);
                 this.byId("selectphase2").setSelectedKey(null);
             }.bind(this));
+
+
+
         },
         onCreatePress: function () {
             var oNewEntry = {},
@@ -364,7 +521,7 @@ sap.ui.define([
             this.byId("dialog1").close();
         },
         createValidation: function () {
-            var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
+            /* var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
                 sPhase = this.getView().byId("selectphase").getSelectedKey();
 
             // validation create button
@@ -372,7 +529,7 @@ sap.ui.define([
                 this.byId("createButton").setVisible(true);
             } else {
                 this.byId("createButton").setVisible(false);
-            }
+            } */
         },
         editValidation: function () {
             var iInput1 = this.byId("__editCRUD0").getValue(),

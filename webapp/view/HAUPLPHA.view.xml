@@ -85,7 +85,7 @@
                                         type="Accept"/>                                                                           
                                 <Button icon="sap-icon://delete" 
                                         type="Reject" 
-                                        text="Die Zuordnung aufheben" 
+                                        text="Zuordnung aufheben" 
                                         press="onDeletePress"/>
                                 <ToolbarSpacer/> 
                                 <SearchField    id="searchField"
@@ -121,8 +121,8 @@
                     <items>
                         <ColumnListItem>
                             <cells>                                                                                        
-                                <ObjectIdentifier text="{pla_pha}" />                                                                                       
-                                <ObjectIdentifier title="{personalnummer}" text="{txt}" />
+                                <ObjectIdentifier title="{pla_pha}" text="{txt_pha}"/>                                                                                       
+                                <ObjectIdentifier title="{personalnummer}" text="{txt_pers}" />
                             </cells>                                        
                         </ColumnListItem>
                     </items>
