@@ -95,11 +95,7 @@
                                 <Button id="sortUsersButton"
                                         icon="sap-icon://sort"
                                         tooltip="{i18n>sortButtonText}"
-                                        press="handleSortButtonPressed"/> 
-                                <!-- <Button id="filterButton"
-                                        icon="sap-icon://filter"
-                                        tooltip="{i18n>filterButtonText}"
-                                        press="handleFilterButtonPressed"/> -->
+                                        press="handleSortButtonPressed"/>                                 
                                 <Button id="groupButton"
                                         icon="sap-icon://group-2"
                                         tooltip="{i18n>groupButtonText}"

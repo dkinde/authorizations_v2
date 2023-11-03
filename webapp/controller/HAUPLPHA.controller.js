@@ -11,6 +11,7 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     "sap/m/MessageToast",
     "sap/m/MessageBox",
+    'sap/m/Token',
     "sap/ui/export/Spreadsheet",
     "sap/f/library"
 ], function (Controller,
@@ -25,6 +26,7 @@ sap.ui.define([
     MessageToast,
     MessageBox,
     Spreadsheet,
+    Token,
     fioriLibrary
 ) {
     "use strict";
@@ -40,8 +42,8 @@ sap.ui.define([
             this.aPhase = [];
             this.aPers = [];
             this._oPage = this.byId("dynamicPage1");
-            this.aPreviousSelection = [];
-            this.selectedItems = [];
+            this.aSelectedPersonal = [];
+            this.aSelectedPhase = [];
 
             var that = this,
                 batchSize = 0,
@@ -282,8 +284,21 @@ sap.ui.define([
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
         },
-        onValueHelpRequest: function () {
-            var oView = this.getView();
+        onSelectForm1: function () {
+            this.byId("buttonPers1").setEnabled(true);
+            this.byId("selectphase1").setEnabled(true);
+            this.byId("buttonPers2").setEnabled(false);
+            this.byId("selectphase2").setEnabled(false);
+        },
+        onSelectForm2: function () {
+            this.byId("buttonPers1").setEnabled(false);
+            this.byId("selectphase1").setEnabled(false);
+            this.byId("buttonPers2").setEnabled(true);
+            this.byId("selectphase2").setEnabled(true);
+        },
+        onValueHelpRequest: function (oEvent) {
+            var oView = this.getView(),
+                sInputValue = oEvent.getSource().getValue();
 
             if (!this._pValueHelpDialog) {
                 this._pValueHelpDialog = sap.ui.core.Fragment.load({
@@ -296,109 +311,158 @@ sap.ui.define([
                 });
             }
             this._pValueHelpDialog.then(function (oValueHelpDialog) {
-                this._configValueHelpDialog();
+                // this._configValueHelpDialog();
+                oValueHelpDialog.getBinding("items").filter([new sap.ui.model.Filter(
+                    "personalnummer",
+                    sap.ui.model.FilterOperator.Contains,
+                    sInputValue
+                )]);
                 oValueHelpDialog.open();
             }.bind(this));
         },
-        _configValueHelpDialog: function () {
-            var aData = this._oModel.getProperty("/PIPEPERID");
-            var oModel = this.getView().getModel();
-            /* if (aData)
-                this.aPreviousSelection.forEach(function (oSelection) {
-                    var sPersonalnummer = oSelection.personalnummer,
-                        oItem = aData.find(function (oDataItem) {
-                            return oDataItem.personalnummer === sPersonalnummer;
+        multiInputPersTokenUpdate: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem"),
+                aContexts = oEvent.getParameter("selectedContexts"),
+                oMultiInput = this.byId("multiInputPers"),
+                that = this;           
+
+            switch (oEvent.getParameter("type")) {
+                case "added":
+                    oEvent.getParameter("addedTokens").forEach(oToken => {
+                        that.aSelectedPersonal.push({
+                            personalnummer: oToken.getText(),
+                            Txtmd: ""
                         });
-
-                    if (oItem) {
-                        oSelectDialog.setSelectedItem(oItem);
+                    }, this);
+                    break;
+                case "removed":
+                    oEvent.getParameter("removedTokens").forEach(oToken => {
+                        var indexToRemove = -1,
+                            personalnummerToRemove = oToken.getText();
+                        that.aSelectedPersonal.forEach((entry, index) => {
+                            if (entry.personalnummer === personalnummerToRemove) {
+                                indexToRemove = index;
+                            }
+                        });
+                        if (indexToRemove >= 0) {
+                            that.aSelectedPersonal.splice(indexToRemove, 1);
+                        }
+                    }, this);
+                    break;
+                // this.aSelectedPersonal.splice(oEvent.getParameter("removedTokens").getText());                        
+                case "S":
+                    // oSelect.addItem(new sap.ui.core.Item({ key: "S", text: "S" }));
+                    break;
+                default:
+                    if (aContexts && aContexts.length) {
+                        aContexts.forEach(function (oContext) {
+                            var oSelectedObject = oContext.getObject();
+                            oMultiInput.addToken(new Token({
+                                text: oSelectedObject.personalnummer
+                            }));
+                            that.aSelectedPersonal.push({
+                                personalnummer: oSelectedObject.personalnummer,
+                                Txtmd: oSelectedObject.Txtmd
+                            });
+                        });
+                        var selectedValues = "Ausgewählte Personalnummer: " + aContexts.map(function (oContext) {
+                            var oSelectedObject = oContext.getObject();
+                            return oSelectedObject.personalnummer;
+                        }).join(", ");
+                        sap.m.MessageToast.show(selectedValues);
+                        oEvent.getSource().getBinding("items").filter([]);
                     }
-                }); */
-            /* var sInputValue = this.byId("productInput").getValue(),
-                oModel = this.getView().getModel(),
-                aProducts = oModel.getProperty("/ProductCollection");
+                    break;
+            }
+            console.log(this.aSelectedPersonal);
+            this.createValidation();
 
-            aProducts.forEach(function (oProduct) {
-                oProduct.selected = (oProduct.Name === sInputValue);
-            });
-            oModel.setProperty("/ProductCollection", aProducts); */
-        },
-        onClearAllSelection: function (oEvent) {
-            var oSelectDialog = oEvent.getSource();
+            /* else {
+                this.selectedItems = [];
+                sap.m.MessageToast.show("keine Personennummern ausgewählt");                
+            } */
+            /* oEvent.getParameter("addedTokens")
+            oEvent.getParameter("removedTokens") */
 
-            // Reinicia o limpia tu arreglo de selección aquí
-            this.selectedItems = [];
-
-            // Actualiza o realiza cualquier otra lógica necesaria
-            // después de limpiar la selección
         },
         onSelectionChange1: function (oEvent) {
             var oSelectDialog = oEvent.getSource(),
                 aListItems = oEvent.getParameter("listItems"),
-                // oText = this.byId("selectedItemsText"),
                 that = this;
-
-            if (aListItems && aListItems.length) {
-                aListItems.forEach(function (oItem) {
-                    var sPersonalnummer = oItem.getTitle(),
-                        index = that.selectedItems.indexOf(sPersonalnummer);
-                    if (index !== -1)
-                        that.selectedItems.splice(index, 1);
-                    else
-                        that.selectedItems.push(sPersonalnummer);
-                });
-                // selectedValues += sPersonalnummer + ", ";
-                // selectedValues = selectedValues.slice(0, -2); // Eliminar la última coma y el espacio
-            }
-            // oText.setText(selectedValues);
-            var selectedValues = "Personalnummer ausgewählt: " + this.selectedItems.join(", ");
-            sap.m.MessageToast.show(selectedValues);
         },
         onValueHelpDialogClose: function (oEvent) {
-            var oSelectedItem = oEvent.getParameter("selectedItem"),
+            sap.m.MessageToast.show("Aktion abgebrochen");
+            console.log(this.aSelectedPersonal);
+            oEvent.getSource().getBinding("items").filter([]);
+        },
+        onValueHelpDialogConfirm: function (oEvent) {
+            /* var oSelectedItem = oEvent.getParameter("selectedItem"),
                 aContexts = oEvent.getParameter("selectedContexts"),
+                oMultiInput = this.byId("multiInputPers"),
                 that = this;
 
-            if (aContexts && aContexts.length) {
-                sap.m.MessageToast.show("You have chosen " + aContexts.map(function (oContext) { return oContext.getObject().Name; }).join(", "));
+            this.selectedItems = [];
 
+            console.log(oSelectedItem);
+            if (aContexts && aContexts.length) {
                 aContexts.forEach(function (oContext) {
                     var oSelectedObject = oContext.getObject();
                     console.log(oSelectedObject);
-                    /* that.aPreviousSelection.push({
+                    oMultiInput.addToken(new Token({
+                        text: oSelectedObject.personalnummer
+                    }));
+                    that.selectedItems.push({
                         personalnummer: oSelectedObject.personalnummer,
                         Txtmd: oSelectedObject.Txtmd
-                    }); */
+                    });
                 });
+                var selectedValues = "Ausgewählte Personalnummer: " + aContexts.map(function (oContext) {
+                    var oSelectedObject = oContext.getObject();
+                    return oSelectedObject.personalnummer;
+                }).join(", ");
+                sap.m.MessageToast.show(selectedValues);
             } else {
-                sap.m.MessageToast.show("No new item was selected.");
+                this.selectedItems = [];
+                sap.m.MessageToast.show("keine Personennummern ausgewählt");
             }
-            oEvent.getSource().getBinding("items").filter([]);
+            oEvent.getSource().getBinding("items").filter([]); */
         },
         onSearchPersonal: function (oEvent) {
             var sValue = oEvent.getParameter("value"),
-                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
-                oBinding = oEvent.getParameter("itemsBinding"),
-                bClear = oEvent.getParameter("clearButtonPressed");
-            console.log(bClear);
-
+                oFilter = new sap.ui.model.Filter(
+                    "personalnummer",
+                    sap.ui.model.FilterOperator.Contains,
+                    sValue
+                ),
+                oBinding = oEvent.getParameter("itemsBinding");
             oBinding.filter([oFilter]);
+        },
+        handleSelectionFinish: function (oEvent) {
+            var selectedItems = oEvent.getParameter("selectedItems");
+
+            this.aSelectedPhase = [];
+            for (let i = 0; i < selectedItems.length; i++)
+                this.aSelectedPhase.push({
+                    pla_pha: selectedItems[i].getText()
+                });
+
+            console.log(this.aSelectedPhase);
+            /* if (selectedItems.length === aItems.length)
+                this.bAlleDatamart = true;
+            else
+                this.bAlleDatamart = false; */
+
+            this.createValidation();
         },
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
-
-            // this.byId("selectpersonalnummer1").setSelectedKey(null);
-            // this.byId("selectphase1").setSelectedKey(null);
-            // this.byId("selectpersonalnummer2").setSelectedKey(null);
-            this.byId("selectphase2").setSelectedKey(null);
+            this.byId("selectphase1").setSelectedKeys(null);
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
-            this.getView().byId("__editCRUD0").setValue("");
-            this.getView().byId("__editCRUD1").setValue("");
             this.oDialogEdit.close();
         },
         onOpenDialog: function () {
@@ -413,77 +477,120 @@ sap.ui.define([
                 this.oDialog.open();
                 var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                     distinctItems1: this.aPhase
-                }),
-                    that = this,
-                    batchSize = 0;
-
-                /* function retrieveData(sUrl) {
-                    that._oModel.read(sUrl, {
-                        urlParameters: {
-                            "$skiptoken": batchSize
-                        },
-                        success: function (oData, oResponse) {
-                            if (oData && oData.results) {
-                                that.aPers = that.aPers.concat(oData.results.map(function (item) {
-                                    return item;
-                                }));
-                            }
-                            if (oData.__next) {
-                                batchSize += 100;
-                                retrieveData(sUrl);
-                            } else {
-                                var aDistinctItems = that.aPers.reduce(function (aUnique, oItem) {
-                                    if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
-                                        aUnique.push(oItem);
-                                    }
-                                    return aUnique;
-                                }, []);
-
-                                var oDistinctModel = new sap.ui.model.json.JSONModel({
-                                    distinctItems: aDistinctItems
-                                });
-                                // that.aPhase = aDistinctItems1;
-                                console.log(aDistinctItems.length);
-
-                                // that.getView().byId("selectpersonalnummer1").setModel(oDistinctModel);
-                                // that.getView().byId("selectpersonalnummer2").setModel(oDistinctModel);
-
-                                // that._oPage.setBusy(false);
-                                that.byId("dialog1").setBusy(false);
-                                batchSize = 0;
-                                return;
-                            }
-                        },
-                        error: function (oError) {
-                            console.error("Error al recuperar datos:", oError);
-                            that.byId("dialog1").setBusy(false);
-                        }
-                    });
-                }
-                retrieveData("/PIPEPERID"); */
-
+                });
                 this.byId("selectphase1").setModel(oDistinctModel1);
-                // this.byId("selectphase1").setSelectedKey(null);
-                this.byId("selectphase2").setModel(oDistinctModel1);
-                this.byId("selectphase2").setSelectedKey(null);
             }.bind(this));
 
+        },
+        createValidation: function () {
+            var aItems = this.getView().byId("table2").getItems();
+            if (aItems.length > 1)
+                this.byId("deleteButton2").setEnabled(true);
+            else
+                this.byId("deleteButton2").setEnabled(false);
 
+            if (this.aSelectedPhase != '' &&
+                this.aSelectedPersonal != '')
+                this.byId("addButton2").setEnabled(true);
+            else
+                this.byId("addButton2").setEnabled(false);
 
+            /* var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
+                sPhase = this.getView().byId("selectphase").getSelectedKey();
+
+            // validation create button
+            if (sPersonalNummer && sPhase) {
+                this.byId("createButton").setVisible(true);
+            } else {
+                this.byId("createButton").setVisible(false);
+            } */
+        },
+        onAddPress2: function () {
+            var aTemplate = [],
+                that = this;
+            this.aSelectedPhase.forEach(phase=>{
+                that.aSelectedPersonal.forEach(personal=>{
+                    aTemplate.push({
+                        pla_pha: phase,
+                        personalnummer: personal 
+                    });    
+                });
+            });
+            console.log(aTemplate);
+            try {
+                /* var oTable = this.byId("table2"),
+                    oTemplate = new sap.m.ColumnListItem({
+                        cells: [
+                            new sap.m.Text({ text: this.byId("__inputFunktion2").getText() }),
+                            new sap.m.Text({ text: this.byId("selecttyp").getSelectedItem().getText() })
+                        ]
+                    }); */
+
+                /* if (this.byId("__inputFunktion2").getText() == "" ||
+                    this.byId("selecttyp").getSelectedKey() == null ||
+                    this.byId("selectentit").getSelectedKey() == null ||
+                    this.byId("__inputWert").getValue() == "")
+                    throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition"); */
+
+                /* this.aIOBJ_Sondern.forEach(element => {
+                    if (element[0] == this.byId("__inputFunktion2").getText() &&
+                        element[1] == this.byId("selecttyp").getSelectedItem().getText() &&
+                        element[2] == this.byId("selectentit").getSelectedItem().getText() &&
+                        element[3] == this.byId("__inputWert").getValue()) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
+                    }
+                }); */
+
+                oTable.addItem(oTemplate);
+
+                /* this.aIOBJ_Sondern.push([
+                    this.byId("__inputFunktion2").getText(),
+                    this.byId("selecttyp").getSelectedItem().getText(),
+                    this.byId("selectentit").getSelectedItem().getText(),
+                    this.byId("__inputWert").getValue()
+                ]); */
+
+                sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
+
+                this.createValidation();
+                /* this.byId("selecttyp").setSelectedKey(null);
+                this.byId("selectentit").setSelectedKey(null);
+                this.byId("__inputWert").setValue(""); */
+
+            } catch (error) {
+                if (error.message == "EmptyFieldException")
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("Das Element ist vorhanden");
+                if (error instanceof TypeError)
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+            }
+        },
+        onDeletePress2: function () {
+            var oSelectedItem = this.byId("table2").getSelectedItem(),
+                iIndex = this.byId("table2").indexOfItem(oSelectedItem);
+
+            if (oSelectedItem) {
+                if (iIndex == 0) {
+                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
+                }
+                else {
+                    iIndex -= 1;
+                    // this.aIOBJ_Sondern.splice(iIndex, 1);
+                    oSelectedItem.destroy();
+                    sap.m.MessageToast.show("Zuordnung erfolgreich gelöscht");
+                    this.createValidation();
+                }
+            } else {
+                sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
+            }
+            this.createValidation();
         },
         onCreatePress: function () {
             var oNewEntry = {},
                 aItems = this.byId("table1").getItems(),
                 fnSucces = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
-                    /*var oList = this.byId("table1");
-                     oList.getItems().some(function (oItem) {
-                        if (oItem.getBindingContext() === oContext) {
-                            oItem.focus();
-                            oItem.setSelected(true);
-                            return true;
-                        }
-                    }); */
                 }.bind(this),
                 fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
@@ -519,17 +626,6 @@ sap.ui.define([
             this.getView().byId("selectpersonalnummer").setSelectedKey(null);
             this.getView().byId("selectphase").setSelectedKey(null);
             this.byId("dialog1").close();
-        },
-        createValidation: function () {
-            /* var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
-                sPhase = this.getView().byId("selectphase").getSelectedKey();
-
-            // validation create button
-            if (sPersonalNummer && sPhase) {
-                this.byId("createButton").setVisible(true);
-            } else {
-                this.byId("createButton").setVisible(false);
-            } */
         },
         editValidation: function () {
             var iInput1 = this.byId("__editCRUD0").getValue(),

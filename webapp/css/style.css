@@ -14,3 +14,13 @@
     width: 350px;
     height: 60px;
 }
+
+.myForm {
+    border: 1px solid #000;
+    /* Ajusta el ancho y color del borde según tus preferencias */
+    padding: 5px;
+    /* Añade espacio entre el contenido y el borde */
+    margin: 5px;
+    /* Opcional: añade margen alrededor del formulario */
+    border-radius: 20px;
+}
