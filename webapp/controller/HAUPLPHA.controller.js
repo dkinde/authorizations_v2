@@ -324,7 +324,7 @@ sap.ui.define([
             var oSelectedItem = oEvent.getParameter("selectedItem"),
                 aContexts = oEvent.getParameter("selectedContexts"),
                 oMultiInput = this.byId("multiInputPers"),
-                that = this;           
+                that = this;
 
             switch (oEvent.getParameter("type")) {
                 case "added":
@@ -508,23 +508,23 @@ sap.ui.define([
         onAddPress2: function () {
             var aTemplate = [],
                 that = this;
-            this.aSelectedPhase.forEach(phase=>{
-                that.aSelectedPersonal.forEach(personal=>{
+            this.aSelectedPhase.forEach(phase => {
+                that.aSelectedPersonal.forEach(personal => {
                     aTemplate.push({
                         pla_pha: phase,
-                        personalnummer: personal 
-                    });    
+                        personalnummer: personal
+                    });
                 });
             });
             console.log(aTemplate);
             try {
-                /* var oTable = this.byId("table2"),
+                var oTable = this.byId("table2"),
                     oTemplate = new sap.m.ColumnListItem({
                         cells: [
                             new sap.m.Text({ text: this.byId("__inputFunktion2").getText() }),
                             new sap.m.Text({ text: this.byId("selecttyp").getSelectedItem().getText() })
                         ]
-                    }); */
+                    });
 
                 /* if (this.byId("__inputFunktion2").getText() == "" ||
                     this.byId("selecttyp").getSelectedKey() == null ||
