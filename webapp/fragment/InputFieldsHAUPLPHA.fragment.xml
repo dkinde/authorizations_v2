@@ -55,18 +55,19 @@
 														}">
 											<core:ListItem key="{pla_pha}" text="{pla_pha}" additionalText="{txt_pha}"/>
 										</MultiComboBox>										                                                                                                                                   
-										<MultiInput id="multiInputPers"
-													required="true"
+										<MultiInput id="multiInputPers"													
+													autocomplete="false"
 													type="Number"
-													valueHelpRequest=".onValueHelpRequest"
-													valueLiveUpdate="true"
+													valueHelpRequest=".onValueHelpRequest"													
 													liveChange="createValidation"
 													tokenUpdate="multiInputPersTokenUpdate"
 													placeholder="Personalnummer auswählen"
 													showClearIcon="true"
+													showSuggestion="true"
+													suggest="suggestPersonalnummer"
 													suggestionItems="{
 														path: '/PIPEPERID',
-														sorter: { path: 'personalnummer' }
+														sorter: { path: 'personalnummer' }														
 													}">
 													<core:ListItem key="{personalnummer}" text="{personalnummer}" additionalText="{Txtmd}"/>
 										</MultiInput>

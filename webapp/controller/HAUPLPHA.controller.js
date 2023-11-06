@@ -374,7 +374,7 @@ sap.ui.define([
                     }
                     break;
             }
-            console.log(this.aSelectedPersonal);
+            // console.log(this.aSelectedPersonal);
             this.createValidation();
 
             /* else {
@@ -392,7 +392,7 @@ sap.ui.define([
         },
         onValueHelpDialogClose: function (oEvent) {
             sap.m.MessageToast.show("Aktion abgebrochen");
-            console.log(this.aSelectedPersonal);
+            // console.log(this.aSelectedPersonal);
             oEvent.getSource().getBinding("items").filter([]);
         },
         onValueHelpDialogConfirm: function (oEvent) {
@@ -429,12 +429,14 @@ sap.ui.define([
         },
         onSearchPersonal: function (oEvent) {
             var sValue = oEvent.getParameter("value"),
-                oFilter = new sap.ui.model.Filter(
-                    "personalnummer",
-                    sap.ui.model.FilterOperator.Contains,
-                    sValue
-                ),
+                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.StartsWith, sValue),
                 oBinding = oEvent.getParameter("itemsBinding");
+            oBinding.filter([oFilter]);
+        },
+        suggestPersonalnummer: function (oEvent) {
+            var sValue = oEvent.getParameter("suggestValue"),
+                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.StartsWith, sValue),
+                oBinding = oEvent.getSource().getBinding("suggestionItems");
             oBinding.filter([oFilter]);
         },
         handleSelectionFinish: function (oEvent) {
@@ -446,7 +448,7 @@ sap.ui.define([
                     pla_pha: selectedItems[i].getText()
                 });
 
-            console.log(this.aSelectedPhase);
+            // console.log(this.aSelectedPhase);
             /* if (selectedItems.length === aItems.length)
                 this.bAlleDatamart = true;
             else
@@ -507,42 +509,85 @@ sap.ui.define([
         },
         onAddPress2: function () {
             var aTemplate = [],
+                aItems = this.byId("table1").getItems(),
                 that = this;
             this.aSelectedPhase.forEach(phase => {
                 that.aSelectedPersonal.forEach(personal => {
                     aTemplate.push({
-                        pla_pha: phase,
-                        personalnummer: personal
+                        pla_pha: phase.pla_pha,
+                        personalnummer: personal.personalnummer
                     });
                 });
             });
             console.log(aTemplate);
             try {
                 var oTable = this.byId("table2"),
-                    oTemplate = new sap.m.ColumnListItem({
+                    bAssigExist = false,
+                    aAssigExist = [],
+                    aAssigOK = [],
+                    aColumnListItems = [];
+
+                aTemplate.forEach((item, index)=>{                    
+                    for (var i = 0; i < aItems.length; i++) {
+                        if (item.pla_pha === aItems[i].getCells()[0].getTitle() &&
+                            item.personalnummer === aItems[i].getCells()[1].getTitle()) {
+                            bAssigExist = true;
+                            aAssigExist.push({
+                                pla_pha: item.pla_pha,
+                                personalnummer: item.personalnummer
+                            });
+                            // aTemplate.splice(index, 1);
+                            // sap.m.MessageBox.warning("Diese Element ist vorhanden:\n Phase:" + item.pla_pha + "\n Personalnummer:" + item.personalnummer);
+                            // throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");                            
+                        } else {
+                            aAssigOK.push({
+                                pla_pha: item.pla_pha,
+                                personalnummer: item.personalnummer
+                            });
+                        }
+                    }                    
+                });
+                
+
+                console.log(aAssigOK);
+                console.log(aAssigExist);
+
+                if (bAssigExist){
+                    var sMessage = "Die folgende(n) Personalnummer(n) hat/haben bereits Phase(n) zugeordnet\n";
+                    aAssigExist.forEach(function (item){
+                        sMessage += "Phase: " + item.pla_pha + " => Personalnummer: " + item.personalnummer + "\n";
+                    });
+                    sap.m.MessageBox.warning(sMessage);
+                } else {
+                    
+                }
+                aAssigOK.forEach(function (item) {
+                    var oColumnListItem = new sap.m.ColumnListItem({
                         cells: [
-                            new sap.m.Text({ text: this.byId("__inputFunktion2").getText() }),
-                            new sap.m.Text({ text: this.byId("selecttyp").getSelectedItem().getText() })
+                            new sap.m.Text({ text: item.pla_pha }),
+                            new sap.m.Text({ text: item.personalnummer })
                         ]
                     });
+                    aColumnListItems.push(oColumnListItem);
+                }, this);
+                aColumnListItems.forEach(function (oColumnListItem) {
+                    oTable.addItem(oColumnListItem);
+                });
+
 
                 /* if (this.byId("__inputFunktion2").getText() == "" ||
                     this.byId("selecttyp").getSelectedKey() == null ||
                     this.byId("selectentit").getSelectedKey() == null ||
                     this.byId("__inputWert").getValue() == "")
                     throw new sap.ui.base.Exception("EmptyFieldException", "Falsche Definition"); */
-
                 /* this.aIOBJ_Sondern.forEach(element => {
                     if (element[0] == this.byId("__inputFunktion2").getText() &&
                         element[1] == this.byId("selecttyp").getSelectedItem().getText() &&
                         element[2] == this.byId("selectentit").getSelectedItem().getText() &&
-                        element[3] == this.byId("__inputWert").getValue()) {
-                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
-                    }
+                        element[3] == this.byId("__inputWert").getValue()) 
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");                    
                 }); */
-
-                oTable.addItem(oTemplate);
-
+                // oTable.addItem(oTemplate);
                 /* this.aIOBJ_Sondern.push([
                     this.byId("__inputFunktion2").getText(),
                     this.byId("selecttyp").getSelectedItem().getText(),
@@ -553,17 +598,22 @@ sap.ui.define([
                 sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 
                 this.createValidation();
-                /* this.byId("selecttyp").setSelectedKey(null);
-                this.byId("selectentit").setSelectedKey(null);
-                this.byId("__inputWert").setValue(""); */
+                this.byId("selectphase1").setSelectedKeys(null);
+                this.byId("multiInputPers").removeAllTokens();
+                this.aSelectedPhase = [];
+                this.aSelectedPersonal = [];
 
             } catch (error) {
-                if (error.message == "EmptyFieldException")
+                /* if (error.message == "EmptyFieldException")
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden"); */
+                if (error.message == "DuplicatedKey") {
+                    // sap.m.MessageBox.warning("Diese Element ist vorhanden:\n Phase:" + item.pla_pha + "\n Personalnummer:" + item.personalnummer);
+                    sap.m.MessageBox.warning("Ein Element ist bereits vorhanden");
+                }
+                if (error instanceof TypeError) {
+                    console.log(error);
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
-                if (error.message == "DuplicatedKey")
-                    sap.m.MessageBox.warning("Das Element ist vorhanden");
-                if (error instanceof TypeError)
-                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                }
             }
         },
         onDeletePress2: function () {
