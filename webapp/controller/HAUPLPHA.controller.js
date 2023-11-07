@@ -486,10 +486,13 @@ sap.ui.define([
         },
         createValidation: function () {
             var aItems = this.getView().byId("table2").getItems();
-            if (aItems.length > 1)
+            if (aItems.length > 1) {
+                this.byId("createButton").setEnabled(true);
                 this.byId("deleteButton2").setEnabled(true);
-            else
+            } else {
+                this.byId("createButton").setEnabled(false);
                 this.byId("deleteButton2").setEnabled(false);
+            }
 
             if (this.aSelectedPhase != '' &&
                 this.aSelectedPersonal != '')
@@ -499,8 +502,7 @@ sap.ui.define([
 
             /* var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
                 sPhase = this.getView().byId("selectphase").getSelectedKey();
-
-            // validation create button
+            
             if (sPersonalNummer && sPhase) {
                 this.byId("createButton").setVisible(true);
             } else {
@@ -527,39 +529,52 @@ sap.ui.define([
                     aAssigOK = [],
                     aColumnListItems = [];
 
-                aTemplate.forEach((item, index)=>{                    
+                aTemplate.forEach((item, index) => {
+                    var bAssigExist1 = false;
                     for (var i = 0; i < aItems.length; i++) {
                         if (item.pla_pha === aItems[i].getCells()[0].getTitle() &&
                             item.personalnummer === aItems[i].getCells()[1].getTitle()) {
                             bAssigExist = true;
+                            bAssigExist1 = true;
                             aAssigExist.push({
                                 pla_pha: item.pla_pha,
                                 personalnummer: item.personalnummer
                             });
+                            break;
                             // aTemplate.splice(index, 1);
                             // sap.m.MessageBox.warning("Diese Element ist vorhanden:\n Phase:" + item.pla_pha + "\n Personalnummer:" + item.personalnummer);
                             // throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");                            
-                        } else {
-                            aAssigOK.push({
-                                pla_pha: item.pla_pha,
-                                personalnummer: item.personalnummer
-                            });
                         }
-                    }                    
+                    }
+                    if (!bAssigExist1) {
+                        aAssigOK.push({
+                            pla_pha: item.pla_pha,
+                            personalnummer: item.personalnummer
+                        });
+                    }
                 });
-                
+                /* aTemplate.forEach((item, index)=>{                    
+                    aAssigExist.forEach(item1=>{
+                        if(!(item.pla_pha === item1.pla_pha && item.personalnummer === item1.personalnummer)){
+                                aAssigOK.push({
+                                    pla_pha: item.pla_pha,
+                                    personalnummer: item.personalnummer
+                                });    
+                        }
+                    });                    
+                }); */
 
                 console.log(aAssigOK);
                 console.log(aAssigExist);
 
-                if (bAssigExist){
-                    var sMessage = "Die folgende(n) Personalnummer(n) hat/haben bereits Phase(n) zugeordnet\n";
-                    aAssigExist.forEach(function (item){
+                if (bAssigExist) {
+                    var sMessage = "Die folgenden Zuordnungen sind bereits vorhanden\n";
+                    aAssigExist.forEach(function (item) {
                         sMessage += "Phase: " + item.pla_pha + " => Personalnummer: " + item.personalnummer + "\n";
                     });
                     sap.m.MessageBox.warning(sMessage);
                 } else {
-                    
+
                 }
                 aAssigOK.forEach(function (item) {
                     var oColumnListItem = new sap.m.ColumnListItem({
@@ -597,11 +612,11 @@ sap.ui.define([
 
                 sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 
-                this.createValidation();
                 this.byId("selectphase1").setSelectedKeys(null);
                 this.byId("multiInputPers").removeAllTokens();
                 this.aSelectedPhase = [];
                 this.aSelectedPersonal = [];
+                this.createValidation();
 
             } catch (error) {
                 /* if (error.message == "EmptyFieldException")
@@ -637,9 +652,11 @@ sap.ui.define([
             this.createValidation();
         },
         onCreatePress: function () {
-            var oNewEntry = {},
-                aItems = this.byId("table1").getItems(),
-                fnSucces = function () {
+            console.log("Hallo");
+            var oTable = this.getView().byId("table2"),
+                aItems = oTable.getItems(),
+                that = this,
+                fnSuccess = function () {
                     sap.m.MessageToast.show("Element erfolgreich erstellt");
                 }.bind(this),
                 fnError = function (oError) {
@@ -647,35 +664,58 @@ sap.ui.define([
                 }.bind(this);
 
             try {
-                oNewEntry.personalnummer = this.getView().byId("selectpersonalnummer").getSelectedItem().getText();
+                /* oNewEntry.personalnummer = this.getView().byId("selectpersonalnummer").getSelectedItem().getText();
                 oNewEntry.pla_pha = this.getView().byId("selectphase").getSelectedItem().getText();
-
-                for (var i = 0; i < aItems.length; i++) {
-                    var oItem = aItems[i],
-                        oContext = oItem.getBindingContext(),
-                        sPersonalnummer = oContext.getProperty("personalnummer"),
-                        sPhase = oContext.getProperty("pla_pha");
-
+                for (var i = 1; i < aItems.length; i++) {
+                    oNewEntry.personalnummer = aItems[i].getCells()[1].getText();
+                    oNewEntry.pla_pha = aItems[i].getCells()[0].getText();
+                    this._oModel.create("/HAUPLPHA", oNewEntry, {
+                        success: fnSucces,
+                        error: fnError
+                    });
+                    var sPersonalnummer = aItems[i].getCells()[0].getText(),
+                        sPhase = aItems[i].getCells()[0].getText();
                     if (sPersonalnummer === oNewEntry.personalnummer &&
                         sPhase === oNewEntry.pla_pha) {
                         throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
                     }
                 }
-                this._oModel.create("/HAUPLPHA", oNewEntry, {
-                    success: fnSucces,
-                    error: fnError
+                this.byId("table1").getBinding("items").refresh(); */
+
+                var aCreate = [];
+                for (let i = 1; i < aItems.length; i++) {
+                    var aRow = [aItems[i].getCells()[0].getText(),
+                    aItems[i].getCells()[1].getText()];
+                    aCreate.push(aRow);
+                }
+                console.log(aCreate);
+                aCreate.forEach(item => {
+                    that._oModel.create("/HAUPLPHA", {
+                        pla_pha: item[0],
+                        personalnummer: item[1]
+                    }, {
+                        success: fnSuccess,
+                        error: fnError
+                    });
                 });
+                for (var i = aItems.length - 1; i > 0; i--) {
+                    oTable.removeItem(aItems[i]);
+                }
+                this.oDialog.close();
                 this.byId("table1").getBinding("items").refresh();
+
             } catch (error) {
-                if (error instanceof TypeError)
+                console.log(error);
+                if (error instanceof TypeError) {
+                    console.log(error);
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                }
                 if (error.message === "DuplicatedKey")
                     sap.m.MessageBox.warning("Das Element ist vorhanden");
             }
-
-            this.getView().byId("selectpersonalnummer").setSelectedKey(null);
+            /* this.getView().byId("selectpersonalnummer").setSelectedKey(null);
             this.getView().byId("selectphase").setSelectedKey(null);
-            this.byId("dialog1").close();
+            this.byId("dialog1").close(); */
         },
         editValidation: function () {
             var iInput1 = this.byId("__editCRUD0").getValue(),
@@ -813,7 +853,7 @@ sap.ui.define([
         },
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
-                fnSucces = function () {
+                fnSuccess = function () {
                     sap.m.MessageToast.show("Element (" + sPersNummer + ") erfolgreich gelöscht");
                 },
                 fnError = function (oError) {
