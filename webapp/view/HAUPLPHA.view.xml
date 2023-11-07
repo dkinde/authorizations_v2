@@ -1,17 +1,14 @@
 <mvc:View   xmlns:mvc="sap.ui.core.mvc"   
             xmlns:core="sap.ui.core"  
-            xmlns="sap.m"
-            xmlns:l="sap.ui.layout"
+            xmlns="sap.m"            
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
             controllerName="auth.controller.HAUPLPHA">
-
     <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
-                        <Title text="{i18n>table7PageTitle}"/>
-						<!-- <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" /> -->
+                        <Title text="{i18n>table7PageTitle}"/>						
 					</f:heading>
 					<f:expandedContent>
 						<Label id="expandedLabel" text="No filters active" />
@@ -19,11 +16,11 @@
 					<f:snappedContent>
 						<Label id="snappedLabel" text="No filters active" />
 					</f:snappedContent>
-                    <f:actions>
+                    <!-- <f:actions>
                         <Button text="Schließen" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
-                    </f:actions>
+                    </f:actions> -->
                     <f:navigationActions>
-                        <Button text="zur Startseite" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                        <Button text="zur Startseite" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:navigationActions>
 				</f:DynamicPageTitle>
 			</f:title>
@@ -125,98 +122,4 @@
                 </Table>
 			</f:content>
 		</f:DynamicPage>
-
-
-    <!-- <Page   title="{i18n>table5PageTitle}"
-            showNavButton="true"
-            navButtonPress=".onNavButtonPressed"
-            backgroundDesign="Solid">            
-        <content>
-        <l:Grid defaultSpan="L12 M12 S12" 
-                class="sapUiResponsiveMargin" 
-                vSpacing="0" 
-                hSpacing="0">            
-            <Table  sticky="ColumnHeaders,HeaderToolbar"
-                    growing="true"
-                    growingScrollToLoad="true"
-                    growingThreshold="100" 
-                    id="table1" 
-                    mode="SingleSelectMaster" 
-                    items="{
-                        path: '/HAUPF001',
-                        parameters: {
-                            $count: true                                    
-                        }    
-                    }"
-                    fixedLayout="false"
-                    alternateRowColors="true">
-                <headerToolbar>
-                    <Toolbar>
-                        <content>                            
-                            <Button icon="sap-icon://add" 
-                                    text="{i18n>tableToolbarButtonAdd}" 
-                                    press="onOpenDialog"
-                                    type="Accept"/>                                                                           
-                            <Button icon="sap-icon://delete" 
-                                    type="Reject" 
-                                    text="{i18n>tableToolbarButtonDelete}" 
-                                    press="onDeletePress"/>
-                            <ToolbarSpacer/> 
-                            <SearchField    id="searchField"
-                                            width="20%"
-                                            liveChange=".onSearch"
-                                            placeholder="{i18n>searchFieldPlaceholder}"/>                            
-                            <Button id="sortUsersButton"
-                                    icon="sap-icon://sort"
-                                    tooltip="{i18n>sortButtonText}"
-                                    press="handleSortButtonPressed"/> 
-                            <Button id="filterButton"
-                                    icon="sap-icon://filter"
-                                    tooltip="{i18n>filterButtonText}"
-                                    press="handleFilterButtonPressed"/>
-                            <Button id="groupButton"
-                                    icon="sap-icon://group-2"
-                                    tooltip="{i18n>groupButtonText}"
-                                    press="handleGroupButtonPressed"/>
-                            <Button icon="sap-icon://excel-attachment"
-                                    tooltip="{i18n>excelButtonText}" 
-                                    press="onExport"/>                                                                     
-                        </content>
-                    </Toolbar>
-                </headerToolbar>
-                <columns>
-                    <Column mergeDuplicates="true">
-                        <Text text="{i18n>colPIPEPERID}" />
-                    </Column>
-                    <Column>
-                        <Text text="{i18n>colAUFKT}" />
-                    </Column>                                                                      
-                </columns>
-                <items>
-                    <ColumnListItem vAlign="Middle">
-                        <cells>                                                                                        
-                            <ObjectIdentifier text="{personalnummer}" />
-                            <ObjectIdentifier text="{funktion}" />                                                                                       
-                        </cells>                                        
-                    </ColumnListItem>
-                </items>
-            </Table>                                        
-            </l:Grid>  
-        </content> 
-        <footer>
-            <OverflowToolbar>
-                <ToolbarSpacer />
-                <Button id="saveButton" 
-                        text="Save" 
-                        type="Accept" 
-                        press="onSave" 
-                        visible="false" />
-                <Button id="cancelButton" 
-                        text="Cancel" 
-                        type="Reject" 
-                        press="onCancel" 
-                        visible="false" />
-            </OverflowToolbar>
-        </footer>                                               
-    </Page> -->
 </mvc:View>

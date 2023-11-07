@@ -1,18 +1,11 @@
 <core:FragmentDefinition xmlns="sap.m" 
-                         xmlns:core="sap.ui.core"                        
-						 xmlns:form="sap.ui.layout.form" 
-						 xmlns:l="sap.ui.layout">                         
-    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="650px" contentHeight="500px" busy="false">
-		<content>
-				<!-- <MessageStrip	text="Es kann nur eine Form der Zuordnung gewählt werden"
-								type="Information"
-								showIcon="true"
-								class="sapUiMediumMarginBottom">
-				</MessageStrip> -->	
+                         xmlns:core="sap.ui.core">                         
+    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="650px" contentHeight="500px">
+		<content>					
 			<Table  id="table2" 
-                        		mode="SingleSelectMaster"
-								headerText="Zuordnung hinzufügen"
-								fixedLayout="false">
+                    mode="SingleSelectMaster"
+					headerText="Zuordnung hinzufügen"
+					fixedLayout="false">
 							<headerToolbar>
 								<Toolbar>
 									<content>
@@ -32,10 +25,10 @@
 								</Toolbar>
 							</headerToolbar>
 							<columns>								
-								<Column mergeDuplicates="false">
+								<Column>
 									<Text text="{i18n>colCOPLAPHA}" />
 								</Column>                                                                      
-								<Column mergeDuplicates="false">
+								<Column>
 									<Text text="{i18n>colPIPEPERID}" />
 								</Column>                                                                       
 							</columns>
@@ -74,89 +67,7 @@
 									</cells>                                        
 								</ColumnListItem>
 							</items>                                
-						</Table>	
-
-			<!-- <l:Grid	containerQuery="false"
-					defaultSpan="L6 M6 S12"
-					class="sapUiSmallMarginTop"
-					hSpacing="1.5"
-					position="Center"
-					vSpacing="2"
-					width="100%">
-				<l:content>			
-					<form:SimpleForm	id="formPhasePers"	
-										editable="true" 
-										width="285px" 
-										backgroundDesign="Transparent"
-										layout="ResponsiveGridLayout"
-										class="myForm"
-										labelSpanL="4"
-										labelSpanM="4"
-										labelSpanS="12">
-						<form:content>
-							<Button text="Personalnummer zuordnen" press=".onSelectForm1" type="Emphasized"/>
-							<Label text="{i18n>colPIPEPERID}" required="true"/>    
-							<Button	id="buttonPers1"
-									text="Personalnummer auswählen"
-									press=".onValueHelpRequest"
-									class="sapUiSmallMarginBottom"
-									ariaHasPopup="Dialog"
-									enabled="false" />							
-							<Label text="{i18n>colCOPLAPHA}" required="true"/>
-							<MultiComboBox id="selectphase1"
-								showSecondaryValues= "true"
-								showSelectAll="true"
-								selectionChange="createValidation"
-								selectionFinish="handleSelectionFinish"	
-								required="true"
-								placeholder="Phase auswählen"
-								enabled="false"						
-								width="500px"
-								items="{
-									path: '/distinctItems1'
-								}">
-								<core:ListItem key="{pla_pha}" text="{pla_pha}" additionalText="{txt_pha}"/>
-							</MultiComboBox>							             
-						</form:content>							
-					</form:SimpleForm>	
-					<form:SimpleForm	id="formPersPhase" 
-										class="myForm"
-										editable="true"	
-										width="285px"
-										backgroundDesign="Transparent"
-										layout="ResponsiveGridLayout"
-										labelSpanL="4"
-										labelSpanM="4"
-										labelSpanS="12">
-						<form:content>
-							<Button text="Phase zuordnen" press=".onSelectForm2" type="Emphasized" />
-							<Label text="{i18n>colCOPLAPHA}" required="true"/>
-							<Select id="selectphase2"					
-									change="createValidation"
-									forceSelection="false"
-									showSecondaryValues="true"
-									required="true"									
-									enabled="false"
-									wrapItemsText="false"
-									columnRatio="1:4"									
-									items="{
-										path: '/distinctItems1'                                
-									}">
-								<core:ListItem  key="{pla_pha}" 
-												text="{pla_pha}" 
-												additionalText="{txt_pha}"/>
-							</Select> 
-							<Label text="{i18n>colPIPEPERID}" required="true"/>		
-							<Button	id="buttonPers2"
-									text="Personalnummer auswählen"
-									press=".onValueHelpRequest"
-									class="sapUiSmallMarginBottom"
-									ariaHasPopup="Dialog" 
-									enabled="false"/>							
-						</form:content>							
-					</form:SimpleForm>						
-				</l:content>
-			</l:Grid>		       -->		
+						</Table>			
 		</content>
 		<beginButton>
 			<Button id="createButton" 

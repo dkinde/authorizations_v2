@@ -1,0 +1,31 @@
+<core:FragmentDefinition xmlns="sap.m" 
+                         xmlns:core="sap.ui.core"    						 						 				 
+                         width="100%">			
+		<SelectDialog	id="selectDialogFunktion"
+						noDataText="Keinen Funktion gefunden"
+						title="Funktion auswählen"
+						search=".onSearchFunktion"
+						searchPlaceholder="Funktion suchen"
+						confirm=".multiInputFunktionTokenUpdate"
+						cancel=".onValueHelpDialogClose"
+						contentWidth="300px"
+						rememberSelections="false"
+						growingThreshold="10"
+						selectionChange=".onSelectionChange2"
+						multiSelect="true"
+						showClearButton="true"												
+						items="{
+							path: '/FKT_TXT',
+							sorter: {
+								path: 'funktion',
+								descending: false
+							}
+						}">
+			<StandardListItem							
+							title="{funktion}"
+							description="{Txtlg}"							
+							iconDensityAware="false"
+							iconInset="false"
+							type="Active" />
+		</SelectDialog>			
+</core:FragmentDefinition>

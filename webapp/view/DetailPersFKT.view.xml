@@ -1,8 +1,7 @@
 <mvc:View   xmlns:mvc="sap.ui.core.mvc" 
             displayBlock="true"
             xmlns="sap.uxap" 
-            xmlns:m="sap.m"
-            xmlns:f="sap.f"
+            xmlns:m="sap.m"            
 	        xmlns:form="sap.ui.layout.form"
             controllerName="auth.controller.DetailPersFKT">
 	<ObjectPageLayout   id="ObjectPageLayout"
@@ -12,15 +11,14 @@
                         headerContentPinnable="true"
                         isChildPage="true"
                         upperCaseAnchorBar="false">
-
                         <headerTitle>
                             <ObjectPageDynamicHeaderTitle>
                                 <actions>                                    
-                                    <m:Button
+                                    <!-- <m:Button
                                         icon="sap-icon://decline"
                                         text="Schließen"
                                         press="onCancelTwoColumns"
-                                        type="Transparent"/>
+                                        type="Transparent"/> -->
                                     <m:Button
                                         text="Schließen"
                                         press="onCancelTwoColumns"
@@ -55,17 +53,18 @@
                                                             parameters: {
                                                                 $count: true                                    
                                                             }    
-                                                        }"                                                        
+                                                        }"    
+                                                        noDataText="Diese Funktion ist nicht definiert"                                                    
                                                         fixedLayout="false"
-                                                        alternateRowColors="true">
+                                                        alternateRowColors="false">
                                                 <m:columns>
-                                                    <m:Column mergeDuplicates="false">
+                                                    <m:Column mergeDuplicates="true">
                                                         <m:Text text="Funktion" />
                                                     </m:Column>
-                                                    <m:Column mergeDuplicates="false">
+                                                    <m:Column mergeDuplicates="true">
                                                         <m:Text text="Typ" />
                                                     </m:Column>
-                                                    <m:Column mergeDuplicates="false">
+                                                    <m:Column mergeDuplicates="true">
                                                         <m:Text text="{i18n>colAUENT}" />
                                                     </m:Column>
                                                     <m:Column>
@@ -75,43 +74,14 @@
                                                 <m:items>
                                                     <m:ColumnListItem>
                                                         <m:cells>
-                                                            <m:ObjectIdentifier title="{funktion}" text="{Txtlg}"/>
+                                                            <m:ObjectIdentifier title="{funktion}" text="{txt}"/>
                                                             <m:ObjectIdentifier text="{typ}" />
                                                             <m:ObjectIdentifier text="{entit}" />
                                                             <m:ObjectIdentifier text="{wert}" /> 
                                                         </m:cells>
                                                     </m:ColumnListItem>
                                                 </m:items>
-                                            </m:Table> 
-                                            <!-- <form:SimpleForm    maxContainerCols="2"
-                                                                editable="false"
-                                                                layout="ResponsiveGridLayout"
-                                                                labelSpanL="12"
-                                                                labelSpanM="12"
-                                                                emptySpanL="0"
-                                                                emptySpanM="0"
-                                                                columnsL="1"
-                                                                columnsM="1">
-                                                <form:content>
-                                                    <m:Label text="Funktion"/>
-                                                    <m:Text text="{/HAUFW001>funktion}"/>
-                                                    <m:Label text="Typ"/>
-                                                    <m:Text text="{HAUFW001>typ}"/>
-                                                    <m:Label text="Entität"/>
-                                                    <m:Text text="{HAUFW001>entit}"/>
-                                                    <m:Label text="Wert"/>
-                                                    <m:Text text="{HAUFW001>wert}"/>
-                                                </form:content>
-                                            </form:SimpleForm> -->
-                                        <!-- </blocks>
-                                    </ObjectPageSubSection>
-                                </subSections>
-                            </ObjectPageSection>
-
-                            <ObjectPageSection title="Funktionswerte/daten">
-                                <subSections>
-                                    <ObjectPageSubSection>
-                                        <blocks> -->                                              
+                                            </m:Table>                                                                                           
                                             <m:Table    id="funktionTable1"
                                                         items="{
                                                             path: '/HAUPF001',
@@ -120,20 +90,20 @@
                                                             }    
                                                         }"                                                        
                                                         fixedLayout="false"
-                                                        alternateRowColors="true">
+                                                        alternateRowColors="false">
                                                 <m:columns>                                                    
-                                                    <m:Column mergeDuplicates="false">
+                                                    <m:Column>
                                                         <m:Text text="{i18n>colPIPEPERID}" />
                                                     </m:Column>
-                                                    <m:Column mergeDuplicates="false">
+                                                    <m:Column mergeDuplicates="true">
                                                         <m:Text text="{i18n>colAUFKT}" />
                                                     </m:Column>                                                    
                                                 </m:columns>
                                                 <m:items>
                                                     <m:ColumnListItem>
                                                         <m:cells>
-                                                            <m:ObjectIdentifier title="{personalnummer}" text="{txt}" />
-                                                            <m:ObjectIdentifier title="{funktion}" />                                                            
+                                                            <m:ObjectIdentifier title="{personalnummer}" text="{txt_pers}" />
+                                                            <m:ObjectIdentifier title="{funktion}" text="{txt_fkt}"/>                                                            
                                                         </m:cells>
                                                     </m:ColumnListItem>
                                                 </m:items>

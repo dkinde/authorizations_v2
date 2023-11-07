@@ -1,51 +1,85 @@
 <core:FragmentDefinition xmlns="sap.m" 
-                         xmlns:core="sap.ui.core"                                                                         
-						 xmlns:form="sap.ui.layout.form" 
-                         width="100%">
-    <Dialog title="{i18n>inputFieldDialogTitle}" id="dialog1">
+                         xmlns:core="sap.ui.core">
+    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="650px" contentHeight="500px">
 		<content>
-			<form:SimpleForm	editable="true">
-				<form:content>
-					<Label 	text="{i18n>colPIPEPERID}" required="true"/>                    
-					<Select id="selectpersonalnummer"							
-							showSecondaryValues="true"
-                        	forceSelection="false"							
-							change="createValidation"
-                            items="{
-                                path: '/PIPEPERID',
-                                sorter: { 
-                                    path: 'personalnummer' 
-                                }
-                            }">
-                        <core:ListItem  key="{personalnummer}" 
-						            	text="{personalnummer}" 
-										additionalText="{Txtlg}"/>
-                    </Select>
-                    <Label 	text="{i18n>colAUFKT}" required="true"/>
-					<Select id="selectfunktion"			
-							showSecondaryValues="true"		
-							wrapItemsText="true"
-							change="createValidation"
-                        	forceSelection="false"
-                            items="{
-                                path: '/FKT_TXT',
-                                sorter: { 
-                                    path: 'funktion' 
-                                }
-                            }">
-                        <core:ListItem  key="{funktion}" 
-						            	text="{funktion}"
-										additionalText="{Txtlg}" />
-                    </Select>                    
-				</form:content>							
-			</form:SimpleForm>			
+			<Table  id="table2" 
+                    mode="SingleSelectMaster"
+					headerText="Zuordnung hinzufügen"
+					fixedLayout="false">
+							<headerToolbar>
+								<Toolbar>
+									<content>
+										<Button id="addButton2"
+												enabled="false"
+												icon="sap-icon://add" 
+												text="{i18n>tableToolbarButtonAdd}" 
+												press="onAddPress2" 
+												type="Accept"/>                                                                                               
+										<Button id="deleteButton2"
+												enabled="false"
+												icon="sap-icon://delete" 
+												type="Reject" 
+												text="{i18n>tableToolbarButtonDelete}" 
+												press="onDeletePress2"/>                                                                                            
+									</content>
+								</Toolbar>
+							</headerToolbar>
+							<columns>								
+								<Column>
+									<Text text="{i18n>colPIPEPERID}" />
+								</Column>                                                                      
+								<Column>
+									<Text text="{i18n>colAUFKT}" />
+								</Column>                                                                       
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>																				
+										<MultiInput id="multiInputPers"													
+													autocomplete="false"
+													type="Number"
+													valueHelpRequest=".onValueHelpRequestPersonal"													
+													liveChange="createValidation"
+													tokenUpdate="multiInputPersTokenUpdate"
+													placeholder="Personalnummer auswählen"
+													showClearIcon="true"
+													showSuggestion="true"
+													suggest="suggestPersonalnummer"
+													suggestionItems="{
+														path: '/PIPEPERID',
+														sorter: { path: 'personalnummer' }														
+													}">
+													<core:ListItem 	key="{personalnummer}" text="{personalnummer}" 
+																	additionalText="{Txtmd}"/>
+										</MultiInput>										                                                                                                                                   
+										<MultiInput id="multiInputFunktion"													
+													autocomplete="false"
+													type="Number"
+													valueHelpRequest=".onValueHelpRequestFunktion"													
+													liveChange="createValidation"
+													tokenUpdate="multiInputFunktionTokenUpdate"
+													placeholder="Funktion auswählen"
+													showClearIcon="true"
+													showSuggestion="true"
+													suggest="suggestFunktion"
+													suggestionItems="{
+														path: '/FKT_TXT',
+														sorter: { path: 'funktion' }														
+													}">
+													<core:ListItem 	key="{funktion}" text="{funktion}" 
+																	additionalText="{Txtlg}"/>
+										</MultiInput>
+									</cells>                                        
+								</ColumnListItem>
+							</items>                                
+						</Table>				
 		</content>
 		<beginButton>
 			<Button id="createButton" 
-					text="{i18n>inputFieldDialogBeginButton}" 
+					text="Zuordnungen erstellen" 
 					type="Accept"  
 					press=".onCreatePress" 
-					visible="false" />
+					enabled="false" />
 		</beginButton>
 		<endButton>
 			<Button text="{i18n>inputFieldDialogEndButton}"  

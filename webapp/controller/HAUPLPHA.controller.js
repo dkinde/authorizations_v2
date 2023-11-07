@@ -284,18 +284,6 @@ sap.ui.define([
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
         },
-        onSelectForm1: function () {
-            this.byId("buttonPers1").setEnabled(true);
-            this.byId("selectphase1").setEnabled(true);
-            this.byId("buttonPers2").setEnabled(false);
-            this.byId("selectphase2").setEnabled(false);
-        },
-        onSelectForm2: function () {
-            this.byId("buttonPers1").setEnabled(false);
-            this.byId("selectphase1").setEnabled(false);
-            this.byId("buttonPers2").setEnabled(true);
-            this.byId("selectphase2").setEnabled(true);
-        },
         onValueHelpRequest: function (oEvent) {
             var oView = this.getView(),
                 sInputValue = oEvent.getSource().getValue();
@@ -303,7 +291,7 @@ sap.ui.define([
             if (!this._pValueHelpDialog) {
                 this._pValueHelpDialog = sap.ui.core.Fragment.load({
                     id: oView.getId(),
-                    name: "auth.fragment.ValueHelpDialog",
+                    name: "auth.fragment.ValueHelpDialogPersonal",
                     controller: this
                 }).then(function (oValueHelpDialog) {
                     oView.addDependent(oValueHelpDialog);
@@ -460,6 +448,7 @@ sap.ui.define([
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
             this.byId("selectphase1").setSelectedKeys(null);
+            this.byId("multiInputPers").removeAllTokens();
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -651,44 +640,23 @@ sap.ui.define([
             }
             this.createValidation();
         },
-        onCreatePress: function () {
-            console.log("Hallo");
-            var oTable = this.getView().byId("table2"),
-                aItems = oTable.getItems(),
-                that = this,
-                fnSuccess = function () {
-                    sap.m.MessageToast.show("Element erfolgreich erstellt");
-                }.bind(this),
-                fnError = function (oError) {
-                    sap.m.MessageBox.error(oError.message);
-                }.bind(this);
-
-            try {
-                /* oNewEntry.personalnummer = this.getView().byId("selectpersonalnummer").getSelectedItem().getText();
-                oNewEntry.pla_pha = this.getView().byId("selectphase").getSelectedItem().getText();
-                for (var i = 1; i < aItems.length; i++) {
-                    oNewEntry.personalnummer = aItems[i].getCells()[1].getText();
-                    oNewEntry.pla_pha = aItems[i].getCells()[0].getText();
-                    this._oModel.create("/HAUPLPHA", oNewEntry, {
-                        success: fnSucces,
-                        error: fnError
-                    });
-                    var sPersonalnummer = aItems[i].getCells()[0].getText(),
-                        sPhase = aItems[i].getCells()[0].getText();
-                    if (sPersonalnummer === oNewEntry.personalnummer &&
-                        sPhase === oNewEntry.pla_pha) {
-                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
-                    }
-                }
-                this.byId("table1").getBinding("items").refresh(); */
-
-                var aCreate = [];
+        onCreatePress: function () {                   
+            try {                
+                var oTable = this.getView().byId("table2"),
+                    aItems = oTable.getItems(),
+                    aCreate = [],
+                    that = this,
+                    fnSuccess = function () {
+                        sap.m.MessageToast.show("Phase erfolgreich zugeordnet");
+                    }.bind(this),
+                    fnError = function (oError) {
+                        sap.m.MessageBox.error(oError.message);
+                    }.bind(this);
                 for (let i = 1; i < aItems.length; i++) {
                     var aRow = [aItems[i].getCells()[0].getText(),
                     aItems[i].getCells()[1].getText()];
                     aCreate.push(aRow);
-                }
-                console.log(aCreate);
+                }                
                 aCreate.forEach(item => {
                     that._oModel.create("/HAUPLPHA", {
                         pla_pha: item[0],
@@ -703,19 +671,11 @@ sap.ui.define([
                 }
                 this.oDialog.close();
                 this.byId("table1").getBinding("items").refresh();
-
-            } catch (error) {
-                console.log(error);
-                if (error instanceof TypeError) {
-                    console.log(error);
+            } catch (error) {                
+                if (error instanceof TypeError) {                    
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
-                if (error.message === "DuplicatedKey")
-                    sap.m.MessageBox.warning("Das Element ist vorhanden");
-            }
-            /* this.getView().byId("selectpersonalnummer").setSelectedKey(null);
-            this.getView().byId("selectphase").setSelectedKey(null);
-            this.byId("dialog1").close(); */
+            }            
         },
         editValidation: function () {
             var iInput1 = this.byId("__editCRUD0").getValue(),
