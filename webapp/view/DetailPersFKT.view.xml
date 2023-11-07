@@ -1,8 +1,7 @@
 <mvc:View   xmlns:mvc="sap.ui.core.mvc" 
             displayBlock="true"
             xmlns="sap.uxap" 
-            xmlns:m="sap.m"            
-	        xmlns:form="sap.ui.layout.form"
+            xmlns:m="sap.m"            	        
             controllerName="auth.controller.DetailPersFKT">
 	<ObjectPageLayout   id="ObjectPageLayout"
                         showTitleInHeaderContent="true"
@@ -13,12 +12,7 @@
                         upperCaseAnchorBar="false">
                         <headerTitle>
                             <ObjectPageDynamicHeaderTitle>
-                                <actions>                                    
-                                    <!-- <m:Button
-                                        icon="sap-icon://decline"
-                                        text="Schließen"
-                                        press="onCancelTwoColumns"
-                                        type="Transparent"/> -->
+                                <actions>                                       
                                     <m:Button
                                         text="Schließen"
                                         press="onCancelTwoColumns"
@@ -54,7 +48,7 @@
                                                                 $count: true                                    
                                                             }    
                                                         }"    
-                                                        noDataText="Diese Funktion ist nicht definiert"                                                    
+                                                        noDataText="Diese Funktion hat keine Definition"                                                    
                                                         fixedLayout="false"
                                                         alternateRowColors="false">
                                                 <m:columns>
@@ -90,6 +84,7 @@
                                                             }    
                                                         }"                                                        
                                                         fixedLayout="false"
+                                                        noDataText="Hat keine Zuordnung" 
                                                         alternateRowColors="false">
                                                 <m:columns>                                                    
                                                     <m:Column>

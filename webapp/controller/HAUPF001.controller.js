@@ -214,18 +214,14 @@ sap.ui.define([
         getFiltersWithValues: function () {
             var aFiltersWithValue = this.oFilterBar.getFilterGroupItems().reduce(function (aResult, oFilterGroupItem) {
                 var oControl = oFilterGroupItem.getControl();
-
                 if (oControl && oControl.getSelectedKeys && oControl.getSelectedKeys().length > 0) {
                     aResult.push(oFilterGroupItem);
                 }
-
                 return aResult;
             }, []);
-
             return aFiltersWithValue;
         },
         onSelectionChange: function (oEvent) {
-            //this.oSmartVariantManagement.currentVariantSetModified(true);
             this.oFilterBar.fireFilterChange(oEvent);
         },
         onFilterChange: function () {
@@ -283,14 +279,12 @@ sap.ui.define([
                             value1: sSelectedKey
                         });
                     });
-
                 if (aSelectedKeys.length > 0) {
                     aResult.push(new sap.ui.model.Filter({
                         filters: aFilters,
                         and: false
                     }));
                 }
-
                 return aResult;
             }, []);
 
@@ -315,7 +309,7 @@ sap.ui.define([
             this.byId("multiInputPers").removeAllTokens();
             this.byId("multiInputFunktion").removeAllTokens();
             this.aSelectedFunktion = [];
-            this.aSelectedPersonal = [];            
+            this.aSelectedPersonal = [];
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -328,7 +322,6 @@ sap.ui.define([
         onValueHelpRequestPersonal: function (oEvent) {
             var oView = this.getView(),
                 sInputValue = oEvent.getSource().getValue();
-
             if (!this._pValueHelpDialog1) {
                 this._pValueHelpDialog1 = sap.ui.core.Fragment.load({
                     id: oView.getId(),
@@ -339,7 +332,7 @@ sap.ui.define([
                     return oValueHelpDialog;
                 });
             }
-            this._pValueHelpDialog1.then(function (oValueHelpDialog) {                
+            this._pValueHelpDialog1.then(function (oValueHelpDialog) {
                 oValueHelpDialog.getBinding("items").filter([new sap.ui.model.Filter(
                     "personalnummer",
                     sap.ui.model.FilterOperator.Contains,
@@ -351,7 +344,6 @@ sap.ui.define([
         onValueHelpRequestFunktion: function (oEvent) {
             var oView = this.getView(),
                 sInputValue = oEvent.getSource().getValue();
-
             if (!this._pValueHelpDialog2) {
                 this._pValueHelpDialog2 = sap.ui.core.Fragment.load({
                     id: oView.getId(),
@@ -362,7 +354,7 @@ sap.ui.define([
                     return oValueHelpDialog;
                 });
             }
-            this._pValueHelpDialog2.then(function (oValueHelpDialog) {                
+            this._pValueHelpDialog2.then(function (oValueHelpDialog) {
                 oValueHelpDialog.getBinding("items").filter([new sap.ui.model.Filter(
                     "funktion",
                     sap.ui.model.FilterOperator.Contains,
@@ -372,7 +364,7 @@ sap.ui.define([
             }.bind(this));
         },
         onValueHelpDialogClose: function (oEvent) {
-            sap.m.MessageToast.show("Aktion abgebrochen");            
+            sap.m.MessageToast.show("Aktion abgebrochen");
             oEvent.getSource().getBinding("items").filter([]);
         },
         onSearchPersonal: function (oEvent) {
@@ -426,7 +418,7 @@ sap.ui.define([
                             that.aSelectedPersonal.splice(indexToRemove, 1);
                         }
                     }, this);
-                    break;                
+                    break;
                 default:
                     if (aContexts && aContexts.length) {
                         aContexts.forEach(function (oContext) {
@@ -447,7 +439,7 @@ sap.ui.define([
                         oEvent.getSource().getBinding("items").filter([]);
                     }
                     break;
-            }            
+            }
             this.createValidation();
         },
         multiInputFunktionTokenUpdate: function (oEvent) {
@@ -477,7 +469,7 @@ sap.ui.define([
                             that.aSelectedFunktion.splice(indexToRemove, 1);
                         }
                     }, this);
-                    break;                                
+                    break;
                 default:
                     if (aContexts && aContexts.length) {
                         aContexts.forEach(function (oContext) {
@@ -498,7 +490,7 @@ sap.ui.define([
                         oEvent.getSource().getBinding("items").filter([]);
                     }
                     break;
-            }           
+            }
             this.createValidation();
         },
         onAddPress2: function () {
@@ -512,7 +504,7 @@ sap.ui.define([
                         funktion: fkt.funktion
                     });
                 });
-            });            
+            });
             try {
                 var oTable = this.byId("table2"),
                     bAssigExist = false,
@@ -520,7 +512,7 @@ sap.ui.define([
                     aAssigOK = [],
                     aColumnListItems = [];
 
-                aTemplate.forEach((item, index) => {
+                aTemplate.forEach((item) => {
                     var bAssigExist1 = false;
                     for (var i = 0; i < aItems.length; i++) {
                         if (item.funktion === aItems[i].getCells()[1].getTitle() &&
@@ -532,9 +524,6 @@ sap.ui.define([
                                 funktion: item.funktion,
                             });
                             break;
-                            // aTemplate.splice(index, 1);
-                            // sap.m.MessageBox.warning("Diese Element ist vorhanden:\n Phase:" + item.pla_pha + "\n Personalnummer:" + item.personalnummer);
-                            // throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");                            
                         }
                     }
                     if (!bAssigExist1) {
@@ -543,7 +532,7 @@ sap.ui.define([
                             funktion: item.funktion
                         });
                     }
-                });                
+                });
 
                 if (bAssigExist) {
                     var sMessage = "Die folgenden Zuordnungen sind bereits vorhanden\n";
@@ -551,7 +540,7 @@ sap.ui.define([
                         sMessage += "Personalnummer: " + item.personalnummer + " => Funktion: " + item.funktion + "\n";
                     });
                     sap.m.MessageBox.warning(sMessage);
-                } 
+                }
                 aAssigOK.forEach(function (item) {
                     var oColumnListItem = new sap.m.ColumnListItem({
                         cells: [
@@ -573,10 +562,7 @@ sap.ui.define([
                 this.createValidation();
 
             } catch (error) {
-                /* if (error.message == "EmptyFieldException")
-                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden"); */
                 if (error.message == "DuplicatedKey") {
-                    // sap.m.MessageBox.warning("Diese Element ist vorhanden:\n Phase:" + item.pla_pha + "\n Personalnummer:" + item.personalnummer);
                     sap.m.MessageBox.warning("Ein Element ist bereits vorhanden");
                 }
                 if (error instanceof TypeError) {
@@ -595,7 +581,6 @@ sap.ui.define([
                 }
                 else {
                     iIndex -= 1;
-                    // this.aIOBJ_Sondern.splice(iIndex, 1);
                     oSelectedItem.destroy();
                     sap.m.MessageToast.show("Zuordnung erfolgreich gelöscht");
                     this.createValidation();
@@ -615,20 +600,10 @@ sap.ui.define([
                 this.byId("deleteButton2").setEnabled(false);
             }
 
-            if (this.aSelectedFunktion != '' &&
-                this.aSelectedPersonal != '')
+            if (this.aSelectedFunktion != '' && this.aSelectedPersonal != '')
                 this.byId("addButton2").setEnabled(true);
             else
                 this.byId("addButton2").setEnabled(false);
-            /* var sPersonalNummer = this.getView().byId("selectpersonalnummer").getSelectedKey(),
-                sFunktion = this.getView().byId("selectfunktion").getSelectedKey();
-
-            // validation create button
-            if (sPersonalNummer && sFunktion) {
-                this.byId("createButton").setVisible(true);
-            } else {
-                this.byId("createButton").setVisible(false);
-            } */
         },
         onCreatePress: function () {
             try {
@@ -662,24 +637,6 @@ sap.ui.define([
                 }
                 this.oDialog.close();
                 this.byId("table1").getBinding("items").refresh();
-                /* oNewEntry.personalnummer = this.getView().byId("selectpersonalnummer").getSelectedItem().getText();
-                oNewEntry.funktion = this.getView().byId("selectfunktion").getSelectedItem().getText();
-
-                for (var i = 0; i < aItems.length; i++) {
-                    var oItem = aItems[i],
-                        oContext = oItem.getBindingContext(),
-                        sPersonalnummer = oContext.getProperty("personalnummer"),
-                        sFunktion = oContext.getProperty("funktion");
-
-                    if (sPersonalnummer === oNewEntry.personalnummer &&
-                        sFunktion === oNewEntry.funktion) {
-                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
-                    }
-                }
-                this._oModel.create("/HAUPF001", oNewEntry, {
-                    success: fnSucces,
-                    error: fnError
-                }); */
             } catch (error) {
                 if (error instanceof TypeError) {
                     console.log(error.message);
@@ -695,7 +652,6 @@ sap.ui.define([
 
             // validation single inputs	
             if (iInput1.length < 6 && iInput1.length > 0) {
-                //this._oWizard.setCurrentStep(this.byId("step1"));				                
                 oInput1.setValueState(sap.ui.core.ValueState.None);
             } else {
                 oInput1.setValueState(sap.ui.core.ValueState.Error);
@@ -745,13 +701,11 @@ sap.ui.define([
 
             //oContext.getProperty(sPath);                       
             //this._setBusy(true);
-
             //oContext.setProperty("InfoAuthName",oUpdateEntry.InfoAuthName,"$auto",false);     
             //oContext.setProperty("NameCube",oUpdateEntry.NameCube,"$auto",false);
             //oContext.setProperty("InfoName",oUpdateEntry.InfoName,"$auto",false);
             //oContext.setProperty("InfoTyp",oUpdateEntry.InfoTyp,"$auto",false);
             //oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,"$auto",false);  
-
             //oContext.requestProperty("Sequenz").then(oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,)) ;
 
             oModel.submitBatch(sGroupId, function () {
@@ -771,7 +725,6 @@ sap.ui.define([
             if (sFunktion != oUpdateEntry.Funktion) {
                 oContext.setProperty("funktion", oUpdateEntry.Funktion);
             }
-
             oModel.submitBatch(sGroupId).then(fnSucces, fnError);
             //this._oModel.submitChanges();
 
