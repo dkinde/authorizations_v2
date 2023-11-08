@@ -449,6 +449,11 @@ sap.ui.define([
             sap.m.MessageToast.show("Aktion abgebrochen");
             this.byId("selectphase1").setSelectedKeys(null);
             this.byId("multiInputPers").removeAllTokens();
+
+            var aItems = this.byId("table2").getItems();
+            for (let i = 1; i < aItems.length; i++) {
+                this.byId("table2").removeItem(aItems[i]);
+            }
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
@@ -640,8 +645,8 @@ sap.ui.define([
             }
             this.createValidation();
         },
-        onCreatePress: function () {                   
-            try {                
+        onCreatePress: function () {
+            try {
                 var oTable = this.getView().byId("table2"),
                     aItems = oTable.getItems(),
                     aCreate = [],
@@ -656,7 +661,7 @@ sap.ui.define([
                     var aRow = [aItems[i].getCells()[0].getText(),
                     aItems[i].getCells()[1].getText()];
                     aCreate.push(aRow);
-                }                
+                }
                 aCreate.forEach(item => {
                     that._oModel.create("/HAUPLPHA", {
                         pla_pha: item[0],
@@ -671,11 +676,11 @@ sap.ui.define([
                 }
                 this.oDialog.close();
                 this.byId("table1").getBinding("items").refresh();
-            } catch (error) {                
-                if (error instanceof TypeError) {                    
+            } catch (error) {
+                if (error instanceof TypeError) {
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
-            }            
+            }
         },
         editValidation: function () {
             var iInput1 = this.byId("__editCRUD0").getValue(),

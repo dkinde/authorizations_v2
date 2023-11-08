@@ -310,6 +310,10 @@ sap.ui.define([
             this.byId("multiInputFunktion").removeAllTokens();
             this.aSelectedFunktion = [];
             this.aSelectedPersonal = [];
+            var aItems = this.byId("table2").getItems();
+            for (let i = 1; i < aItems.length; i++) {
+                this.byId("table2").removeItem(aItems[i]);
+            }
             this.oDialog.close();
         },
         onCloseEditDialog: function () {
