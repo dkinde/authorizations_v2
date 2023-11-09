@@ -98,59 +98,7 @@ sap.ui.define([
                 });
             }
             retrieveData("/HAUPF001");
-
-            /* function getData() {
-                $.ajax({
-                    url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUPF001" + "?$top=500" + "&$skip=" + iSkip,
-                    method: "GET",
-                    success: function (data) {
-                        console.log(data);
-                        if (data && data.value) {
-                            that.aValue = that.aValue.concat(data.value.map(function (item) {
-                                return item;
-                            }));
-                        }
-                        if (data.value.length === 500) {
-                            iSkip += 500;
-                            getData();
-                        } else {
-                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { 
-                                    return obj.personalnummer === oItem.personalnummer; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var oDistinctModel = new sap.ui.model.json.JSONModel({
-                                distinctItems: aDistinctItems
-                            });
-                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
-                                distinctItems1: aDistinctItems1
-                            });
-
-                            that.getView().byId("multiPersonal").setModel(oDistinctModel);
-                            that.getView().byId("multiFunktion").setModel(oDistinctModel1);
-
-                            that._oPage.setBusy(false);
-                            return;
-                        }
-                    }.bind(this),
-                    error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
-                    }
-                });
-            }
-            getData(); */
-
-            /* this.oSmartVariantManagement = this.getView().byId("svm"); */
+           
             this.oFilterBar = this.getView().byId("filterbar");
             this.oExpandedLabel = this.getView().byId("expandedLabel");
             this.oSnappedLabel = this.getView().byId("snappedLabel");
@@ -164,26 +112,19 @@ sap.ui.define([
             this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
 
             this.oView = this.getView();
-
         },
         onNavButtonPressed: function () {
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
             UIComponent.getRouterFor(this).navTo("RouteFunktion");
         },
-        onListItemPress: function (oEvent) {
-            /* console.log(this.oView.getParent().getParent());
-            console.log()
-            this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
+        onListItemPress: function (oEvent) {            
+            /*this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
 
             var funktionPath = oEvent.getSource().getBindingContext().getPath(),
                 funktion = funktionPath.match(/funktion='(\d+)'/);
 
-            if (funktion && funktion.length > 1) {
-                const numeroExtraido = funktion[1];
-                console.log("Funktion gefunden: " + numeroExtraido);
-            } else {
-                console.log("Funktion nicht gefunden");
-            }
+            if (funktion && funktion.length > 1) 
+                const numeroExtraido = funktion[1];                             
 
             // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
             // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
@@ -569,8 +510,7 @@ sap.ui.define([
                 if (error.message == "DuplicatedKey") {
                     sap.m.MessageBox.warning("Ein Element ist bereits vorhanden");
                 }
-                if (error instanceof TypeError) {
-                    console.log(error);
+                if (error instanceof TypeError) {                    
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
             }
@@ -583,11 +523,9 @@ sap.ui.define([
                 if (iIndex == 0) {
                     sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
                 }
-                else {
-                    iIndex -= 1;
+                else {                    
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Zuordnung erfolgreich gelöscht");
-                    this.createValidation();
+                    sap.m.MessageToast.show("Zuordnung erfolgreich gelöscht");                    
                 }
             } else {
                 sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
@@ -642,8 +580,7 @@ sap.ui.define([
                 this.oDialog.close();
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
-                if (error instanceof TypeError) {
-                    console.log(error.message);
+                if (error instanceof TypeError) {                    
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
             }

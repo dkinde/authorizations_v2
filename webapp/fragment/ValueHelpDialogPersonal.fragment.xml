@@ -8,10 +8,8 @@
 						searchPlaceholder="Personalnummer suchen"
 						confirm=".multiInputPersTokenUpdate"
 						cancel=".onValueHelpDialogClose"
-						contentWidth="300px"
-						rememberSelections="false"
-						growingThreshold="10"
-						selectionChange=".onSelectionChange1"
+						contentWidth="300px"						
+						growingThreshold="20"						
 						multiSelect="true"
 						showClearButton="true"												
 						items="{

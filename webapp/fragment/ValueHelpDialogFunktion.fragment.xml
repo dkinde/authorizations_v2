@@ -8,10 +8,8 @@
 						searchPlaceholder="Funktion suchen"
 						confirm=".multiInputFunktionTokenUpdate"
 						cancel=".onValueHelpDialogClose"
-						contentWidth="300px"
-						rememberSelections="false"
-						growingThreshold="10"
-						selectionChange=".onSelectionChange2"
+						contentWidth="300px"						
+						growingThreshold="20"						
 						multiSelect="true"
 						showClearButton="true"												
 						items="{

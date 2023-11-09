@@ -359,13 +359,11 @@ sap.ui.define([
 
             } */
         },
-        onInputFunktionLiveChange: function (oEvent) {
-            console.log(oEvent.getSource());
+        onInputFunktionLiveChange: function (oEvent) {            
             var oInput = this.byId("__inputFunktion1"),
                 iInput = this.byId("__inputFunktion1").getValue(),
                 bExistFunktion = false;
-            this.byId("__inputFunktion2").setText(iInput.toString());
-            console.log(iInput);
+            this.byId("__inputFunktion2").setText(iInput.toString());            
 
             this.aDistinctFunktion.forEach(item => {
                 if (item.funktion === iInput) {
@@ -373,15 +371,13 @@ sap.ui.define([
                     return;
                 }
             });
-            if (bExistFunktion) {
-                console.log("funktion exist");
+            if (bExistFunktion) {                
                 oInput.setValueState(sap.ui.core.ValueState.Error);
                 oInput.setValueStateText("Diese Funktion ist bereits vorhanden");
             } else {
                 oInput.setValueState(sap.ui.core.ValueState.None);
                 oInput.setValueStateText("Geben Sie nicht mehr als 2 Ziffern ein");
-            }
-            console.log(oInput.getValueStateText());
+            }            
             this.createValidation();
         },
         handleSelectionFinish: function (oEvent) {
@@ -496,14 +492,7 @@ sap.ui.define([
                                     aUnique.push(oItem);
                                 }
                                 return aUnique;
-                            }, []);
-                            /* var oDistinctModel = new sap.ui.model.json.JSONModel({
-                                distinctItems: aDistinctItems
-                            }); */
-                            // that.getView().byId("multiFunktion").setModel(oDistinctModel);
-                            // that.maxFunktion += 1;
-                            /* that.byId("__inputFunktion1").setValue(that.maxFunktion.toString());
-                            that.byId("__inputFunktion2").setText(that.byId("__inputFunktion1").getValue()); */
+                            }, []);                            
                             that.byId("dialog1").setBusy(false);
                             that.createValidation();
                             return;
@@ -556,10 +545,7 @@ sap.ui.define([
                                 if (oData.__next) {
                                     batchSize += 100;
                                     retrieveData(sUrl);
-                                }
-                                else {
-                                    // console.log(that.aDatamart);
-                                }
+                                }                                
                             },
                             error: function (oError) {
                                 console.error("Error al recuperar datos:", oError);
@@ -601,8 +587,7 @@ sap.ui.define([
                                             oInput = new sap.m.Input({
                                                 value: item.wert,
                                                 valueLiveUpdate: true,
-                                                valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
-                                                // liveChange: that.editValidation.bind(that)
+                                                valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",                                                
                                                 liveChange: that.liveChangeInput.bind(that)
                                             });
                                         switch (item.typ) {
@@ -621,18 +606,9 @@ sap.ui.define([
                                                     placeholder: "Geben Sie nur vorhandene Datamarts ein",
                                                     showSuggestion: true,
                                                     value: item.wert,
-                                                    valueLiveUpdate: true,
-                                                    // liveChange: that.editValidation.bind(that),
+                                                    valueLiveUpdate: true,                                                    
                                                     liveChange: that.liveChangeInput.bind(that),
-                                                    valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
-                                                    /* suggestionItemSelected: function (oEvent) {
-                                                        var oSelectedItem = oEvent.getParameter("selectedItem");
-                                                        if (oSelectedItem) {                                                            
-                                                            var sKey = oSelectedItem.getKey();
-                                                            var sText = oSelectedItem.getText();
-                                                            var sAdditionalText = oSelectedItem.getAdditionalText();                                                            
-                                                        }
-                                                    } */
+                                                    valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",                                                    
                                                 });
                                                 break;
                                             case "I":
@@ -667,11 +643,7 @@ sap.ui.define([
                         });
                     }
                     getFunktion("/HAUFW001");
-                    this.byId("__inputEditFunktion").setText(oEntry.funktion);
-                    /*  this.byId("selecttyp1").setSelectedKey(oEntry.typ);
-                        this.filterTyp1(); 
-                        this.byId("selectentit1").setSelectedKey(oEntry.entit);
-                        this.byId("__editCRUD3").setValue(oEntry.wert); */
+                    this.byId("__inputEditFunktion").setText(oEntry.funktion);                    
                     this.editValidation();
 
                 }.bind(this));
@@ -926,8 +898,7 @@ sap.ui.define([
                         value: this.byId("__editCRUD3").getValue(),
                         valueLiveUpdate: true,
                         valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
-                        liveChange: this.editValidation.bind(this)
-                        // liveChange: this.liveChangeInput.bind(this)
+                        liveChange: this.editValidation.bind(this)                        
                     });
 
                 switch (this.byId("selecttyp1").getSelectedItem().getText()) {
@@ -949,15 +920,7 @@ sap.ui.define([
                             maxLength: 2,
                             valueLiveUpdate: true,
                             liveChange: this.editValidation.bind(this),
-                            valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
-                            /* suggestionItemSelected: function (oEvent) {
-                                var oSelectedItem = oEvent.getParameter("selectedItem");
-                                if (oSelectedItem) {                                                            
-                                    var sKey = oSelectedItem.getKey();
-                                    var sText = oSelectedItem.getText();
-                                    var sAdditionalText = oSelectedItem.getAdditionalText();                                                            
-                                }
-                            } */
+                            valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",                            
                         });
                         break;
                     case "I":
@@ -1072,18 +1035,9 @@ sap.ui.define([
             var oNewEntryDatamart = {},
                 oNewEntryTyp = {},
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element erfolgreich erstellt");
-                    var oList = this.byId("table1");
-                    /* oList.getItems().some(function (oItem) {
-                        if (oItem.getBindingContext() === oContext) {
-                            oItem.focus();
-                            oItem.setSelected(true);
-                            return true;
-                        }
-                    }); */
+                    sap.m.MessageToast.show("Element erfolgreich erstellt");                                        
                 }.bind(this),
-                fnError = function (oError) {
-                    console.log(oError);
+                fnError = function (oError) {                    
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
@@ -1129,8 +1083,7 @@ sap.ui.define([
 
                 this.byId("table1").getBinding("items").refresh();
 
-            } catch (error) {
-                console.log(error);
+            } catch (error) {                
                 if (error instanceof TypeError) {
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
@@ -1272,39 +1225,7 @@ sap.ui.define([
 
                 if (error.message == "FalscheDatamartException")
                     sap.m.MessageBox.warning("Einer der Datamarts, die Sie hinzufügen möchten, existiert nicht");
-            }
-            /* if (sEntitat === this.byId("selectentit1").getSelectedItem().getText() &&
-                sTyp === this.byId("selecttyp1").getSelectedItem().getText() &&
-                sWert === this.byId("__editCRUD3").getValue()) {
-                sap.m.MessageBox.warning("Es gibt keine Änderungen zur Aktualisierung der Funktion");
-            } else {
-                var sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntitat + "',wert='" + sWert + "')",
-                    that = this;
-                // "/HAUFW001(funktion='2',typ='D',entit='DATAMART',wert='DB')"
-                oUpdateEntry = {
-                    funktion: this.byId("__inputEditFunktion").getText(),
-                    typ: this.byId("selecttyp1").getSelectedItem().getText(),
-                    entit: this.byId("selectentit1").getSelectedItem().getText(),
-                    wert: this.byId("__editCRUD3").getValue()
-                };
-                this._oModel.update(sURL, oUpdateEntry, {                    
-                    success: function (data, response) {
-                        console.log("funktion aktualisiert!");
-                        console.log(response);
-                        console.log(data);
-                        sap.m.MessageToast.show("Funktion erfolgreich aktualisiert");
-                        that._oModel.submitChanges({
-                            success: fnSucces,
-                            error: fnError
-                        });
-                        that.byId("dialog2").close();
-                        that.byId("table1").getBinding("items").refresh();
-                    },
-                    error: function (error) {
-                        console.error("Error al actualizar el registro: " + error);
-                    }
-                }); 
-            } */
+            }            
         },
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
@@ -1337,8 +1258,7 @@ sap.ui.define([
                                 error: fnError
                             });
                         } else {
-                            sap.m.MessageToast.show("Aktion abgebrochen");
-                            console.log(sAction);
+                            sap.m.MessageToast.show("Aktion abgebrochen");                            
                         }
                     }
                 });
@@ -1355,10 +1275,7 @@ sap.ui.define([
                     sap.m.MessageBox.error(oError.message);
                 },
                 oContext = oSelectedItem.getBindingContext(),
-                sFunktion = oContext.getProperty("funktion"),
-                /* sURLFunktion = "/HAUFW001(funktion='" + sFunktion + "')",
-                sURLPersNumm = "/HAUPF001(funktion='" + sFunktion + "')",
-                sFilterFunktion = "funktion eq" + sFunktion, */
+                sFunktion = oContext.getProperty("funktion"),                
                 that = this,
                 batchSize = 0,
                 batchSize1 = 0;
@@ -1488,8 +1405,7 @@ sap.ui.define([
             var mParams = oEvent.getParameters(),
                 sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
-
-            console.log(sort);
+            
             if (sort) {
                 var sPath = mParams.sortItem.getKey(),
                     bDescending = mParams.sortDescending;
