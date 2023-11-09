@@ -14,7 +14,7 @@
                             <ObjectPageDynamicHeaderTitle>
                                 <actions>                                       
                                     <m:Button
-                                        text="Schließen"
+                                        text="Zur Personalnummer zu Funktion"
                                         press="onCancelTwoColumns"
                                         icon="sap-icon://decline"
                                         type="Reject"/>

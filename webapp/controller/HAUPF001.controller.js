@@ -123,15 +123,16 @@ sap.ui.define([
             var funktionPath = oEvent.getSource().getBindingContext().getPath(),
                 funktion = funktionPath.match(/funktion='(\d+)'/);
 
-            if (funktion && funktion.length > 1) 
-                const numeroExtraido = funktion[1];                             
+            if (funktion && funktion.length > 1) {
+                UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", {
+                    layout: sap.f.LayoutType.TwoColumnsMidExpanded,
+                    funktion: funktion[1]
+                });
+            }
+                // const numeroExtraido = funktion[1];                             
 
             // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
             // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
-            UIComponent.getRouterFor(this).navTo("RouteDetailPersFKT", {
-                layout: sap.f.LayoutType.TwoColumnsMidExpanded,
-                funktion: funktion[1]
-            });
         },
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {

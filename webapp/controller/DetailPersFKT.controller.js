@@ -43,15 +43,12 @@ sap.ui.define([
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
         },
         _onFunktionMatched: function (oEvent) {
-            console.log(oEvent.getParameter("arguments"));
-            console.log(oEvent.getParameter("arguments").funktion);
-            this._funktion = oEvent.getParameter("arguments").funktion || this._funktion || "0";
-            console.log(this._funktion);
+            var iFunktion = oEvent.getParameter("arguments").funktion || iFunktion || "0",
+                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.EQ, iFunktion);
+            // this._funktion = oEvent.getParameter("arguments").funktion || this._funktion || "0";
 
-            var filter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.EQ, this._funktion);
-
-            this.byId("funktionTable").getBinding("items").filter(filter, sap.ui.model.FilterType.Application);
-            this.byId("funktionTable1").getBinding("items").filter(filter, sap.ui.model.FilterType.Application);
+            this.byId("funktionTable").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
+            this.byId("funktionTable1").getBinding("items").filter(oFilter, sap.ui.model.FilterType.Application);
 
             /* this.getView().bindElement({
                 path: "/HAUFW001/" + this._funktion,
