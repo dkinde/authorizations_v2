@@ -248,6 +248,8 @@ sap.ui.define([
         onCloseViewDialog: function () {
             this._oModel.resetChanges();
             sap.m.MessageToast.show("Aktion abgebrochen");
+            this.byId("multiInputPers").setValue("");
+            this.byId("multiInputFunktion").setValue("");
             this.byId("multiInputPers").removeAllTokens();
             this.byId("multiInputFunktion").removeAllTokens();
             this.aSelectedFunktion = [];

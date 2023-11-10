@@ -14,7 +14,7 @@
                             <ObjectPageDynamicHeaderTitle>
                                 <actions>                                       
                                     <m:Button
-                                        text="Zur Personalnummer zu Funktion"
+                                        text="Zur Personalnummer - Funktion"
                                         press="onCancelTwoColumns"
                                         icon="sap-icon://decline"
                                         type="Reject"/>
@@ -37,7 +37,7 @@
                         </headerContent>
 
                         <sections>
-                            <ObjectPageSection title="Personal - Funktion">
+                            <ObjectPageSection title="Definition der Funktion und der ihr zugeordneten Personalnummern">
                                 <subSections>
                                     <ObjectPageSubSection>
                                         <blocks>                        

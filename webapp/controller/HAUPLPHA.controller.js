@@ -98,7 +98,7 @@ sap.ui.define([
                     }
                 });
             }
-            retrieveData("/HAUPLPHA");            
+            retrieveData("/HAUPLPHA");
 
             this.oView = this.getView();
             this.oFilterBar = this.getView().byId("filterbar");
@@ -236,7 +236,7 @@ sap.ui.define([
                     return oValueHelpDialog;
                 });
             }
-            this._pValueHelpDialog.then(function (oValueHelpDialog) {                
+            this._pValueHelpDialog.then(function (oValueHelpDialog) {
                 oValueHelpDialog.getBinding("items").filter([new sap.ui.model.Filter(
                     "personalnummer",
                     sap.ui.model.FilterOperator.StartsWith,
@@ -272,7 +272,7 @@ sap.ui.define([
                             that.aSelectedPersonal.splice(indexToRemove, 1);
                         }
                     }, this);
-                    break;                
+                    break;
                 default:
                     if (aContexts && aContexts.length) {
                         aContexts.forEach(function (oContext) {
@@ -293,11 +293,11 @@ sap.ui.define([
                         oEvent.getSource().getBinding("items").filter([]);
                     }
                     break;
-            }            
+            }
             this.createValidation();
         },
         onValueHelpDialogClose: function (oEvent) {
-            sap.m.MessageToast.show("Aktion abgebrochen");            
+            sap.m.MessageToast.show("Aktion abgebrochen");
             oEvent.getSource().getBinding("items").filter([]);
         },
         onSearchPersonal: function (oEvent) {
@@ -328,6 +328,7 @@ sap.ui.define([
             sap.m.MessageToast.show("Aktion abgebrochen");
             this.byId("selectphase1").setSelectedKeys(null);
             this.byId("multiInputPers").removeAllTokens();
+            this.byId("multiInputPers").setValue("");
 
             var aItems = this.byId("table2").getItems();
             for (let i = 1; i < aItems.length; i++) {
@@ -448,7 +449,7 @@ sap.ui.define([
                 if (error.message == "DuplicatedKey") {
                     sap.m.MessageBox.warning("Ein Element ist bereits vorhanden");
                 }
-                if (error instanceof TypeError) {                    
+                if (error instanceof TypeError) {
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
             }
