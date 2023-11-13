@@ -49,18 +49,20 @@ sap.ui.define([
                 batchSize = 0,
                 iSkip = 0;
 
-            function retrieveData(sUrl) {
-                that._oModel.read(sUrl, {
+            function retrieveData() {
+                that._oModel.read("/HAUPLPHA", {
                     urlParameters: {
-                        "$skiptoken": batchSize
+                        "$top": 5000,
+                        "$skip": iSkip
                     },
-                    success: function (oData, oResponse) {
-                        if (oData && oData.results) {
+                    success: function (oData) {
+                        if (oData.results && oData.results.length > 0) {
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
                             }));
                         }
-                        if (oData.__next) {
+                        if (oData.results.length === 5000) {
+                            iSkip += 5000;
                             batchSize += 100;
                             retrieveData(sUrl);
                         } else {
@@ -84,6 +86,7 @@ sap.ui.define([
                             var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                                 distinctItems1: aDistinctItems1
                             });
+                            oDistinctModel.setSizeLimit(2000);
                             that.aPhase = aDistinctItems1;
 
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
@@ -98,7 +101,7 @@ sap.ui.define([
                     }
                 });
             }
-            retrieveData("/HAUPLPHA");
+            retrieveData();
 
             this.oView = this.getView();
             this.oFilterBar = this.getView().byId("filterbar");

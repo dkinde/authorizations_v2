@@ -62,20 +62,22 @@ sap.ui.define([
                 batchSize = 0,
                 iSkip = 0;
 
-            function retrieveData(sUrl) {
-                that._oModel.read(sUrl, {
+            function retrieveData() {
+                that._oModel.read("/HAUFW001", {
                     urlParameters: {
-                        "$skiptoken": batchSize
+                        "$top": 5000,
+                        "$skip": iSkip
                     },
-                    success: function (oData, oResponse) {
-                        if (oData && oData.results) {
+                    success: function (oData) {
+                        if (oData.results && oData.results.length > 0) {
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
                             }));
                         }
-                        if (oData.__next) {
+                        if (oData.results.length === 5000) {
+                            iSkip += 5000;
                             batchSize += 100;
-                            retrieveData(sUrl);
+                            retrieveData();
                         } else {
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
                                 if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
@@ -104,6 +106,7 @@ sap.ui.define([
                                 }
                                 return aUnique;
                             }, []);
+                            console.log(aDistinctItems3);
 
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
@@ -117,6 +120,7 @@ sap.ui.define([
                             var oDistinctModel3 = new sap.ui.model.json.JSONModel({
                                 distinctItems3: aDistinctItems3
                             });
+                            oDistinctModel.setSizeLimit(500);
 
                             that.getView().byId("multiFunktion").setModel(oDistinctModel);
                             that.getView().byId("multiTyp").setModel(oDistinctModel1);
@@ -132,14 +136,14 @@ sap.ui.define([
                     }
                 });
             }
-            retrieveData("/HAUFW001");
+            retrieveData();
 
             function retrieveEntit(sUrl) {
                 that._oModel.read(sUrl, {
                     urlParameters: {
                         "$skiptoken": batchSize
                     },
-                    success: function (oData, oResponse) {
+                    success: function (oData) {
                         if (oData && oData.results) {
                             that.aEntit = that.aEntit.concat(oData.results.map(function (item) {
                                 return item;

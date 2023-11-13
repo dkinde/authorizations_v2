@@ -9,8 +9,7 @@
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
-                        <Title text="Kontrollbericht"/>
-						<!-- <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" /> -->
+                        <Title text="Kontrolbericht"/>						
 					</f:heading>
 					<f:expandedContent>
 						<Label id="expandedLabel" text="No filters active" />
@@ -18,11 +17,11 @@
 					<f:snappedContent>
 						<Label id="snappedLabel" text="No filters active" />
 					</f:snappedContent>
-                    <f:actions>
-                        <Button text="Schließen" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
-                    </f:actions>
+                    <!-- <f:actions>
+                        <Button text="zur Startseite" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                    </f:actions> -->
                     <f:navigationActions>
-                        <Button text="zur Startseite" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                        <Button text="zur Startseite" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:navigationActions>
 				</f:DynamicPageTitle>
 			</f:title>
@@ -47,7 +46,7 @@
 									<fb:control>
 										<MultiComboBox	id="multiDatamart" name="datamart"	selectionChange=".onSelectionChange"
                                                         items="{
-                                                            path: '/distinctItems1',
+                                                            path: '/DATAMART_DIST',
 												            templateShareable: true
                                                         }">
 											<core:ListItem key="{datamart}" text="{datamart}"/>
@@ -59,7 +58,7 @@
 									<fb:control>
 										<MultiComboBox  id="multiFunktion" name="funktion"	selectionChange=".onSelectionChange"
                                                         items="{
-                                                            path: '/distinctItems2',
+                                                            path: '/FUNKTION_DIST',
 												            templateShareable: true
                                                         }">
 											<core:ListItem key="{funktion}" text="{funktion}"/>
@@ -71,7 +70,7 @@
 									<fb:control>
 										<MultiComboBox  id="multiOrgEinh" name="org_einh"	selectionChange=".onSelectionChange"
                                                         items="{
-                                                            path: '/distinctItems3',
+                                                            path: '/ORG_EINH_DIST',
 												            templateShareable: true
                                                         }">
 											<core:ListItem key="{org_einh}" text="{org_einh}"/>
@@ -83,7 +82,7 @@
 									<fb:control>
 										<MultiComboBox  id="multiTyp" name="typ"	selectionChange=".onSelectionChange"
                                                         items="{
-                                                            path: '/distinctItems4',
+                                                            path: '/TYP_DIST',
 												            templateShareable: true
                                                         }">
 											<core:ListItem key="{typ}" text="{typ}"/>
@@ -95,14 +94,14 @@
 									<fb:control>
 										<MultiComboBox  id="multiEntit" name="entit"	selectionChange=".onSelectionChange"
                                                         items="{
-                                                            path: '/distinctItems5',
+                                                            path: '/ENTITAT_DIST',
 												            templateShareable: true
                                                         }">
 											<core:ListItem key="{entit}" text="{entit}"/>
 										</MultiComboBox>
 									</fb:control>
 								</fb:FilterGroupItem>
-                                <fb:FilterGroupItem name="infoobjectkontrolle" label="{i18n>colAUIOBJK}" groupName="Group1" 
+                                <!-- <fb:FilterGroupItem name="infoobjectkontrolle" label="{i18n>colAUIOBJK}" groupName="Group1" 
                                                     visibleInFilterBar="true">
 									<fb:control>
 										<MultiComboBox  id="multiIOBJK" name="infoobjectkontrolle"	selectionChange=".onSelectionChange"
@@ -125,7 +124,7 @@
 											<core:ListItem key="{wertkontrolle}" text="{wertkontrolle}"/>
 										</MultiComboBox>
 									</fb:control>
-								</fb:FilterGroupItem>
+								</fb:FilterGroupItem> -->
 							</fb:filterGroupItems>
 						</fb:FilterBar>
 					</f:content>

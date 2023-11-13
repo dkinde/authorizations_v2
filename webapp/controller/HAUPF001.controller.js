@@ -47,20 +47,23 @@ sap.ui.define([
                 batchSize = 0,
                 iSkip = 0;
 
-            function retrieveData(sUrl) {
-                that._oModel.read(sUrl, {
+            function retrieveData() {
+                that._oModel.read("/HAUPF001", {
                     urlParameters: {
-                        "$skiptoken": batchSize
+                        "$top": 5000,
+                        "$skip": iSkip
                     },
-                    success: function (oData, oResponse) {
-                        if (oData && oData.results) {
+                    success: function (oData) {
+                        if (oData.results && oData.results.length > 0) {
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
                             }));
+                            // that.aValue = that.aValue.concat(oData.results);                            
                         }
-                        if (oData.__next) {
+                        if (oData.results.length === 5000) {
+                            iSkip += 5000;
                             batchSize += 100;
-                            retrieveData(sUrl);
+                            retrieveData();
                         } else {
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
                                 if (!aUnique.some(function (obj) {
@@ -78,12 +81,26 @@ sap.ui.define([
                                 return aUnique;
                             }, []);
 
+                            aDistinctItems1.sort(function (a, b) {
+                                var funktionA = a.funktion.toLowerCase();
+                                var funktionB = b.funktion.toLowerCase();
+
+                                if (funktionA < funktionB) {
+                                    return -1;
+                                }
+                                if (funktionA > funktionB) {
+                                    return 1;
+                                }
+                                return 0;
+                            });
+
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
                             });
                             var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                                 distinctItems1: aDistinctItems1
                             });
+                            oDistinctModel.setSizeLimit(2000);
 
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
                             that.getView().byId("multiFunktion").setModel(oDistinctModel1);
@@ -97,8 +114,8 @@ sap.ui.define([
                     }
                 });
             }
-            retrieveData("/HAUPF001");
-           
+            retrieveData();
+
             this.oFilterBar = this.getView().byId("filterbar");
             this.oExpandedLabel = this.getView().byId("expandedLabel");
             this.oSnappedLabel = this.getView().byId("snappedLabel");
@@ -117,7 +134,7 @@ sap.ui.define([
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
             UIComponent.getRouterFor(this).navTo("RouteFunktion");
         },
-        onListItemPress: function (oEvent) {            
+        onListItemPress: function (oEvent) {
             /*this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
 
             var funktionPath = oEvent.getSource().getBindingContext().getPath(),
@@ -129,7 +146,7 @@ sap.ui.define([
                     funktion: funktion[1]
                 });
             }
-                // const numeroExtraido = funktion[1];                             
+            // const numeroExtraido = funktion[1];                             
 
             // this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
             // this.oRouter.getRoute("RouteMasterPersFKT").attachPatternMatched(this._onFunktionMatched, this);
@@ -513,7 +530,7 @@ sap.ui.define([
                 if (error.message == "DuplicatedKey") {
                     sap.m.MessageBox.warning("Ein Element ist bereits vorhanden");
                 }
-                if (error instanceof TypeError) {                    
+                if (error instanceof TypeError) {
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
             }
@@ -526,9 +543,9 @@ sap.ui.define([
                 if (iIndex == 0) {
                     sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
                 }
-                else {                    
+                else {
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Zuordnung erfolgreich gelöscht");                    
+                    sap.m.MessageToast.show("Zuordnung erfolgreich gelöscht");
                 }
             } else {
                 sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
@@ -583,7 +600,7 @@ sap.ui.define([
                 this.oDialog.close();
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
-                if (error instanceof TypeError) {                    
+                if (error instanceof TypeError) {
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
             }
