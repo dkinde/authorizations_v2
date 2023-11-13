@@ -49,7 +49,6 @@ sap.ui.define([
                         if (oData.results && oData.results.length > 0) {
                             that.aValue = that.aValue.concat(oData.results);
                         }
-                        console.log(oData.results.length);
                         if (oData.results.length === 5000) {
                             iSkip += 5000;
                             getPers();
@@ -59,14 +58,14 @@ sap.ui.define([
                                     aUnique.push(oItem);
                                 }
                                 return aUnique;
-                            }, []);                            
+                            }, []);
 
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
                             });
-                            oDistinctModel.setSizeLimit(2000);                            
+                            oDistinctModel.setSizeLimit(2000);
 
-                            that.getView().byId("multiPersonal").setModel(oDistinctModel);                                                       
+                            that.getView().byId("multiPersonal").setModel(oDistinctModel);
 
                             that._oPage.setBusy(false);
                             return;
@@ -218,7 +217,7 @@ sap.ui.define([
                     }
                 });
             }
-            getData(); */        
+            getData(); */
 
             /* var that = this,
                 iSkip = 0;

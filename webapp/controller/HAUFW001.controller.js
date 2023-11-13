@@ -106,7 +106,6 @@ sap.ui.define([
                                 }
                                 return aUnique;
                             }, []);
-                            console.log(aDistinctItems3);
 
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
@@ -363,11 +362,11 @@ sap.ui.define([
 
             } */
         },
-        onInputFunktionLiveChange: function (oEvent) {            
+        onInputFunktionLiveChange: function (oEvent) {
             var oInput = this.byId("__inputFunktion1"),
                 iInput = this.byId("__inputFunktion1").getValue(),
                 bExistFunktion = false;
-            this.byId("__inputFunktion2").setText(iInput.toString());            
+            this.byId("__inputFunktion2").setText(iInput.toString());
 
             this.aDistinctFunktion.forEach(item => {
                 if (item.funktion === iInput) {
@@ -375,13 +374,13 @@ sap.ui.define([
                     return;
                 }
             });
-            if (bExistFunktion) {                
+            if (bExistFunktion) {
                 oInput.setValueState(sap.ui.core.ValueState.Error);
                 oInput.setValueStateText("Diese Funktion ist bereits vorhanden");
             } else {
                 oInput.setValueState(sap.ui.core.ValueState.None);
                 oInput.setValueStateText("Geben Sie nicht mehr als 2 Ziffern ein");
-            }            
+            }
             this.createValidation();
         },
         handleSelectionFinish: function (oEvent) {
@@ -496,7 +495,7 @@ sap.ui.define([
                                     aUnique.push(oItem);
                                 }
                                 return aUnique;
-                            }, []);                            
+                            }, []);
                             that.byId("dialog1").setBusy(false);
                             that.createValidation();
                             return;
@@ -549,7 +548,7 @@ sap.ui.define([
                                 if (oData.__next) {
                                     batchSize += 100;
                                     retrieveData(sUrl);
-                                }                                
+                                }
                             },
                             error: function (oError) {
                                 console.error("Error al recuperar datos:", oError);
@@ -591,7 +590,7 @@ sap.ui.define([
                                             oInput = new sap.m.Input({
                                                 value: item.wert,
                                                 valueLiveUpdate: true,
-                                                valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",                                                
+                                                valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
                                                 liveChange: that.liveChangeInput.bind(that)
                                             });
                                         switch (item.typ) {
@@ -610,9 +609,9 @@ sap.ui.define([
                                                     placeholder: "Geben Sie nur vorhandene Datamarts ein",
                                                     showSuggestion: true,
                                                     value: item.wert,
-                                                    valueLiveUpdate: true,                                                    
+                                                    valueLiveUpdate: true,
                                                     liveChange: that.liveChangeInput.bind(that),
-                                                    valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",                                                    
+                                                    valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
                                                 });
                                                 break;
                                             case "I":
@@ -647,7 +646,7 @@ sap.ui.define([
                         });
                     }
                     getFunktion("/HAUFW001");
-                    this.byId("__inputEditFunktion").setText(oEntry.funktion);                    
+                    this.byId("__inputEditFunktion").setText(oEntry.funktion);
                     this.editValidation();
 
                 }.bind(this));
@@ -902,7 +901,7 @@ sap.ui.define([
                         value: this.byId("__editCRUD3").getValue(),
                         valueLiveUpdate: true,
                         valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
-                        liveChange: this.editValidation.bind(this)                        
+                        liveChange: this.editValidation.bind(this)
                     });
 
                 switch (this.byId("selecttyp1").getSelectedItem().getText()) {
@@ -924,7 +923,7 @@ sap.ui.define([
                             maxLength: 2,
                             valueLiveUpdate: true,
                             liveChange: this.editValidation.bind(this),
-                            valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",                            
+                            valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
                         });
                         break;
                     case "I":
@@ -1039,9 +1038,9 @@ sap.ui.define([
             var oNewEntryDatamart = {},
                 oNewEntryTyp = {},
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element erfolgreich erstellt");                                        
+                    sap.m.MessageToast.show("Element erfolgreich erstellt");
                 }.bind(this),
-                fnError = function (oError) {                    
+                fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
                 }.bind(this);
 
@@ -1087,7 +1086,7 @@ sap.ui.define([
 
                 this.byId("table1").getBinding("items").refresh();
 
-            } catch (error) {                
+            } catch (error) {
                 if (error instanceof TypeError) {
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 }
@@ -1229,7 +1228,7 @@ sap.ui.define([
 
                 if (error.message == "FalscheDatamartException")
                     sap.m.MessageBox.warning("Einer der Datamarts, die Sie hinzufügen möchten, existiert nicht");
-            }            
+            }
         },
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
@@ -1262,7 +1261,7 @@ sap.ui.define([
                                 error: fnError
                             });
                         } else {
-                            sap.m.MessageToast.show("Aktion abgebrochen");                            
+                            sap.m.MessageToast.show("Aktion abgebrochen");
                         }
                     }
                 });
@@ -1279,7 +1278,7 @@ sap.ui.define([
                     sap.m.MessageBox.error(oError.message);
                 },
                 oContext = oSelectedItem.getBindingContext(),
-                sFunktion = oContext.getProperty("funktion"),                
+                sFunktion = oContext.getProperty("funktion"),
                 that = this,
                 batchSize = 0,
                 batchSize1 = 0;
@@ -1409,7 +1408,7 @@ sap.ui.define([
             var mParams = oEvent.getParameters(),
                 sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
-            
+
             if (sort) {
                 var sPath = mParams.sortItem.getKey(),
                     bDescending = mParams.sortDescending;
