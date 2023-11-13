@@ -8,7 +8,7 @@
 						searchPlaceholder="Personalnummer suchen"
 						confirm=".multiInputPersTokenUpdate"
 						cancel=".onValueHelpDialogClose"
-						contentWidth="300px"						
+						contentWidth="400px"						
 						growingThreshold="20"						
 						multiSelect="true"
 						showClearButton="true"												

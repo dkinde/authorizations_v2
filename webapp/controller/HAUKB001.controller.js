@@ -36,7 +36,139 @@ sap.ui.define([
             this.aValue = [];
             this._oPage = this.byId("dynamicPage1");
 
-            var that = this,
+            var that = this;
+            var iSkip = 0;
+            var oModel = this.getOwnerComponent().getModel();
+
+            function getData() {
+                oModel.read("/HAUKB001", {
+                    urlParameters: {
+                        "$top": 5000,
+                        "$skip": iSkip
+                    },
+                    success: function (oData) {
+                        if (oData.results && oData.results.length > 0) {
+                            that.aValue = that.aValue.concat(oData.results);
+                        }
+                        console.log(that.aValue.length);
+                        if (oData.results.length === 5000) {
+                            iSkip += 5000;
+                            getData();
+                        } else {
+                            // Resto del código para procesar los datos
+                            // ...
+                            console.log(that.aValue);
+                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.datamart === oItem.datamart; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems2 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems3 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.org_einh === oItem.org_einh; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems4 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.typ === oItem.typ; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems5 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.entit === oItem.entit; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems6 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.infoobjectkontrolle === oItem.infoobjectkontrolle; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            var aDistinctItems7 = that.aValue.reduce(function (aUnique, oItem) {
+                                if (!aUnique.some(function (obj) { return obj.wertkontrolle === oItem.wertkontrolle; })) {
+                                    aUnique.push(oItem);
+                                }
+                                return aUnique;
+                            }, []);
+
+                            console.log("distinct 0: "+aDistinctItems.length);
+                            console.log("distinct 1: "+aDistinctItems1.length);
+                            console.log("distinct 2: "+aDistinctItems2.length);
+                            console.log("distinct 3: "+aDistinctItems3.length);
+                            console.log("distinct 4: "+aDistinctItems4.length);
+                            console.log("distinct 5: "+aDistinctItems5.length);
+                            console.log("distinct 6: "+aDistinctItems6.length);
+                            console.log("distinct 7: "+aDistinctItems7.length);
+
+                            var oDistinctModel = new sap.ui.model.json.JSONModel({
+                                distinctItems: aDistinctItems
+                            });
+                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
+                                distinctItems1: aDistinctItems1
+                            });
+                            var oDistinctModel2 = new sap.ui.model.json.JSONModel({
+                                distinctItems2: aDistinctItems2
+                            });
+                            var oDistinctModel3 = new sap.ui.model.json.JSONModel({
+                                distinctItems3: aDistinctItems3
+                            });
+                            var oDistinctModel4 = new sap.ui.model.json.JSONModel({
+                                distinctItems4: aDistinctItems4
+                            });
+                            var oDistinctModel5 = new sap.ui.model.json.JSONModel({
+                                distinctItems5: aDistinctItems5
+                            });
+                            var oDistinctModel6 = new sap.ui.model.json.JSONModel({
+                                distinctItems6: aDistinctItems6
+                            });
+                            var oDistinctModel7 = new sap.ui.model.json.JSONModel({
+                                distinctItems7: aDistinctItems7
+                            });
+
+                            that.getView().byId("multiPersonal").setModel(oDistinctModel);
+                            that.getView().byId("multiDatamart").setModel(oDistinctModel1);
+                            that.getView().byId("multiFunktion").setModel(oDistinctModel2);
+                            that.getView().byId("multiOrgEinh").setModel(oDistinctModel3);
+                            that.getView().byId("multiTyp").setModel(oDistinctModel4);
+                            that.getView().byId("multiEntit").setModel(oDistinctModel5);
+                            that.getView().byId("multiIOBJK").setModel(oDistinctModel6);
+                            that.getView().byId("multiWertK").setModel(oDistinctModel7);
+
+                            that._oPage.setBusy(false);
+                            return;
+                        }
+                    },
+                    error: function (errorEntit1) {
+                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+                    }
+                });
+            }
+            getData();
+
+            /* var that = this,
                 iSkip = 0;
 
             function getData() {
@@ -152,7 +284,7 @@ sap.ui.define([
                     }
                 });
             }
-            getData();
+            getData(); */
 
             /* this.oSmartVariantManagement = this.getView().byId("svm"); */
             this.oFilterBar = this.getView().byId("filterbar");
