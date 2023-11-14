@@ -68,32 +68,7 @@
 									</cells>                                        
 								</ColumnListItem>
 							</items>                                
-						</Table>
-        <!-- <form:SimpleForm editable="true">
-            <form:content>                
-                <Label text="{i18n>colAUFKT}" required="true"/>
-                <Text  id="__inputEditFunktion" />                
-                <Label  text="{i18n>colAUENTTYP}" required="true"/>
-                <Select id="selecttyp1" 
-                        change="filterTyp1"
-                        forceSelection="false">
-                    <core:Item key="D" text="D" />
-                    <core:Item key="I" text="I" />
-                    <core:Item key="S" text="S" />                                                        
-                </Select>
-                <Label  text="{i18n>colAUENT}" required="true"/>
-                <Select id="selectentit1" 
-						change="editValidation" 
-						forceSelection="false">
-					<core:Item key="" text=""/>                                                                                           
-				</Select>
-                <Label  text="{i18n>colAUWERT}" required="true"/>
-                <Input  id="__editCRUD3" 
-                        liveChange="editValidation" 
-                        valueLiveUpdate="true" 
-                        valueStateText="Geben Sie nicht mehr als 60 Zeichen ein"/>
-            </form:content>							
-        </form:SimpleForm> -->			
+						</Table>		
     </content>
     <beginButton>
         <Button id="editButton" text="{i18n>editDialogBeginButton}" type="Accept" press=".onUpdateEditPress"/>

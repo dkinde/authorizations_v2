@@ -350,7 +350,7 @@ sap.ui.define([
             var oInput = oEvent.getSource(),
                 sInput = oInput.getValue().toUpperCase(),
                 lettersOnly = /^[A-Za-z]+$/;
-
+            
             if (lettersOnly.test(sInput)) {
                 oInput.setValue(sInput);
             }
@@ -529,25 +529,28 @@ sap.ui.define([
                         path: '/HAUFW001'
                     });
                     this.oDialogEdit.open();
-                    var batchSize = 0,
+                    var iSkip1 = 0,
+                        iSkip = 0,
                         that = this,
                         oTable = this.byId("table6");
 
                     oTable.addStyleClass("firstRow");
-                    function retrieveEntit(sUrl) {
-                        that._oModel.read(sUrl, {
+                    function retrieveEntit() {
+                        that._oModel.read("/AUDMART", {
                             urlParameters: {
-                                "$skiptoken": batchSize
+                                "$top": 5000,
+                                "$skip": iSkip1
                             },
-                            success: function (oData, oResponse) {
-                                if (oData && oData.results) {
+                            success: function (oData) {
+                                if (oData.results && oData.results.length > 0) {
                                     that.aDatamart = that.aDatamart.concat(oData.results.map(function (item) {
                                         return item;
                                     }));
                                 }
-                                if (oData.__next) {
-                                    batchSize += 100;
-                                    retrieveData(sUrl);
+                                if (oData.results.length === 5000) {
+                                    iSkip1 += 5000;
+                                    // batchSize += 100;
+                                    retrieveEntit();
                                 }
                             },
                             error: function (oError) {
@@ -557,12 +560,13 @@ sap.ui.define([
                     }
                     retrieveEntit("/AUDMART");
 
-                    function getFunktion(sUrl) {
-                        that._oModel.read(sUrl, {
+                    function getFunktion() {
+                        that._oModel.read("/HAUFW001", {
                             urlParameters: {
-                                "$skiptoken": batchSize,
+                                "$top": 5000,
+                                "$skip": iSkip
                             },
-                            success: function (oData, oResponse) {
+                            success: function (oData) {
                                 if (oData && oData.results) {
                                     oData.results.forEach(item => {
                                         if (item.funktion === oEntry.funktion) {
@@ -570,9 +574,10 @@ sap.ui.define([
                                         }
                                     });
                                 }
-                                if (oData.__next) {
-                                    batchSize += 100;
-                                    getFunktion(sUrl);
+                                if (oData.results.length === 5000) {
+                                    iSkip += 5000;
+                                    // batchSize += 100;
+                                    getFunktion();
                                 }
                                 else {
                                     that.aDefinition.forEach(item => {
@@ -645,7 +650,7 @@ sap.ui.define([
                             }
                         });
                     }
-                    getFunktion("/HAUFW001");
+                    getFunktion();
                     this.byId("__inputEditFunktion").setText(oEntry.funktion);
                     this.editValidation();
 
@@ -753,7 +758,12 @@ sap.ui.define([
         editValidation: function () {
             var selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
                 selectEntit = this.getView().byId("selectentit1").getSelectedKey(),
+                sInput = this.byId("__editCRUD3").getValue(),
+                oInput = this.byId("__editCRUD3"),
                 lettersOnly = /^[A-Za-z]+$/;
+
+            oInput.setValueState(sap.ui.core.ValueState.None);
+            oInput.setValueStateText("");
 
             if (lettersOnly.test(this.byId("__editCRUD3").getValue())) {
                 this.byId("__editCRUD3").setValue(this.byId("__editCRUD3").getValue().toUpperCase());
@@ -779,7 +789,7 @@ sap.ui.define([
             }
 
             // validation all inputs - edit & add button
-            if (selectTyp && selectEntit) {
+            if (selectTyp && selectEntit && sInput !== "") {
                 // this.byId("editButton").setEnabled(true);
                 this.byId("addButton3").setEnabled(true);
             } else {
@@ -901,7 +911,7 @@ sap.ui.define([
                         value: this.byId("__editCRUD3").getValue(),
                         valueLiveUpdate: true,
                         valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
-                        liveChange: this.editValidation.bind(this)
+                        liveChange: this.liveChangeInput.bind(this)
                     });
 
                 switch (this.byId("selecttyp1").getSelectedItem().getText()) {
@@ -922,7 +932,7 @@ sap.ui.define([
                             value: this.byId("__editCRUD3").getValue(),
                             maxLength: 2,
                             valueLiveUpdate: true,
-                            liveChange: this.editValidation.bind(this),
+                            liveChange: this.liveChangeInput.bind(this),
                             valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
                         });
                         break;
@@ -960,10 +970,10 @@ sap.ui.define([
                 this.aCreate.push(aRow);
                 sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
 
-                this.editValidation();
                 this.byId("selecttyp1").setSelectedKey(null);
                 this.byId("selectentit1").setSelectedKey(null);
                 this.byId("__editCRUD3").setValue("");
+                this.editValidation();
 
             } catch (error) {
                 if (error.message == "EmptyFieldException")
@@ -1119,6 +1129,7 @@ sap.ui.define([
         onUpdateEditPress: function () {
             var bEinDatamart = false,
                 bExistDatamrt = true,
+                bAlleDatamart = false,
                 bEmptyField = false,
                 that = this,
                 iTotal = this.aDefinition.length,
@@ -1141,6 +1152,7 @@ sap.ui.define([
                         bEinDatamart = true;
                         if (sInput === "*") {
                             bDatamartOK = true;
+                            bAlleDatamart = true;
                         } else {
                             this.aDatamart.forEach(item => {
                                 if (sInput === item.datamart) {
@@ -1175,14 +1187,27 @@ sap.ui.define([
                         success: function () {
                             iTotalSuccess++;
                             if (iTotalSuccess === iTotal) {
-                                var aCreateUpd = [];
+                                var aCreateUpd = [],
+                                    bFirst = true;
                                 for (let i = 1; i < iItems.length; i++) {
-                                    var aRow = [iItems[i].getCells()[0].getText(),
-                                    iItems[i].getCells()[1].getSelectedItem().getText(),
-                                    iItems[i].getCells()[2].getSelectedItem().getText(),
-                                    iItems[i].getCells()[3].getValue()];
-                                    aCreateUpd.push(aRow);
+                                    if (bAlleDatamart && bFirst && iItems[i].getCells()[1].getSelectedItem().getText() === "D") {
+                                        var aRow = [iItems[i].getCells()[0].getText(),
+                                        iItems[i].getCells()[1].getSelectedItem().getText(),
+                                        iItems[i].getCells()[2].getSelectedItem().getText(),
+                                            "*"];
+                                        aCreateUpd.push(aRow);
+                                        bFirst = false;
+                                    } else if (bAlleDatamart && !bFirst && iItems[i].getCells()[1].getSelectedItem().getText() === "D") {
+                                        continue;
+                                    } else {
+                                        var aRow = [iItems[i].getCells()[0].getText(),
+                                        iItems[i].getCells()[1].getSelectedItem().getText(),
+                                        iItems[i].getCells()[2].getSelectedItem().getText(),
+                                        iItems[i].getCells()[3].getValue()];
+                                        aCreateUpd.push(aRow);
+                                    }
                                 }
+                                console.log(aCreateUpd);
                                 aCreateUpd.forEach(item => {
                                     that._oModel.create("/HAUFW001", {
                                         funktion: item[0],
@@ -1216,6 +1241,7 @@ sap.ui.define([
                         error: fnError
                     });
                 });
+
             } catch (error) {
                 if (error instanceof TypeError)
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
