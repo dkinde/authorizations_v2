@@ -443,15 +443,36 @@ sap.ui.define([
                 aItems = oTable.getItems();
             for (var i = aItems.length - 1; i > 0; i--) {
                 oTable.removeItem(aItems[i]);
+                console.log(aItems[i]);
             }
 
+            console.log(aItems);
             this.oDialogEdit.close();
+            console.log(this.oDialogEdit);
         },
         onCloseDeleteDialog: function () {
+            // this._oModel.resetChanges();
+            // this.byId("table3").getBinding("items").filter([]);
             sap.m.MessageToast.show("Aktion abgebrochen");
+            this.byId("__textFunktion").setText("");
+            this.byId("__textTyp").setText("");
+            this.byId("__textEntit").setText("");
+            this.byId("__textWert").setText("");
             this.aDefinitionDelete = [];
             this.aPersNumm = [];
+
+            this.byId("table3").destroyItems();
+            /* var aItems = this.byId("table3").getItems();
+            for (let i = 0; i < aItems.length; i++) {
+                this.byId("table3").removeItem(aItems[i]);
+                console.log(aItems[i]);
+            } */
+
+            // oEvent.getSource().getBinding("items").filter([]);
+
+            // console.log(aItems);
             this.oDialogDelete.close();
+            console.log(this.oDialogDelete);
         },
         onOpenCreateDialog: function () {
             if (!this._oDialogCRUD) {
@@ -674,10 +695,10 @@ sap.ui.define([
                 }
                 this._oDialogDelete.then(function (oDialog) {
                     this.oDialogDelete = oDialog;
-                    oView.addDependent(this.oDialogDelete);
-                    this.oDialogDelete.bindElement({
+                    /* oView.addDependent(this.oDialogDelete); */
+                    /* this.oDialogDelete.bindElement({
                         path: '/HAUPF001'
-                    });
+                    }); */
                     this.oDialogDelete.open();
                     var oContext = oSelectedItem.getBindingContext(),
                         sFunktion = oContext.getProperty("funktion"),
@@ -1287,28 +1308,28 @@ sap.ui.define([
                                 sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntit + "',wert='" + sWert + "')";
 
                             if (sTyp === "D" && sWert === "*")
-                                sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");                                
+                                sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");
                             else if (sTyp === "D") {
                                 var iCount = 0;
                                 for (let i = 0; i < aItems.length; i++) {
-                                    if (aItems[i].getCells()[0].getText() === sFunktion )
+                                    if (aItems[i].getCells()[0].getText() === sFunktion)
                                         aFunktion.push([aItems[i].getCells()[0].getText(),
-                                                        aItems[i].getCells()[1].getText(),
-                                                        aItems[i].getCells()[2].getText(),
-                                                        aItems[i].getCells()[3].getText()]);
+                                        aItems[i].getCells()[1].getText(),
+                                        aItems[i].getCells()[2].getText(),
+                                        aItems[i].getCells()[3].getText()]);
                                 }
-                                aFunktion.forEach(item => {                                        
-                                    if(item[1] === "D")
+                                aFunktion.forEach(item => {
+                                    if (item[1] === "D")
                                         ++iCount;
                                 });
                                 if (iCount < 2)
-                                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");                                    
-                                else 
+                                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");
+                                else
                                     that._oModel.remove(sURL, {
                                         success: fnSuccess,
                                         error: fnError
                                     });
-                            } else {                                
+                            } else {
                                 that._oModel.remove(sURL, {
                                     success: fnSuccess,
                                     error: fnError
@@ -1334,25 +1355,29 @@ sap.ui.define([
                 oContext = oSelectedItem.getBindingContext(),
                 sFunktion = oContext.getProperty("funktion"),
                 that = this,
+                iSkip = 0,
+                iSkip1 = 0,
                 batchSize = 0,
                 batchSize1 = 0;
 
-            function getFunktion(sUrl) {
-                that._oModel.read(sUrl, {
+            function getFunktion() {
+                that._oModel.read("/HAUFW001", {
                     urlParameters: {
-                        "$skiptoken": batchSize,
+                        "$top": 5000,
+                        "$skip": iSkip
                     },
-                    success: function (oData, oResponse) {
-                        if (oData && oData.results) {
+                    success: function (oData) {
+                        if (oData.results && oData.results.length > 0) {
                             oData.results.forEach(item => {
                                 if (item.funktion === sFunktion) {
                                     that.aDefinitionDelete = that.aDefinitionDelete.concat(item);
                                 }
                             });
                         }
-                        if (oData.__next) {
+                        if (oData.results.length === 5000) {
+                            iSkip += 5000;
                             batchSize += 100;
-                            getFunktion(sUrl);
+                            getFunktion();
                         }
                         else {
                             that.aDefinitionDelete.forEach(item => {
@@ -1369,24 +1394,26 @@ sap.ui.define([
                     }
                 });
             }
-            getFunktion("/HAUFW001");
+            getFunktion();
 
-            function getPersNumm(sUrl) {
-                that._oModel.read(sUrl, {
+            function getPersNumm() {
+                that._oModel.read("/HAUPF001", {
                     urlParameters: {
-                        "$skiptoken": batchSize1,
+                        "$top": 5000,
+                        "$skip": iSkip1
                     },
-                    success: function (oData, oResponse) {
-                        if (oData && oData.results) {
+                    success: function (oData) {
+                        if (oData.results && oData.results.length > 0) {
                             oData.results.forEach(item => {
                                 if (item.funktion === sFunktion) {
                                     that.aPersNumm = that.aPersNumm.concat(item);
                                 }
                             });
                         }
-                        if (oData.__next) {
+                        if (oData.results.length === 5000) {
+                            iSkip1 += 5000;
                             batchSize1 += 100;
-                            getFunktion(sUrl);
+                            getPersNumm();
                         }
                         else {
                             that.aPersNumm.forEach(item => {
@@ -1396,6 +1423,21 @@ sap.ui.define([
                                     error: fnError
                                 });
                             });
+                            // that.onCloseDeleteDialog();
+                            that.aDefinitionDelete = [];
+                            that.aPersNumm = [];
+                            that.byId("table3").getBinding("items").filter([]);
+                            that.byId("__textFunktion").setText("");
+                            that.byId("__textTyp").setText("");
+                            that.byId("__textEntit").setText("");
+                            that.byId("__textWert").setText("");
+
+                            var oTable = that.getView().byId("table3"),
+                                aItems = oTable.getItems();
+                            for (var i = 0; i < aItems.length; i++) {
+                                oTable.removeItem(aItems[i]);
+                            }
+                            that.oDialogDelete.close();
                         }
                     },
                     error: function (oError) {
@@ -1403,9 +1445,9 @@ sap.ui.define([
                     }
                 });
             }
-            getPersNumm("/HAUPF001");
+            getPersNumm();
 
-            this.onCloseDeleteDialog();
+            // this.onCloseDeleteDialog();
         },
         onSearch1: function (oEvent) {
             var aFilters = [],

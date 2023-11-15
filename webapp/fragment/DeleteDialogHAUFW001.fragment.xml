@@ -1,39 +1,39 @@
 <core:FragmentDefinition xmlns="sap.m" 
                          xmlns:core="sap.ui.core"                                                   
 						 xmlns:form="sap.ui.layout.form" 
-						 xmlns:l="sap.ui.layout"
-                         width="100%">
-    <Dialog title="Sonderfunktion vollständig entfernen " id="dialog3" busy="false" 
+						 width="100%">
+    <Dialog title="Sonderfunktion vollständig entfernen " id="dialog3" 
 			contentHeight="700px" contentWidth="750px" resizable="true">
 		<content>			
 			<VBox   class="sapUiSmallMargin">
 				<Title  text="Ausgewähltes Element"/>
 				<form:SimpleForm id="form1" editable="false" width="600px" >
 					<form:content>						
-						<Label text="{i18n>colAUFKT}" id="text9" required="true"/>					
-						<Text  id="__textFunktion"  />
-						<Label 	text="{i18n>colAUENTTYP}"  id="text10" required="true"/>
+						<Label text="{i18n>colAUFKT}" required="true"/>					
+						<Text  id="__textFunktion"  text=""/>
+						<Label 	text="{i18n>colAUENTTYP}" required="true"/>
 						<Text 	id="__textTyp"  text=""/>						
-						<Label 	text="{i18n>colAUENT}"  id="text11" required="true"/>	
+						<Label 	text="{i18n>colAUENT}"  required="true"/>	
 						<Text 	id="__textEntit" text=""/>										
-						<Label 	text="{i18n>colAUWERT}" id="text12" required="true"/>
+						<Label 	text="{i18n>colAUWERT}" required="true"/>
 						<Text 	id="__textWert" text=""/>																		
 					</form:content>							
 				</form:SimpleForm>					
-					<Title  text="zugewiesene Personalnummer"/>
-						<Table  id="table3"                         		
-								headerText="zugewiesene Personalnummer"
-								items="{/HAUPF001}"   
+					<Title  text="Zugewiesene Personalnummer"/>
+						<Table  id="table3"                         										
+								items="{ 
+									path: '/HAUPF001' 
+								}"   
 								noDataText="Dieser Funktion hat keine Personalnummer zugeordnet"
-								fixedLayout="true">
+								fixedLayout="false">
 							<headerToolbar>
 								<Toolbar>
 									<content>
 										<MessageStrip
+											id="messageStrip1"
 											text="Wenn Sie die gesamte Funktion löschen, werden alle zugeordneten Personalnummern gelöscht"
 											type="Warning"
-											showIcon="true"
-											showCloseButton="false">
+											showIcon="true">
 										</MessageStrip>										                                                                                          
 									</content>
 								</Toolbar>
@@ -49,8 +49,8 @@
 							<items>
 								<ColumnListItem>
 									<cells>
-										<ObjectIdentifier title="{funktion}" /> 
-										<ObjectIdentifier title="{personalnummer}" text="{txt}" />                                        																			                                                                                                                                   
+										<ObjectIdentifier title="{funktion}" text="{txt_fkt}"/> 
+										<ObjectIdentifier title="{personalnummer}"  text="{txt_pers}"/>                                        																			                                                                                                                                   
 									</cells>                                        
 								</ColumnListItem>
 							</items>                                
