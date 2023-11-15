@@ -1,7 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m" 
                          xmlns:core="sap.ui.core"                                                   
-						 xmlns:form="sap.ui.layout.form" 
-						 xmlns:l="sap.ui.layout"
+						 xmlns:form="sap.ui.layout.form" 						 
                          width="100%">
     <Dialog title="{i18n>inputFieldDialogTitleFunktion}" id="dialog1" busy="true" 
 			contentHeight="700px" contentWidth="750px" resizable="true">
@@ -10,8 +9,7 @@
 				<Title  text="Datamart hinzufügen"/>
 				<form:SimpleForm id="form1" editable="false" width="600px" >
 					<form:content>						
-						<Label text="{i18n>colAUFKT}" id="text9" required="true"/>					
-						<!-- <Text  id="__inputFunktion1"  /> -->
+						<Label text="{i18n>colAUFKT}" id="text9" required="true"/>											
 						<Input  id="__inputFunktion1" 
 								liveChange="createValidation" 
 								type="Number"

@@ -350,7 +350,7 @@ sap.ui.define([
             var oInput = oEvent.getSource(),
                 sInput = oInput.getValue().toUpperCase(),
                 lettersOnly = /^[A-Za-z]+$/;
-            
+
             if (lettersOnly.test(sInput)) {
                 oInput.setValue(sInput);
             }
@@ -558,7 +558,7 @@ sap.ui.define([
                             }
                         });
                     }
-                    retrieveEntit("/AUDMART");
+                    retrieveEntit();
 
                     function getFunktion() {
                         that._oModel.read("/HAUFW001", {
@@ -772,7 +772,7 @@ sap.ui.define([
             if (selectTyp) {
                 if (this.byId("selecttyp1").getSelectedItem().getText() === "D") {
                     this.byId("__editCRUD3").setShowSuggestion(true);
-                    this.byId("__editCRUD3").setAutocomplete(true);
+                    // this.byId("__editCRUD3").setAutocomplete(true);
                 } else {
                     this.byId("__editCRUD3").setAutocomplete(false);
                     this.byId("__editCRUD3").setShowSuggestion(false);
@@ -781,7 +781,7 @@ sap.ui.define([
             if (selectEntit) {
                 if (this.byId("selectentit1").getSelectedItem().getText() === "DATAMART") {
                     this.byId("__editCRUD3").setShowSuggestion(true);
-                    this.byId("__editCRUD3").setAutocomplete(true);
+                    // this.byId("__editCRUD3").setAutocomplete(true);
                 } else {
                     this.byId("__editCRUD3").setAutocomplete(false);
                     this.byId("__editCRUD3").setShowSuggestion(false);
@@ -1257,7 +1257,9 @@ sap.ui.define([
             }
         },
         onDeletePress: function () {
-            var oSelectedItem = this.byId("table1").getSelectedItem(),
+            var aItems = this.byId("table1").getItems(),
+                oSelectedItem = this.byId("table1").getSelectedItem(),
+                sFunktion = oSelectedItem.getBindingContext().getProperty("funktion"),
                 fnSuccess = function () {
                     sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
                 },
@@ -1277,15 +1279,41 @@ sap.ui.define([
                             that.onOpenDeleteDialog();
                         } else if (sAction === "Nur dieses Element") {
                             var oContext = oSelectedItem.getBindingContext(),
+                                aFunktion = [],
                                 sFunktion = oContext.getProperty("funktion"),
                                 sTyp = oContext.getProperty("typ"),
                                 sEntit = oContext.getProperty("entit"),
                                 sWert = oContext.getProperty("wert"),
                                 sURL = "/HAUFW001(funktion='" + sFunktion + "',typ='" + sTyp + "',entit='" + sEntit + "',wert='" + sWert + "')";
-                            this._oModel.remove(sURL, {
-                                success: fnSuccess,
-                                error: fnError
-                            });
+
+                            if (sTyp === "D" && sWert === "*")
+                                sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");                                
+                            else if (sTyp === "D") {
+                                var iCount = 0;
+                                for (let i = 0; i < aItems.length; i++) {
+                                    if (aItems[i].getCells()[0].getText() === sFunktion )
+                                        aFunktion.push([aItems[i].getCells()[0].getText(),
+                                                        aItems[i].getCells()[1].getText(),
+                                                        aItems[i].getCells()[2].getText(),
+                                                        aItems[i].getCells()[3].getText()]);
+                                }
+                                aFunktion.forEach(item => {                                        
+                                    if(item[1] === "D")
+                                        ++iCount;
+                                });
+                                if (iCount < 2)
+                                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");                                    
+                                else 
+                                    that._oModel.remove(sURL, {
+                                        success: fnSuccess,
+                                        error: fnError
+                                    });
+                            } else {                                
+                                that._oModel.remove(sURL, {
+                                    success: fnSuccess,
+                                    error: fnError
+                                });
+                            }
                         } else {
                             sap.m.MessageToast.show("Aktion abgebrochen");
                         }

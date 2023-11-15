@@ -334,26 +334,29 @@ sap.ui.define([
         },
         onSearchPersonal: function (oEvent) {
             var sValue = oEvent.getParameter("value"),
-                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.StartsWith, sValue),
+                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getParameter("itemsBinding");
             oBinding.filter([oFilter]);
         },
         suggestPersonalnummer: function (oEvent) {
             var sValue = oEvent.getParameter("suggestValue"),
-                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.StartsWith, sValue),
+                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getSource().getBinding("suggestionItems");
+            console.log(oFilter);
             oBinding.filter([oFilter]);
         },
         onSearchFunktion: function (oEvent) {
             var sValue = oEvent.getParameter("value"),
-                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.StartsWith, sValue),
+                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getParameter("itemsBinding");
             oBinding.filter([oFilter]);
         },
         suggestFunktion: function (oEvent) {
             var sValue = oEvent.getParameter("suggestValue"),
-                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.StartsWith, sValue),
+                oFilter = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getSource().getBinding("suggestionItems");
+            console.log(sValue);
+            console.log(oFilter);
             oBinding.filter([oFilter]);
         },
         multiInputPersTokenUpdate: function (oEvent) {

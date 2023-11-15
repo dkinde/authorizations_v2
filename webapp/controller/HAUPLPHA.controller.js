@@ -305,13 +305,13 @@ sap.ui.define([
         },
         onSearchPersonal: function (oEvent) {
             var sValue = oEvent.getParameter("value"),
-                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.StartsWith, sValue),
+                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getParameter("itemsBinding");
             oBinding.filter([oFilter]);
         },
         suggestPersonalnummer: function (oEvent) {
             var sValue = oEvent.getParameter("suggestValue"),
-                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.StartsWith, sValue),
+                oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getSource().getBinding("suggestionItems");
             oBinding.filter([oFilter]);
         },
