@@ -7,7 +7,7 @@
 		<content>			
 			<VBox   class="sapUiSmallMargin">
 				<Title  text="Ausgewähltes Element"/>
-				<form:SimpleForm id="form1" editable="false" width="600px" >
+				<form:SimpleForm id="form2" editable="false" width="600px" >
 					<form:content>						
 						<Label text="{i18n>colAUFKT}" required="true"/>					
 						<Text  id="__textFunktion"  text=""/>
@@ -58,7 +58,7 @@
 					</VBox>						
 		</content>
 		<beginButton>
-			<Button id="createButton" 
+			<Button id="deleteButton" 
 					text="Sonderfunktion Löschen" 
 					type="Reject"  
 					icon="sap-icon://delete" 

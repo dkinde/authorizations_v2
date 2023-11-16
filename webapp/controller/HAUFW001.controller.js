@@ -434,9 +434,7 @@ sap.ui.define([
                 console.log(aItems[i]);
             }
 
-            console.log(aItems);
             this.oDialogEdit.close();
-            console.log(this.oDialogEdit);
         },
         onCloseDeleteDialog: function () {
             this._oModel.resetChanges();
@@ -480,7 +478,7 @@ sap.ui.define([
                                 return item;
                             }));
                         }
-                        if (oData.results.length = 5000) {
+                        if (oData.results.length === 5000) {
                             iSkip += 5000;
                             getData();
                         } else {
@@ -659,7 +657,6 @@ sap.ui.define([
         },
         onOpenDeleteDialog: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
-                iIndex = this.byId("table1").indexOfItem(oSelectedItem),
                 oView = this.getView();
 
             if (oSelectedItem) {
@@ -671,10 +668,10 @@ sap.ui.define([
                 }
                 this._oDialogDelete.then(function (oDialog) {
                     this.oDialogDelete = oDialog;
-                    /* oView.addDependent(this.oDialogDelete); */
-                    /* this.oDialogDelete.bindElement({
+                    oView.addDependent(this.oDialogDelete);
+                    this.oDialogDelete.bindElement({
                         path: '/HAUPF001'
-                    }); */
+                    });
                     this.oDialogDelete.open();
                     var oContext = oSelectedItem.getBindingContext(),
                         sFunktion = oContext.getProperty("funktion"),
