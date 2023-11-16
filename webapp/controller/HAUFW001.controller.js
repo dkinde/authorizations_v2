@@ -431,7 +431,6 @@ sap.ui.define([
                 aItems = oTable.getItems();
             for (var i = aItems.length - 1; i > 0; i--) {
                 oTable.removeItem(aItems[i]);
-                console.log(aItems[i]);
             }
 
             this.oDialogEdit.close();
@@ -1215,7 +1214,6 @@ sap.ui.define([
                                 that.byId("selectentit1").setSelectedKey(null);
                                 that.aDefinition = [];
                                 that.aCreate = [];
-                                that.aUpdate = [];
                                 that.aDelete = [];
 
                                 var oTable = that.getView().byId("table6"),
@@ -1230,7 +1228,6 @@ sap.ui.define([
                         error: fnError
                     });
                 });
-
             } catch (error) {
                 if (error instanceof TypeError)
                     sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
