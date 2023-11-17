@@ -359,7 +359,6 @@ sap.ui.define([
                 });
                 this.byId("selectphase1").setModel(oDistinctModel1);
             }.bind(this));
-
         },
         createValidation: function () {
             var aItems = this.getView().byId("table2").getItems();
@@ -371,8 +370,7 @@ sap.ui.define([
                 this.byId("deleteButton2").setEnabled(false);
             }
 
-            if (this.aSelectedPhase != '' &&
-                this.aSelectedPersonal != '')
+            if (this.aSelectedPhase != '' && this.aSelectedPersonal != '')
                 this.byId("addButton2").setEnabled(true);
             else
                 this.byId("addButton2").setEnabled(false);
@@ -420,7 +418,7 @@ sap.ui.define([
                 });
 
                 if (bAssigExist) {
-                    var sMessage = "Die folgenden Zuordnungen sind bereits vorhanden\n";
+                    var sMessage = "Die folgenden Zuordnungen sind bereits vorhanden:\n \n";
                     aAssigExist.forEach(function (item) {
                         sMessage += "Phase: " + item.pla_pha + " => Personalnummer: " + item.personalnummer + "\n";
                     });

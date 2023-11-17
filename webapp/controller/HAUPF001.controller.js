@@ -500,7 +500,7 @@ sap.ui.define([
                 });
 
                 if (bAssigExist) {
-                    var sMessage = "Die folgenden Zuordnungen sind bereits vorhanden\n";
+                    var sMessage = "Die folgenden Zuordnungen sind bereits vorhanden:\n \n";
                     aAssigExist.forEach(function (item) {
                         sMessage += "Personalnummer: " + item.personalnummer + " => Funktion: " + item.funktion + "\n";
                     });
@@ -573,7 +573,7 @@ sap.ui.define([
                     aItems = oTable.getItems(),
                     aCreate = [],
                     that = this,
-                    fnSuccess = function (oData) {
+                    fnSuccess = function () {
                         sap.m.MessageToast.show("Funktion erfolgreich zugeordnet");
                     }.bind(this),
                     fnError = function (oError) {
@@ -633,48 +633,21 @@ sap.ui.define([
             var oUpdateEntry = {},
                 oModel = this.getView().getModel(),
                 oContext = this.byId("table1").getSelectedItem().getBindingContext(),
-                sPath = oContext.getPath(),
                 sGroupId = oModel.getGroupId(),
                 fnSucces = function () {
                     this._setBusy(false);
                     sap.m.MessageToast.show("Objekt erfolgreich aktualisiert");
-                    var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
-                        if (oItem.getBindingContext() === oContext) {
-                            oItem.focus();
-                            oItem.setSelected(true);
-                            return true;
-                        }
-                    });
                     this._setUIChanges(false);
                 }.bind(this),
                 fnError = function (oError) {
                     this._setBusy(false);
                     sap.m.MessageBox.error(oError.message);
                     this._setUIChanges(false);
-                }.bind(this),
-                iIndex = oContext.getIndex();
-
-            this._oEditItem = this.byId("table1").getSelectedItem();
-
-            oUpdateEntry.Personalnummer = this.getView().byId("__editCRUD0").getValue();
-            oUpdateEntry.Funktion = this.getView().byId("__editCRUD1").getValue();
-
-            //oContext.getProperty(sPath);                       
-            //this._setBusy(true);
-            //oContext.setProperty("InfoAuthName",oUpdateEntry.InfoAuthName,"$auto",false);     
-            //oContext.setProperty("NameCube",oUpdateEntry.NameCube,"$auto",false);
-            //oContext.setProperty("InfoName",oUpdateEntry.InfoName,"$auto",false);
-            //oContext.setProperty("InfoTyp",oUpdateEntry.InfoTyp,"$auto",false);
-            //oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,"$auto",false);  
-            //oContext.requestProperty("Sequenz").then(oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,)) ;
+                }.bind(this);
 
             oModel.submitBatch(sGroupId, function () {
-
                 oContext.setProperty("personalnummer", oUpdateEntry.Personalnummer);
                 oContext.setProperty("funktion", oUpdateEntry.Funktion);
-
-                oModel.submitBatch(sGroupId).then(fnSucces, fnError);
             }, fnError);
 
             var sPersonalnummer = oContext.getProperty("personalnummer"),
@@ -687,30 +660,18 @@ sap.ui.define([
                 oContext.setProperty("funktion", oUpdateEntry.Funktion);
             }
             oModel.submitBatch(sGroupId).then(fnSucces, fnError);
-            //this._oModel.submitChanges();
-
-            //this._setBusy(false);
-            //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));                 
-            //this._bTechnicalErrors = false;            
-            //this.byId("table1").getBinding("items").refresh();             
 
             if (oContext.hasPendingChanges()) {
                 oModel.submitBatch("$auto").then(fnSucces, fnError);
                 sap.m.MessageToast.show("kann aufgrund von anstehenden Änderungen nicht aktualisiert werden");
             }
             else {
-                //this._oModel.submitBatch("$auto").then(fnSucces, fnError);
                 oContext.refresh();
                 this.byId("dialog2").close();
             }
-
-            //this._oModel.resetChanges();                                    
-            //var oContext = this.byId("table1").getBinding("items").update();
-
         },
         onUpdatePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem();
-
             if (oSelectedItem) {
                 var oView = this.getView(),
                     oContext = oSelectedItem.getBindingContext(),
@@ -725,12 +686,9 @@ sap.ui.define([
                     this.oDialogEdit = oDialog;
                     oView.addDependent(this.oDialogEdit);
                     this.oDialogEdit.open();
-
                     this.byId("__editCRUD0").setValue(oEntry.personalnummer);
                     this.byId("__editCRUD1").setValue(oEntry.funktion);
-
                 }.bind(this));
-
             } else {
                 sap.m.MessageBox.warning("Es wurde kein Element zur Aktualisierung ausgewählt");
             }
@@ -761,7 +719,6 @@ sap.ui.define([
         onSearch1: function (oEvent) {
             var aFilters = [],
                 sQuery = oEvent.getSource().getValue();
-
             if (sQuery && sQuery.length > 0) {
                 var filter = new sap.ui.model.Filter([
                     new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery),
