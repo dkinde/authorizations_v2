@@ -2,10 +2,9 @@
             xmlns:core="sap.ui.core"      
             xmlns="sap.m"            
             xmlns:f="sap.f"
-		    xmlns:fb="sap.ui.comp.filterbar"
-            xmlns:svm="sap.ui.comp.smartvariants"
+		    xmlns:fb="sap.ui.comp.filterbar"            
             controllerName="auth.controller.HAUKB001">
-    <f:DynamicPage id="dynamicPage1" headerExpanded="true" busy="true">
+    <f:DynamicPage id="dynamicPage1" busy="true">
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
@@ -16,10 +15,7 @@
 					</f:expandedContent>
 					<f:snappedContent>
 						<Label id="snappedLabel" text="No filters active" />
-					</f:snappedContent>
-                    <!-- <f:actions>
-                        <Button text="zur Startseite" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
-                    </f:actions> -->
+					</f:snappedContent>                    
                     <f:navigationActions>
                         <Button text="zur Startseite" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:navigationActions>
@@ -100,31 +96,7 @@
 											<core:ListItem key="{entit}" text="{entit}"/>
 										</MultiComboBox>
 									</fb:control>
-								</fb:FilterGroupItem>
-                                <!-- <fb:FilterGroupItem name="infoobjectkontrolle" label="{i18n>colAUIOBJK}" groupName="Group1" 
-                                                    visibleInFilterBar="true">
-									<fb:control>
-										<MultiComboBox  id="multiIOBJK" name="infoobjectkontrolle"	selectionChange=".onSelectionChange"
-                                                        items="{
-                                                            path: '/distinctItems6',
-												            templateShareable: true
-                                                        }">
-											<core:ListItem key="{infoobjectkontrolle}" text="{infoobjectkontrolle}"/>
-										</MultiComboBox>
-									</fb:control>
-								</fb:FilterGroupItem>
-                                <fb:FilterGroupItem name="wertkontrolle" label="{i18n>colAUWERTK}" groupName="Group1" 
-                                                    visibleInFilterBar="true">
-									<fb:control>
-										<MultiComboBox  id="multiWertK" name="wertkontrolle"	selectionChange=".onSelectionChange"
-                                                        items="{
-                                                            path: '/distinctItems7',
-												            templateShareable: true
-                                                        }">
-											<core:ListItem key="{wertkontrolle}" text="{wertkontrolle}"/>
-										</MultiComboBox>
-									</fb:control>
-								</fb:FilterGroupItem> -->
+								</fb:FilterGroupItem>                                
 							</fb:filterGroupItems>
 						</fb:FilterBar>
 					</f:content>

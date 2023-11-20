@@ -8,98 +8,72 @@ sap.ui.define([
         "use strict";
 
         return Controller.extend("auth.controller.Home", {
+            // Initialization function called when the view is created
             onInit: function () {
+                // Set the language to German for the application
                 sap.ui.getCore().getConfiguration().setLanguage("de");
                 sap.ui.getCore().applyChanges();
-                this._oModel = this.getOwnerComponent().getModel();
-                var that = this,
-                    batchSize = 0;
 
-                /* this._oModel.read("/HAUPLPHA", {
-                    success: function (oData, oResponse) {
-                        that.getView().byId("numericCont2").setValue(oData.results.length.toString());
-                    },
-                    error: function (oError) {
-                        console.error("Error al recuperar datos:", oError);
-                    }
-                }); */
+                // Get the OData model from the owner component
+                this._oModel = this.getOwnerComponent().getModel();
+                var that = this;
+
+                // AJAX request to retrieve the count of entities for HAUKB001
                 $.ajax({
                     url: that._oModel.sServiceUrl + "/HAUKB001" + "/$count",
                     method: "GET",
                     success: function (data) {
+                        // Set the count value in the corresponding numeric control
                         that.getView().byId("numericCont1").setValue(data.toString());
                     }.bind(this),
                     error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
+                        console.log("Error querying Entity 1:", errorEntit1);
                     }
                 });
+
+                // AJAX request to retrieve the count of entities for HAUPLPHA
                 $.ajax({
                     url: that._oModel.sServiceUrl + "/HAUPLPHA" + "/$count",
                     method: "GET",
                     success: function (data) {
+                        // Set the count value in the corresponding numeric control
                         that.getView().byId("numericCont2").setValue(data.toString());
                     }.bind(this),
                     error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 2:", errorEntit1);
+                        console.log("Error querying Entity 2:", errorEntit1);
                     }
                 });
-
-                /* function retrieveData(sUrl) {
-                    that._oModel.read(sUrl, {
-                        urlParameters: {
-                            "$skiptoken": batchSize
-                        },
-                        success: function (oData, oResponse) {
-                            totalCount += oData.results.length;
-                            console.log(oData);
-                            console.log(oResponse);
-                            console.log(totalCount);
-                            console.log(oData.__next);
-
-                            if (oData.__next) {
-                                // Si hay más páginas, continúa recuperando datos
-                                batchSize += 100;
-                                retrieveData(sUrl);
-                            } else {
-                                // Ya no hay más páginas, muestra el resultado
-                                that.getView().byId("numericCont1").setValue(totalCount.toString());
-                            }
-                        },
-                        error: function (oError) {
-                            console.error("Error al recuperar datos:", oError);
-                        }
-                    });
-                }
-
-                retrieveData("/HAUKB001"); */
-
-                /* this._oModel.read("/HAUKB001", {
-                    success: function (oData, oResponse) {
-                        that.getView().byId("numericCont1").setValue(oData.results.length.toString());
-                    },
-                    error: function (oError) {
-                        console.error("Error al recuperar datos:", oError);
-                    }
-                }); */
-
             },
+
+            // Function to navigate to the "RouteBasisKonfig" route
             onNavToBasisKonfig: function () {
                 this.getRouter().navTo("RouteBasisKonfig");
             },
+
+            // Function to navigate to the "RouteFunktion" route
             onNavToFunktion: function () {
                 this.getRouter().navTo("RouteFunktion");
             },
+
+            // Function to navigate to the "RouteWizard" route
             onNavToWizard: function () {
                 this.getRouter().navTo("RouteWizard");
             },
+
+            // Function to navigate to the "RouteKontroll" route
             onNavToKontroll: function () {
                 this.getRouter().navTo("RouteKontroll");
             },
+
+            // Function to navigate to the "RoutePersPlan" route
             onNavToPersPlan: function () {
                 this.getRouter().navTo("RoutePersPlan");
             },
+
+            // Function to get the router from the owner component
             getRouter: function () {
                 return this.getOwnerComponent().getRouter();
             }
+
         });
     });

@@ -319,14 +319,6 @@ sap.ui.define([
             // Close the dialog
             this.oDialog.close();
         },
-
-        onCloseEditDialog: function () {
-            this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
-            this.getView().byId("__editCRUD0").setValue("");
-            this.getView().byId("__editCRUD1").setValue("");
-            this.oDialogEdit.close();
-        },
         // Function to handle value help requests for personal numbers
         onValueHelpRequestPersonal: function (oEvent) {
             var oView = this.getView(),
@@ -853,7 +845,7 @@ sap.ui.define([
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
-        }
+        },
 
         // Handle the confirmation of sorting dialog
         handleSortDialogConfirm: function (oEvent) {
@@ -930,7 +922,7 @@ sap.ui.define([
                 this.byId("groupButton").setType("Default");
                 this.groupReset = false;
             }
-        }
+        },
 
         // Function to create column configuration for export
         createColumnConfig: function () {

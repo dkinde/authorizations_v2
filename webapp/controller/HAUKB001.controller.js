@@ -28,14 +28,35 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("auth.controller.HAUKB001", {
+        // Initialization function called when the view is created
         onInit: function () {
+            // Set the language to German for the application
+            sap.ui.getCore().getConfiguration().setLanguage("de");
+
+            // Get the OData model from the owner component
             this._oModel = this.getOwnerComponent().getModel();
+
+            // Initialize arrays and objects used in the view
+            this.aValue = [];
             this._mViewSettingsDialogs = {};
             this.mGroupFunctions = {};
-            sap.ui.getCore().getConfiguration().setLanguage("de");
-            this.aValue = [];
-            this._oPage = this.byId("dynamicPage1");
 
+            // Get references to various UI elements
+            this._oPage = this.byId("dynamicPage1");
+            this.oFilterBar = this.getView().byId("filterbar");
+            this.oExpandedLabel = this.getView().byId("expandedLabel");
+            this.oSnappedLabel = this.getView().byId("snappedLabel");
+            this.oTable = this.getView().byId("table1");
+
+            // Bind functions to maintain the correct 'this' context
+            this.applyData = this.applyData.bind(this);
+            this.fetchData = this.fetchData.bind(this);
+            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
+            this.oFilterBar.registerFetchData(this.fetchData);
+            this.oFilterBar.registerApplyData(this.applyData);
+            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
+
+            // Function to retrieve data for the "PERSONAL_DIST" entity
             var that = this,
                 iSkip = 0;
 
@@ -53,6 +74,7 @@ sap.ui.define([
                             iSkip += 5000;
                             getPers();
                         } else {
+                            // Remove duplicates based on 'personalnummer'
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
                                 if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
                                     aUnique.push(oItem);
@@ -60,6 +82,7 @@ sap.ui.define([
                                 return aUnique;
                             }, []);
 
+                            // Create and set JSONModel for distinct items
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
                             });
@@ -67,6 +90,7 @@ sap.ui.define([
 
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
 
+                            // Release the busy state of the page
                             that._oPage.setBusy(false);
                             return;
                         }
@@ -219,151 +243,13 @@ sap.ui.define([
             }
             getData(); */
 
-            /* var that = this,
-                iSkip = 0;
-
-            function getData() {
-                $.ajax({
-                    url: that.getOwnerComponent().getModel().sServiceUrl + "/HAUKB001" + "?$top=5000" + "&$skip=" + iSkip,
-                    method: "GET",
-                    success: function (data) {
-                        if (data && data.value) {
-                            that.aValue = that.aValue.concat(data.value.map(function (item) {
-                                return item;
-                            }));
-                        }
-                        if (data.value.length === 5000) {
-                            iSkip += 5000;
-                            getData();
-                        } else {
-                            var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems1 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.datamart === oItem.datamart; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems2 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems3 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.org_einh === oItem.org_einh; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems4 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.typ === oItem.typ; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems5 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.entit === oItem.entit; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems6 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.infoobjectkontrolle === oItem.infoobjectkontrolle; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var aDistinctItems7 = that.aValue.reduce(function (aUnique, oItem) {
-                                if (!aUnique.some(function (obj) { return obj.wertkontrolle === oItem.wertkontrolle; })) {
-                                    aUnique.push(oItem);
-                                }
-                                return aUnique;
-                            }, []);
-
-                            var oDistinctModel = new sap.ui.model.json.JSONModel({
-                                distinctItems: aDistinctItems
-                            });
-                            var oDistinctModel1 = new sap.ui.model.json.JSONModel({
-                                distinctItems1: aDistinctItems1
-                            });
-                            var oDistinctModel2 = new sap.ui.model.json.JSONModel({
-                                distinctItems2: aDistinctItems2
-                            });
-                            var oDistinctModel3 = new sap.ui.model.json.JSONModel({
-                                distinctItems3: aDistinctItems3
-                            });
-                            var oDistinctModel4 = new sap.ui.model.json.JSONModel({
-                                distinctItems4: aDistinctItems4
-                            });
-                            var oDistinctModel5 = new sap.ui.model.json.JSONModel({
-                                distinctItems5: aDistinctItems5
-                            });
-                            var oDistinctModel6 = new sap.ui.model.json.JSONModel({
-                                distinctItems6: aDistinctItems6
-                            });
-                            var oDistinctModel7 = new sap.ui.model.json.JSONModel({
-                                distinctItems7: aDistinctItems7
-                            });
-
-                            that.getView().byId("multiPersonal").setModel(oDistinctModel);
-                            that.getView().byId("multiDatamart").setModel(oDistinctModel1);
-                            that.getView().byId("multiFunktion").setModel(oDistinctModel2);
-                            that.getView().byId("multiOrgEinh").setModel(oDistinctModel3);
-                            that.getView().byId("multiTyp").setModel(oDistinctModel4);
-                            that.getView().byId("multiEntit").setModel(oDistinctModel5);
-                            that.getView().byId("multiIOBJK").setModel(oDistinctModel6);
-                            that.getView().byId("multiWertK").setModel(oDistinctModel7);
-
-                            that._oPage.setBusy(false);
-                            return;
-                        }
-                    }.bind(this),
-                    error: function (errorEntit1) {
-                        console.log("Fehler bei der Abfrage von Entität 1:", errorEntit1);
-                    }
-                });
-            }
-            getData(); */
-
-            /* this.oSmartVariantManagement = this.getView().byId("svm"); */
-            this.oFilterBar = this.getView().byId("filterbar");
-            this.oExpandedLabel = this.getView().byId("expandedLabel");
-            this.oSnappedLabel = this.getView().byId("snappedLabel");
-            this.oTable = this.getView().byId("table1");
-            this.applyData = this.applyData.bind(this);
-            this.fetchData = this.fetchData.bind(this);
-            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
-
-            this.oFilterBar.registerFetchData(this.fetchData);
-            this.oFilterBar.registerApplyData(this.applyData);
-            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
-
-            /* var oPersInfo = new sap.ui.comp.smartvariants.PersonalizableInfo({
-                type: "filterBar",
-                keyName: "persistencyKey",
-                dataSource: "",
-                control: this.oFilterBar
-            });
-            this.oSmartVariantManagement.addPersonalizableControl(oPersInfo);
-            this.oSmartVariantManagement.initialise(function () { }, this.oFilterBar); */
-
         },
+        // Event handler for navigation button press
         onNavButtonPressed: function () {
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteHome");
         },
+        // Function to retrieve filter data from the FilterBar
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
                 aResult.push({
@@ -377,12 +263,14 @@ sap.ui.define([
 
             return aData;
         },
+        // Function to apply filter data to the FilterBar
         applyData: function (aData) {
             aData.forEach(function (oDataObject) {
                 var oControl = this.oFilterBar.determineControlByName(oDataObject.fieldName, oDataObject.groupName);
                 oControl.setSelectedKeys(oDataObject.fieldData);
             }, this);
         },
+        // Function to get filters with selected values from the FilterBar
         getFiltersWithValues: function () {
             var aFiltersWithValue = this.oFilterBar.getFilterGroupItems().reduce(function (aResult, oFilterGroupItem) {
                 var oControl = oFilterGroupItem.getControl();
@@ -396,21 +284,26 @@ sap.ui.define([
 
             return aFiltersWithValue;
         },
+        // Event handler for selection change in the FilterBar
         onSelectionChange: function (oEvent) {
             //this.oSmartVariantManagement.currentVariantSetModified(true);
             this.oFilterBar.fireFilterChange(oEvent);
         },
+        // Event handler for filter change in the FilterBar
         onFilterChange: function () {
             this._updateLabelsAndTable();
         },
+        // Event handler after loading a variant in the FilterBar
         onAfterVariantLoad: function () {
             this._updateLabelsAndTable();
         },
+        // Function to update labels and table after filter changes
         _updateLabelsAndTable: function () {
             this.oExpandedLabel.setText(this.getFormattedSummaryTextExpanded());
             this.oSnappedLabel.setText(this.getFormattedSummaryText());
             this.oTable.setShowOverlay(true);
         },
+        // Function to get formatted summary text for the collapsed FilterBar
         getFormattedSummaryText: function () {
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
@@ -424,6 +317,7 @@ sap.ui.define([
 
             return aFiltersWithValues.length + " filters active: " + aFiltersWithValues.join(", ");
         },
+        // Function to get formatted summary text for the expanded FilterBar
         getFormattedSummaryTextExpanded: function () {
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
@@ -444,6 +338,7 @@ sap.ui.define([
 
             return sText;
         },
+        // Event handler for search action
         onSearch: function () {
             var aTableFilters = this.oFilterBar.getFilterGroupItems().reduce(function (aResult, oFilterGroupItem) {
                 var oControl = oFilterGroupItem.getControl(),
@@ -469,82 +364,68 @@ sap.ui.define([
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
         },
+        // Function to cancel entry dialog and reset model changes
         onCancelEntryDialog: function () {
+            // Reset model changes
             this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
+
+            // Show a message toast indicating the action is canceled
+            sap.m.MessageToast.show("Action canceled");
+
+            // Hide and reset input fields in the entry dialog
             this.byId("cleanEntryFilter").setVisible(false);
             this.byId("entryPersonal").setValue("");
             this.byId("entryDatamart").setValue("");
             this.byId("entryFunktion").setValue("");
+
+            // Close the dialog
             this.oDialog.close();
         },
+
+        // Function to clean entry filter and show a message toast
         onCleanEntryFilterPress: function () {
+            // Remove filters from the table binding
             var aFilters = [];
-
             this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
-            this.byId("cleanEntryFilter").setVisible(false);
-            sap.m.MessageToast.show("Initialfilter entfernt");
 
+            // Hide the "Clean Entry Filter" button
+            this.byId("cleanEntryFilter").setVisible(false);
+
+            // Show a message toast indicating the initial filter is removed
+            sap.m.MessageToast.show("Initial filter removed");
         },
-        onCloseViewDialog: function () {
-            this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
-            this.byId("__inputCRUD0").setValue("");
-            this.byId("__inputCRUD1").setValue("");
-            this.byId("__inputCRUD2").setValue("");
-            this.byId("__inputCRUD3").setValue("");
-            this.byId("__inputCRUD4").setValue("");
-            this.byId("__inputCRUD5").setValue("");
-            this.byId("__inputCRUD6").setValue("");
-            this.byId("selectTyp").setSelectedKey(null);
-            this.oDialog.close();
-        },
-        onCloseEditDialog: function () {
-            this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
-            this.byId("__editCRUD0").setValue("");
-            this.byId("__editCRUD1").setValue("");
-            this.byId("__editCRUD2").setValue("");
-            this.byId("__editCRUD3").setValue("");
-            this.byId("__editCRUD4").setValue("");
-            this.byId("__editCRUD5").setValue("");
-            this.byId("__editCRUD6").setValue("");
-            this.byId("selectTyp").setSelectedKey(null);
-            this.oDialogEdit.close();
-        },
+
+        // Function to open the entry dialog
         onOpenEntryDialog: function () {
+            // Check if the entry dialog is not already loaded
             if (!this._oDialogEntry) {
+                // Load the entry dialog fragment
                 this._oDialogEntry = this.loadFragment({
                     name: "authorization.fragment.EntryDialogHAUKB001",
                     controller: this
                 });
             }
+            // Open the entry dialog
             this._oDialogEntry.then(function (oDialog) {
                 this.oDialog = oDialog;
                 this.oDialog.open();
             }.bind(this));
         },
-        onOpenDialog: function () {
-            if (!this._oDialogCRUD) {
-                this._oDialogCRUD = this.loadFragment({
-                    name: "authorization.fragment.InputFieldsHAUKB001",
-                    controller: this
-                });
-            }
-            this._oDialogCRUD.then(function (oDialog) {
-                this.oDialog = oDialog;
-                this.oDialog.open();
-            }.bind(this));
-        },
+
+        // Function to handle entry filter press
         onEntryFilterPress: function () {
+            // Array to store filters
             var aFilters = [],
+                // Get values from input fields
                 iPersonalnummer = this.byId("entryPersonal").getValue().toString(),
                 sDatamart = this.byId("entryDatamart").getValue(),
                 iFunktion = this.byId("entryFunktion").getValue().toString(),
+                // Create filters based on input values
                 fPersonalnummer = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, iPersonalnummer),
                 fDatamart = new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sDatamart),
                 fFunktion = new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, iFunktion);
 
+            // Add filters to the array if values are provided
             if (iPersonalnummer) {
                 aFilters.push(fPersonalnummer);
             }
@@ -555,6 +436,7 @@ sap.ui.define([
                 aFilters.push(fFunktion);
             }
 
+            // Apply combined filter if filters are present
             if (aFilters.length > 0) {
                 var combFilter = new sap.ui.model.Filter({
                     filters: aFilters,
@@ -565,180 +447,18 @@ sap.ui.define([
                 console.log(combFilter);
             }
 
-            /* if (iPersonalnummer || sDatamart || iFunktion) {
-                var filter = new sap.ui.model.Filter([
-                    new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, iPersonalnummer),
-                    new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.Contains, sDatamart),
-                    new sap.ui.model.Filter("funktion", sap.ui.model.FilterOperator.Contains, iFunktion)
-                ], false);                
-                aFilters.push(filter);
-            }  */
-
-            // this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
-
-            console.log(aFilters);
-            console.log(iPersonalnummer);
-            console.log(sDatamart);
-            console.log(iFunktion);
-
+            // Show toast message and reset input values
             sap.m.MessageToast.show("Filter einschalten");
             this.byId("entryPersonal").setValue("");
             this.byId("entryDatamart").setValue("");
             this.byId("entryFunktion").setValue("");
+            // Close the dialog
             this.oDialog.close();
-
-
         },
-        onCreatePress: function () {
-            var oNewEntry = {},
-                aItems = this.byId("table1").getItems(),
-                fnSucces = function () {
-                    sap.m.MessageToast.show("Element erfolgreich erstellt");
-                    var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
-                        if (oItem.getBindingContext() === oContext) {
-                            oItem.focus();
-                            oItem.setSelected(true);
-                            return true;
-                        }
-                    });
-                }.bind(this),
-                fnError = function (oError) {
-                    sap.m.MessageBox.error(oError.message);
-                }.bind(this);
 
-            oNewEntry.personalnummer = this.getView().byId("__inputCRUD0").getValue();
-            oNewEntry.datamart = this.getView().byId("__inputCRUD1").getValue();
-            oNewEntry.funktion = this.getView().byId("__inputCRUD2").getValue();
-            oNewEntry.org_einh = this.getView().byId("__inputCRUD3").getValue();
-            oNewEntry.entit = this.getView().byId("__inputCRUD4").getValue();
-            oNewEntry.infoobjectkontrolle = this.getView().byId("__inputCRUD5").getValue();
-            oNewEntry.wertkontrolle = this.getView().byId("__inputCRUD6").getValue();
-            oNewEntry.typ = this.getView().byId("selectTyp").getSelectedItem().getText();
-
-            try {
-                for (var i = 0; i < aItems.length; i++) {
-                    var oItem = aItems[i],
-                        oContext = oItem.getBindingContext(),
-                        sPersonalnummer = oContext.getProperty("personalnummer"),
-                        sDatamart = oContext.getProperty("datamart"),
-                        sFunktion = oContext.getProperty("funktion"),
-                        sOrg_einh = oContext.getProperty("org_einh"),
-                        sEntit = oContext.getProperty("entit"),
-                        sInfoobjectkontrolle = oContext.getProperty("infoobjectkontrolle"),
-                        sWertkontrolle = oContext.getProperty("wertkontrolle"),
-                        sTyp = oContext.getProperty("typ");
-
-                    if (sPersonalnummer === oNewEntry.personalnummer &&
-                        sDatamart === oNewEntry.datamart &&
-                        sFunktion === oNewEntry.funktion &&
-                        sOrg_einh === oNewEntry.org_einh &&
-                        sEntit === oNewEntry.entit &&
-                        sInfoobjectkontrolle === oNewEntry.infoobjectkontrolle &&
-                        sWertkontrolle === oNewEntry.wertkontrolle &&
-                        sTyp === oNewEntry.typ) {
-                        throw new sap.ui.base.Exception("DuplicatedKey", "Falsche Definition");
-                    }
-                }
-                var oContext = this.byId("table1").getBinding("items").create({
-                    personalnummer: oNewEntry.personalnummer,
-                    datamart: oNewEntry.datamart,
-                    funktion: oNewEntry.funktion,
-                    org_einh: oNewEntry.org_einh,
-                    typ: oNewEntry.typ,
-                    entit: oNewEntry.entit,
-                    infoobjectkontrolle: oNewEntry.infoobjectkontrolle,
-                    wertkontrolle: oNewEntry.wertkontrolle
-                });
-                oContext.created().then(fnSucces, fnError).catch(function (oError) {
-                    if (!oError.canceled) {
-                        throw oError;
-                    }
-                });
-                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
-                this.byId("table1").getBinding("items").refresh();
-            } catch (error) {
-                if (error.message == "DuplicatedKey")
-                    sap.m.MessageBox.warning("Das Element ist vorhanden");
-            }
-            this.byId("__inputCRUD0").setValue("");
-            this.byId("__inputCRUD1").setValue("");
-            this.byId("__inputCRUD2").setValue("");
-            this.byId("__inputCRUD3").setValue("");
-            this.byId("__inputCRUD4").setValue("");
-            this.byId("__inputCRUD5").setValue("");
-            this.byId("__inputCRUD6").setValue("");
-            this.byId("selectTyp").setSelectedKey(null);
-            this.byId("dialog1").close();
-        },
-        createValidation: function () {
-            var iInput1 = this.byId("__inputCRUD0").getValue(),
-                sInput2 = this.byId("__inputCRUD1").getValue(),
-                iInput3 = this.byId("__inputCRUD2").getValue(),
-                sInput4 = this.byId("__inputCRUD3").getValue(),
-                sInput5 = this.byId("__inputCRUD4").getValue(),
-                sInput6 = this.byId("__inputCRUD5").getValue(),
-                sInput7 = this.byId("__inputCRUD6").getValue(),
-                oInput1 = this.byId("__inputCRUD0"),
-                oInput2 = this.byId("__inputCRUD1"),
-                oInput3 = this.byId("__inputCRUD2"),
-                oInput4 = this.byId("__inputCRUD3"),
-                oInput5 = this.byId("__inputCRUD4"),
-                oInput6 = this.byId("__inputCRUD5"),
-                oInput7 = this.byId("__inputCRUD6");
-
-            // validation single inputs	
-            if (iInput1.length < 6 && iInput1.length > 0) {
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput2) && sInput2.length < 3) {
-                oInput2.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput2.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (iInput3.length < 3 && iInput3.length > 0) {
-                oInput3.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput3.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput4) && sInput4.length < 3) {
-                oInput4.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput4.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput5) && sInput5.length < 61) {
-                oInput5.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput5.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput6) && sInput6.length < 31) {
-                oInput6.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput6.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (sInput7.length > 0 && sInput7.length < 61) {
-                oInput7.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput7.setValueState(sap.ui.core.ValueState.Error);
-            }
-
-            // validation all inputs - next button
-            if (iInput1.length < 6 && iInput1.length > 0 &&
-                isNaN(sInput2) && sInput2.length < 3 &&
-                iInput3.length < 3 && iInput3.length > 0 &&
-                isNaN(sInput4) && sInput4.length < 3 &&
-                isNaN(sInput5) && sInput5.length < 61 &&
-                isNaN(sInput6) && sInput6.length < 31 &&
-                sInput7.length > 0 && sInput7.length < 61) {
-                this.byId("createButton").setVisible(true);
-            } else {
-                this.byId("createButton").setVisible(false);
-            }
-
-        },
+        // Function to perform input validation for entry fields
         entryValidation: function () {
+            // Get values from input fields
             var iPersonalnummer = this.byId("entryPersonal").getValue(),
                 sDatamart = this.byId("entryDatamart").getValue(),
                 iFunktion = this.byId("entryFunktion").getValue(),
@@ -747,36 +467,36 @@ sap.ui.define([
                 oFunktion = this.byId("entryFunktion"),
                 flag = false;
 
-
+            // Helper function to check if the input is valid (not a number and length <= 2)
             function isValid(input) {
                 return isNaN(input) && input.length <= 2;
             }
 
+            // Check if at least one of the inputs has a value
             if (iPersonalnummer.length > 0 || sDatamart.length > 0 || iFunktion.length > 0) {
                 flag = true;
             } else {
                 flag = false;
             }
 
-            console.log(flag);
-            // validation single inputs
+            // Validation for individual inputs
             if (iPersonalnummer.length < 6 && iPersonalnummer.length > 0) {
-                oPersonalnummer.setValueState(sap.ui.core.ValueState.None);
+                oPersonalnummer.setValueState(sap.ui.core.ValueState.None); // No error
             } else {
-                oPersonalnummer.setValueState(sap.ui.core.ValueState.Error);
+                oPersonalnummer.setValueState(sap.ui.core.ValueState.Error); // Set error state
             }
             if (isNaN(sDatamart) && sDatamart.length < 3) {
-                oDatamart.setValueState(sap.ui.core.ValueState.None);
+                oDatamart.setValueState(sap.ui.core.ValueState.None); // No error
             } else {
-                oDatamart.setValueState(sap.ui.core.ValueState.Error);
+                oDatamart.setValueState(sap.ui.core.ValueState.Error); // Set error state
             }
             if (iFunktion.length < 3 && iFunktion.length > 0) {
-                oFunktion.setValueState(sap.ui.core.ValueState.None);
+                oFunktion.setValueState(sap.ui.core.ValueState.None); // No error
             } else {
-                oFunktion.setValueState(sap.ui.core.ValueState.Error);
+                oFunktion.setValueState(sap.ui.core.ValueState.Error); // Set error state
             }
 
-            // Default None state
+            // Set None state for default (no error) when inputs are empty
             if (iPersonalnummer == '') {
                 oPersonalnummer.setValueState(sap.ui.core.ValueState.None);
             }
@@ -787,203 +507,28 @@ sap.ui.define([
                 oFunktion.setValueState(sap.ui.core.ValueState.None);
             }
 
-            // validation all inputs & filter button
+            // Validation for all inputs and enable/disable entry button based on conditions
             if (flag &&
                 ((iPersonalnummer.length <= 5 || !iPersonalnummer) &&
                     (isValid(sDatamart) || !sDatamart) &&
                     (iFunktion.length <= 2 || !iFunktion))) {
-                this.byId("entryButton").setType("Emphasized");
+                this.byId("entryButton").setType("Emphasized"); // Enable entry button
             } else {
-                this.byId("entryButton").setType("Default");
+                this.byId("entryButton").setType("Default"); // Disable entry button
             }
         },
-        editValidation: function () {
-            var iInput1 = this.byId("__editCRUD0").getValue(),
-                sInput2 = this.byId("__editCRUD1").getValue(),
-                iInput3 = this.byId("__editCRUD2").getValue(),
-                sInput4 = this.byId("__editCRUD3").getValue(),
-                sInput5 = this.byId("__editCRUD4").getValue(),
-                sInput6 = this.byId("__editCRUD5").getValue(),
-                sInput7 = this.byId("__editCRUD6").getValue(),
-                oInput1 = this.byId("__editCRUD0"),
-                oInput2 = this.byId("__editCRUD1"),
-                oInput3 = this.byId("__editCRUD2"),
-                oInput4 = this.byId("__editCRUD3"),
-                oInput5 = this.byId("__editCRUD4"),
-                oInput6 = this.byId("__editCRUD5"),
-                oInput7 = this.byId("__editCRUD6");
 
-            // validation single inputs	
-            if (iInput1.length < 6 && iInput1.length > 0) {
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput2) && sInput2.length < 3) {
-                oInput2.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput2.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (iInput3.length < 3 && iInput3.length > 0) {
-                oInput3.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput3.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput4) && sInput4.length < 3) {
-                oInput4.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput4.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput5) && sInput5.length < 61) {
-                oInput5.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput5.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (isNaN(sInput6) && sInput6.length < 31) {
-                oInput6.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput6.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (sInput7.length > 0 && sInput7.length < 61) {
-                oInput7.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput7.setValueState(sap.ui.core.ValueState.Error);
-            }
-
-            // validation all inputs - next button
-            if (iInput1.length < 6 && iInput1.length > 0 &&
-                isNaN(sInput2) && sInput2.length < 3 &&
-                iInput3.length < 3 && iInput3.length > 0 &&
-                isNaN(sInput4) && sInput4.length < 3 &&
-                isNaN(sInput5) && sInput5.length < 61 &&
-                isNaN(sInput6) && sInput6.length < 31 &&
-                sInput7.length > 0 && sInput7.length < 61) {
-                this.byId("editButton").setVisible(true);
-            } else {
-                this.byId("editButton").setVisible(false);
-            }
-        },
-        onUpdateEditPress: function () {
-            var oUpdateEntry = {},
-                oContext = this.byId("table1").getSelectedItem().getBindingContext(),
-                sPath = oContext.getPath(),
-                fnSucces = function () {
-                    this._setBusy(false);
-                    sap.m.MessageToast.show("Objekt erfolgreich aktualisiert");
-                    var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
-                        if (oItem.getBindingContext() === oContext) {
-                            oItem.focus();
-                            oItem.setSelected(true);
-                            return true;
-                        }
-                    });
-                    this._setUIChanges(false);
-                }.bind(this),
-                fnError = function (oError) {
-                    this._setBusy(false);
-                    sap.m.MessageBox.error(oError.message);
-                    this._setUIChanges(false);
-                }.bind(this),
-                iIndex = oContext.getIndex();
-
-            oUpdateEntry.personalnummer = this.getView().byId("__editCRUD0").getValue();
-            oUpdateEntry.datamart = this.getView().byId("__editCRUD1").getValue();
-            oUpdateEntry.funktion = this.getView().byId("__editCRUD2").getValue();
-            oUpdateEntry.org_einh = this.getView().byId("__editCRUD3").getValue();
-            oUpdateEntry.entit = this.getView().byId("__editCRUD4").getValue();
-            oUpdateEntry.infoobjectkontrolle = this.getView().byId("__editCRUD5").getValue();
-            oUpdateEntry.wertkontrolle = this.getView().byId("__editCRUD6").getValue();
-            oUpdateEntry.typ = this.getView().byId("selectTyp").getSelectedItem().getText();
-
-            //this._setBusy(true);
-
-            //oContext.setProperty("InfoAuthName",oUpdateEntry.InfoAuthName,"$auto",false);     
-            //oContext.setProperty("NameCube",oUpdateEntry.NameCube,"$auto",false);
-            //oContext.setProperty("InfoName",oUpdateEntry.InfoName,"$auto",false);
-            //oContext.setProperty("InfoTyp",oUpdateEntry.InfoTyp,"$auto",false);
-            //oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,"$auto",false);  
-
-            //oContext.requestProperty("Sequenz").then(oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,)) ;
-
-            oContext.setProperty("Sequenz", oUpdateEntry.Sequenz);
-            this._oModel.submitChanges();
-
-            //this._setBusy(false);
-            //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));                    
-            //this._bTechnicalErrors = false;
-
-            //this.byId("table1").getBinding("items").refresh();              
-
-            if (oContext.hasPendingChanges()) {
-                this._oModel.submitBatch("$auto").then(fnSucces, fnError);
-                sap.m.MessageToast.show("kann aufgrund von anstehenden Änderungen nicht aktualisiert werden");
-            }
-            else {
-                //this._oModel.submitBatch("$auto").then(fnSucces, fnError);
-                oContext.refresh();
-                this.byId("dialog2").close();
-            }
-
-            //this._oModel.resetChanges();                                    
-            //var oContext = this.byId("table1").getBinding("items").update();
-
-        },
-        onUpdatePress: function () {
-            var oSelectedItem = this.byId("table1").getSelectedItem();
-            if (oSelectedItem) {
-                var oView = this.getView(),
-                    oContext = oSelectedItem.getBindingContext(),
-                    oEntry = oContext.getObject();
-                if (!this._oDialogEdit) {
-                    this._oDialogEdit = this.loadFragment({
-                        name: "authorization.fragment.EditDialogHAUKB001",
-                        controller: this
-                    });
-                }
-                this._oDialogEdit.then(function (oDialog) {
-                    this.oDialogEdit = oDialog;
-                    oView.addDependent(this.oDialogEdit);
-                    this.oDialogEdit.bindElement({
-                        path: '/HAUKB001'
-                    });
-                    this.oDialogEdit.open();
-                    this.byId("__editCRUD0").setValue(oEntry.personalnummer);
-                    this.byId("__editCRUD1").setValue(oEntry.datamart);
-                    this.byId("__editCRUD2").setValue(oEntry.funktion);
-                    this.byId("__editCRUD3").setValue(oEntry.org_einh);
-                    this.byId("__editCRUD4").setValue(oEntry.entit);
-                    this.byId("__editCRUD5").setValue(oEntry.infoobjectkontrolle);
-                    this.byId("__editCRUD6").setValue(oEntry.wertkontrolle);
-                    //this.byId("selectTyp").setSelectedItem(oEntry.typ).setText();
-                    //console.log(oEntry.typ);
-                }.bind(this));
-            } else {
-                sap.m.MessageBox.warning("Es wurde kein Element zur Aktualisierung ausgewählt");
-            }
-        },
-        onDeletePress: function () {
-            var oSelectedItem = this.byId("table1").getSelectedItem(),
-                fnSucces = function () {
-                    sap.m.MessageToast.show("Element (" + sPersonalnummer + ") erfolgreich gelöscht");
-                },
-                fnError = function (oError) {
-                    sap.m.MessageBox.error(oError.message);
-                };
-            if (oSelectedItem) {
-                var oContext = oSelectedItem.getBindingContext(),
-                    sPersonalnummer = oContext.getProperty("personalnummer");
-
-                oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));
-            } else {
-                sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
-            }
-        },
+        // Function to handle search event in table1
         onSearch1: function (oEvent) {
-            var aFilters = [],
-                sQuery = oEvent.getSource().getValue();
+            // Array to store filters
+            var aFilters = [];
 
+            // Get the search query from the input field
+            var sQuery = oEvent.getSource().getValue();
+
+            // Check if there is a search query
             if (sQuery && sQuery.length > 0) {
+                // Create a filter with multiple conditions based on the search query
                 var filter = new sap.ui.model.Filter([
                     new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("datamart", sap.ui.model.FilterOperator.EQ, sQuery[0] + sQuery[1]),
@@ -994,14 +539,22 @@ sap.ui.define([
                     new sap.ui.model.Filter("infoobjectkontrolle", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("wertkontrolle", sap.ui.model.FilterOperator.Contains, sQuery)
                 ], false);
+
+                // Add the filter to the array
                 aFilters.push(filter);
             }
-            this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
 
+            // Apply filters to the table1 binding
+            this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
         },
+
+        // Function to get or load the view settings dialog based on the fragment name
         getViewSettingsDialog: function (sDialogFragmentName) {
             var pDialog = this._mViewSettingsDialogs[sDialogFragmentName];
+
+            // Check if the dialog is already loaded
             if (!pDialog) {
+                // Load the dialog as a fragment
                 pDialog = sap.ui.core.Fragment.load({
                     id: this.getView().getId(),
                     name: sDialogFragmentName,
@@ -1009,71 +562,100 @@ sap.ui.define([
                 }).then(function (oDialog) {
                     return oDialog;
                 });
+
+                // Store the loaded dialog in a map for reuse
                 this._mViewSettingsDialogs[sDialogFragmentName] = pDialog;
             }
+
+            // Return the dialog
             return pDialog;
         },
+
+        // Function to reset the group dialog settings
         resetGroupDialog: function (oEvent) {
             console.log("reset");
             this.groupReset = true;
         },
+
+        // Function to handle the press event of the sort button
         handleSortButtonPressed: function () {
+            // Open the view settings dialog for sorting
             this.getViewSettingsDialog("authorization.fragment.SortDialogHAUKB001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
+
+        // Function to handle the press event of the filter button
         handleFilterButtonPressed: function () {
+            // Open the view settings dialog for filtering
             this.getViewSettingsDialog("authorization.fragment.FilterDialogHAUKB001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
+
+        // Function to handle the press event of the group button
         handleGroupButtonPressed: function () {
+            // Open the view settings dialog for grouping
             this.getViewSettingsDialog("authorization.fragment.GroupDialogHAUKB001")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
+
+        // Function to handle sorting in the table based on user's selection
         handleSortDialogConfirm: function (oEvent) {
             var mParams = oEvent.getParameters(),
                 sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
 
+            // Check if a sort item is selected
             if (sort) {
                 var sPath = mParams.sortItem.getKey(),
                     bDescending = mParams.sortDescending;
 
+                // Create a sorter based on user's selection
                 aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
                 this.byId("sortUsersButton").setType("Emphasized");
-            } else
+            } else {
+                // If no sort item selected, set default button type
                 this.byId("sortUsersButton").setType("Default");
+            }
 
+            // Apply sorting to the table
             this.byId("table1").getBinding("items").sort(aSorters);
-
         },
+
+        // Function to handle filtering in the table based on user's selection
         handleFilterDialogConfirm: function (oEvent) {
             var mParams = oEvent.getParameters(),
                 aFilters = [];
 
+            // Loop through selected filter items
             mParams.filterItems.forEach(function (oItem) {
                 var aSplit = oItem.getKey().split("___"),
                     sPath = aSplit[0],
-                    sValue = aSplit[1],
-                    oFilter = new sap.ui.model.Filter(sPath, sap.ui.model.FilterOperator.Contains, sValue);
+                    sValue = aSplit[1];
+
+                // Create a filter based on user's selection
+                var oFilter = new sap.ui.model.Filter(sPath, sap.ui.model.FilterOperator.Contains, sValue);
                 aFilters.push(oFilter);
             });
+
+            // Apply filters to the table
             this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
 
+            // Set button type based on the presence of filters
             var filters = oEvent.getParameter("filterItems");
-
-            if (filters.length > 0)
+            if (filters.length > 0) {
                 this.byId("filterButton").setType("Emphasized");
-            else
+            } else {
                 this.byId("filterButton").setType("Default");
-
+            }
         },
 
+        // Function to handle grouping in the table based on user's selection
         handleGroupDialogConfirm: function (oEvent) {
             var mParams = oEvent.getParameters(),
                 sPath,
@@ -1081,25 +663,33 @@ sap.ui.define([
                 vGroup,
                 aGroups = [];
 
+            // Check if a group item is selected
             if (mParams.groupItem) {
                 sPath = mParams.groupItem.getKey();
                 bDescending = mParams.groupDescending;
                 vGroup = this.mGroupFunctions[sPath];
+
+                // Create a sorter for grouping based on user's selection
                 aGroups.push(new sap.ui.model.Sorter(sPath, bDescending, vGroup));
 
+                // Set button type for emphasis
                 this.byId("groupButton").setType("Emphasized");
 
+                // Apply grouping to the table
                 this.byId("table1").getBinding("items").sort(aGroups);
-
             } else if (this.groupReset) {
+                // If group reset is needed, reset grouping and set default button type
                 this.byId("table1").getBinding("items").sort();
                 this.byId("groupButton").setType("Default");
                 this.groupReset = false;
             }
         },
+
+        // Function to create column configuration for export
         createColumnConfig: function () {
             var aCols = [];
 
+            // Define columns with properties and types for export
             aCols.push({
                 property: 'personalnummer',
                 type: sap.ui.export.EdmType.Number
@@ -1135,46 +725,38 @@ sap.ui.define([
 
             return aCols;
         },
+
+        // Function to handle the export of data to a spreadsheet
         onExport: function () {
             var aCols, oRowBinding, oSettings, oSheet, oTable;
 
+            // Check if the table reference exists, otherwise get it from the view
             if (!this._oTable) {
                 this._oTable = this.byId("table1");
             }
             oTable = this._oTable;
+
+            // Get the row binding and create column configuration
             oRowBinding = oTable.getBinding('items');
             aCols = this.createColumnConfig();
 
+            // Set up export settings
             oSettings = {
                 workbook: {
                     columns: aCols,
                     hierarchyLevel: 'Level'
                 },
                 dataSource: oRowBinding,
-                fileName: 'Table export sample.xlsx',
+                fileName: 'HAUKB001.xlsx',
                 worker: false
             };
 
+            // Create and build the spreadsheet
             oSheet = new sap.ui.export.Spreadsheet(oSettings);
             oSheet.build().finally(function () {
                 oSheet.destroy();
             });
-        },
-        _setUIChanges: function (bHasUIChanges) {
-            if (this._bTechnicalErrors) {
-                // If there is currently a technical error, then force 'true'.
-                bHasUIChanges = true;
-            } else if (bHasUIChanges === undefined) {
-                bHasUIChanges = this.getView().getModel().hasPendingChanges();
-            }
-
-            //var oContext = this.byId("table1").getSelectedItem().getBindingContext().setProperty("/hasUIChanges", bHasUIChanges);
-            //var oModel = this._oModel.setProperty("/hasUIChanges", bHasUIChanges);
-        },
-        _setBusy: function (bIsBusy) {
-            //var oModel = this._oModel.setProperty("/busy", bIsBusy);
-            //var oContext = this.byId("table1").getSelectedItem().getBindingContext().setProperty("/busy", bIsBusy);
-            var oView = this.getView().setBusy(bIsBusy);
         }
+
     });
 });
