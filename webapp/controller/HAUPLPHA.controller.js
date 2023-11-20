@@ -32,23 +32,35 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("auth.controller.HAUPLPHA", {
+        // Initialization function
         onInit: function () {
-            this._oModel = this.getOwnerComponent().getModel();
-            this._mViewSettingsDialogs = {};
-            this.mGroupFunctions = {};
-            sap.ui.getCore().getConfiguration().setLanguage("de");
-
+            // Global variables
             this.aValue = [];
             this.aPhase = [];
-            this.aPers = [];
-            this._oPage = this.byId("dynamicPage1");
             this.aSelectedPersonal = [];
             this.aSelectedPhase = [];
+            this._mViewSettingsDialogs = {};
+            this.mGroupFunctions = {};
+            this._oModel = this.getOwnerComponent().getModel();
+            this._oPage = this.byId("dynamicPage1");
+            this.oView = this.getView();
+            this.oFilterBar = this.getView().byId("filterbar");
+            this.oExpandedLabel = this.getView().byId("expandedLabel");
+            this.oSnappedLabel = this.getView().byId("snappedLabel");
+            this.oTable = this.getView().byId("table1");
+            this.applyData = this.applyData.bind(this);
+            this.fetchData = this.fetchData.bind(this);
+            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
+            this.oFilterBar.registerFetchData(this.fetchData);
+            this.oFilterBar.registerApplyData(this.applyData);
+            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
 
+            // Set Language App to German
+            sap.ui.getCore().getConfiguration().setLanguage("de");
+
+            // Get Filters Data
             var that = this,
-                batchSize = 0,
                 iSkip = 0;
-
             function retrieveData() {
                 that._oModel.read("/HAUPLPHA", {
                     urlParameters: {
@@ -57,15 +69,17 @@ sap.ui.define([
                     },
                     success: function (oData) {
                         if (oData.results && oData.results.length > 0) {
+                            // Concatenate data to the 'aValue' array
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
                             }));
                         }
                         if (oData.results.length === 5000) {
                             iSkip += 5000;
-                            batchSize += 100;
-                            retrieveData(sUrl);
+                            // Recursive call to retrieve more data if available
+                            retrieveData();
                         } else {
+                            // Deduplicate data based on 'personalnummer' and 'pla_pha'
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
                                 if (!aUnique.some(function (obj) { return obj.personalnummer === oItem.personalnummer; })) {
                                     aUnique.push(oItem);
@@ -80,41 +94,35 @@ sap.ui.define([
                                 return aUnique;
                             }, []);
 
+                            // Create JSON models for distinct items
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
                             });
                             var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                                 distinctItems1: aDistinctItems1
                             });
+                            // Set size limit for the models
                             oDistinctModel.setSizeLimit(2000);
+
+                            // Update global variables
                             that.aPhase = aDistinctItems1;
 
+                            // Set models for multiComboBoxes in the view
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
                             that.getView().byId("multiPla_pha").setModel(oDistinctModel1);
 
+                            // Disable busy indicator on the page
                             that._oPage.setBusy(false);
                             return;
                         }
                     },
                     error: function (oError) {
-                        console.error("Error al recuperar datos:", oError);
+                        console.error("Error retrieving data:", oError);
                     }
                 });
             }
+            // Initial call to retrieve data
             retrieveData();
-
-            this.oView = this.getView();
-            this.oFilterBar = this.getView().byId("filterbar");
-            this.oExpandedLabel = this.getView().byId("expandedLabel");
-            this.oSnappedLabel = this.getView().byId("snappedLabel");
-            this.oTable = this.getView().byId("table1");
-            this.applyData = this.applyData.bind(this);
-            this.fetchData = this.fetchData.bind(this);
-            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
-
-            this.oFilterBar.registerFetchData(this.fetchData);
-            this.oFilterBar.registerApplyData(this.applyData);
-            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
         },
         onNavButtonPressed: function () {
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);

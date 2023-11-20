@@ -32,19 +32,34 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("auth.controller.HAUPF001", {
+        // Initialization function
         onInit: function () {
+            // Global variables
             this._oModel = this.getOwnerComponent().getModel();
-            this._mViewSettingsDialogs = {};
-            this.mGroupFunctions = {};
-            sap.ui.getCore().getConfiguration().setLanguage("de");
-
             this.aValue = [];
             this.aSelectedPersonal = [];
             this.aSelectedFunktion = [];
+            this._mViewSettingsDialogs = {};
+            this.mGroupFunctions = {};
             this._oPage = this.byId("dynamicPage1");
+            this.oFilterBar = this.getView().byId("filterbar");
+            this.oExpandedLabel = this.getView().byId("expandedLabel");
+            this.oSnappedLabel = this.getView().byId("snappedLabel");
+            this.oTable = this.getView().byId("table1");
+            this.applyData = this.applyData.bind(this);
+            this.fetchData = this.fetchData.bind(this);
+            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
+            this.oFilterBar.registerFetchData(this.fetchData);
+            this.oFilterBar.registerApplyData(this.applyData);
+            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
 
+            this.oView = this.getView();
+
+            // Set App language to German
+            sap.ui.getCore().getConfiguration().setLanguage("de");
+
+            // Get Filters Data
             var that = this,
-                batchSize = 0,
                 iSkip = 0;
 
             function retrieveData() {
@@ -55,16 +70,17 @@ sap.ui.define([
                     },
                     success: function (oData) {
                         if (oData.results && oData.results.length > 0) {
+                            // Concatenate data to the 'aValue' array
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
                             }));
-                            // that.aValue = that.aValue.concat(oData.results);                            
                         }
                         if (oData.results.length === 5000) {
                             iSkip += 5000;
-                            batchSize += 100;
+                            // Recursive call to retrieve more data if available
                             retrieveData();
                         } else {
+                            // Deduplicate data based on 'personalnummer' and 'funktion'
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
                                 if (!aUnique.some(function (obj) {
                                     return obj.personalnummer === oItem.personalnummer;
@@ -81,6 +97,7 @@ sap.ui.define([
                                 return aUnique;
                             }, []);
 
+                            // Sort 'aDistinctItems1' based on 'funktion'
                             aDistinctItems1.sort(function (a, b) {
                                 var funktionA = a.funktion.toLowerCase();
                                 var funktionB = b.funktion.toLowerCase();
@@ -94,6 +111,7 @@ sap.ui.define([
                                 return 0;
                             });
 
+                            // Create JSON models for distinct items
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
                             });
@@ -102,33 +120,21 @@ sap.ui.define([
                             });
                             oDistinctModel.setSizeLimit(2000);
 
+                            // Set models for multiComboBoxes in the view
                             that.getView().byId("multiPersonal").setModel(oDistinctModel);
                             that.getView().byId("multiFunktion").setModel(oDistinctModel1);
 
+                            // Disable busy indicator on the page
                             that._oPage.setBusy(false);
                             return;
                         }
                     },
                     error: function (oError) {
-                        console.error("Error al recuperar datos:", oError);
+                        console.error("Error retrieving data:", oError);
                     }
                 });
             }
             retrieveData();
-
-            this.oFilterBar = this.getView().byId("filterbar");
-            this.oExpandedLabel = this.getView().byId("expandedLabel");
-            this.oSnappedLabel = this.getView().byId("snappedLabel");
-            this.oTable = this.getView().byId("table1");
-            this.applyData = this.applyData.bind(this);
-            this.fetchData = this.fetchData.bind(this);
-            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
-
-            this.oFilterBar.registerFetchData(this.fetchData);
-            this.oFilterBar.registerApplyData(this.applyData);
-            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
-
-            this.oView = this.getView();
         },
         onNavButtonPressed: function () {
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);

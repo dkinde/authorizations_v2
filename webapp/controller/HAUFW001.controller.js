@@ -28,10 +28,10 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("auth.controller.HAUFW001", {
+        // Initialization function
         onInit: function () {
+            // Global variables
             this._oModel = this.getOwnerComponent().getModel();
-            this._mViewSettingsDialogs = {};
-            this.mGroupFunctions = {};
             this.aEntit = [];
             this.aFunktion = [];
             this.maxFunktion = 1;
@@ -46,10 +46,24 @@ sap.ui.define([
             this.aDatamart = [];
             this.aCreate = [];
             this.aDistinctFunktion = [];
+            this._mViewSettingsDialogs = {};
+            this.mGroupFunctions = {};
             this._oPage = this.byId("dynamicPage1");
+            this.oFilterBar = this.getView().byId("filterbar");
+            this.oTable = this.getView().byId("table1");
+            this.oExpandedLabel = this.getView().byId("expandedLabel");
+            this.oSnappedLabel = this.getView().byId("snappedLabel");
+            this.applyData = this.applyData.bind(this);
+            this.fetchData = this.fetchData.bind(this);
+            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
+            this.oFilterBar.registerFetchData(this.fetchData);
+            this.oFilterBar.registerApplyData(this.applyData);
+            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
 
+            // Set App language to German
             sap.ui.getCore().getConfiguration().setLanguage("de");
 
+            // Get Filters Data
             var that = this,
                 iSkip = 0,
                 iSkip1 = 0;
@@ -62,14 +76,17 @@ sap.ui.define([
                     },
                     success: function (oData) {
                         if (oData.results && oData.results.length > 0) {
+                            // Concatenate data to the 'aValue' array
                             that.aValue = that.aValue.concat(oData.results.map(function (item) {
                                 return item;
                             }));
                         }
                         if (oData.results.length === 5000) {
                             iSkip += 5000;
+                            // Recursive call to retrieve more data if available
                             retrieveData();
                         } else {
+                            // Deduplicate data based on various properties
                             var aDistinctItems = that.aValue.reduce(function (aUnique, oItem) {
                                 if (!aUnique.some(function (obj) { return obj.funktion === oItem.funktion; })) {
                                     aUnique.push(oItem);
@@ -98,6 +115,7 @@ sap.ui.define([
                                 return aUnique;
                             }, []);
 
+                            // Create JSON models for distinct items
                             var oDistinctModel = new sap.ui.model.json.JSONModel({
                                 distinctItems: aDistinctItems
                             });
@@ -112,17 +130,19 @@ sap.ui.define([
                             });
                             oDistinctModel.setSizeLimit(500);
 
+                            // Set models for multiComboBoxes in the view
                             that.getView().byId("multiFunktion").setModel(oDistinctModel);
                             that.getView().byId("multiTyp").setModel(oDistinctModel1);
                             that.getView().byId("multiEntit").setModel(oDistinctModel2);
                             that.getView().byId("multiWert").setModel(oDistinctModel3);
 
+                            // Disable busy indicator on the page
                             that._oPage.setBusy(false);
                             return;
                         }
                     },
                     error: function (oError) {
-                        console.error("Error al recuperar datos:", oError);
+                        console.error("Error retrieving data:", oError);
                     }
                 });
             }
@@ -136,34 +156,23 @@ sap.ui.define([
                     },
                     success: function (oData) {
                         if (oData.results && oData.results.length > 0) {
+                            // Concatenate data to the 'aEntit' array
                             that.aEntit = that.aEntit.concat(oData.results.map(function (item) {
                                 return item;
                             }));
                         }
                         if (oData.results.length === 5000) {
                             iSkip1 += 5000;
+                            // Recursive call to retrieve more data if available
                             retrieveEntit();
                         }
                     },
                     error: function (oError) {
-                        console.error("Error al recuperar datos:", oError);
+                        console.error("Error retrieving data:", oError);
                     }
                 });
             }
             retrieveEntit();
-
-            /* this.oSmartVariantManagement = this.getView().byId("svm"); */
-            this.oFilterBar = this.getView().byId("filterbar");
-            this.oExpandedLabel = this.getView().byId("expandedLabel");
-            this.oSnappedLabel = this.getView().byId("snappedLabel");
-            this.oTable = this.getView().byId("table1");
-            this.applyData = this.applyData.bind(this);
-            this.fetchData = this.fetchData.bind(this);
-            this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
-
-            this.oFilterBar.registerFetchData(this.fetchData);
-            this.oFilterBar.registerApplyData(this.applyData);
-            this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
         },
         onExit: function () {
             //Controller.prototype.onExit.apply(this, arguments);
