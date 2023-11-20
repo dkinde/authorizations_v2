@@ -124,10 +124,14 @@ sap.ui.define([
             // Initial call to retrieve data
             retrieveData();
         },
+        // Event handler for navigation button press
         onNavButtonPressed: function () {
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
+
+            // Navigate to the "RouteHome" using the router
             UIComponent.getRouterFor(this).navTo("RouteHome");
         },
+        // Function to retrieve filter data from the FilterBar
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
                 aResult.push({
@@ -141,12 +145,14 @@ sap.ui.define([
 
             return aData;
         },
+        // Function to apply filter data to the FilterBar
         applyData: function (aData) {
             aData.forEach(function (oDataObject) {
                 var oControl = this.oFilterBar.determineControlByName(oDataObject.fieldName, oDataObject.groupName);
                 oControl.setSelectedKeys(oDataObject.fieldData);
             }, this);
         },
+        // Function to get filters with selected values from the FilterBar
         getFiltersWithValues: function () {
             var aFiltersWithValue = this.oFilterBar.getFilterGroupItems().reduce(function (aResult, oFilterGroupItem) {
                 var oControl = oFilterGroupItem.getControl();
@@ -160,21 +166,26 @@ sap.ui.define([
 
             return aFiltersWithValue;
         },
+        // Event handler for selection change in the FilterBar
         onSelectionChange: function (oEvent) {
             //this.oSmartVariantManagement.currentVariantSetModified(true);
             this.oFilterBar.fireFilterChange(oEvent);
         },
+        // Event handler for filter change in the FilterBar
         onFilterChange: function () {
             this._updateLabelsAndTable();
         },
+        // Event handler after loading a variant in the FilterBar
         onAfterVariantLoad: function () {
             this._updateLabelsAndTable();
         },
+        // Function to update labels and table after filter changes
         _updateLabelsAndTable: function () {
             this.oExpandedLabel.setText(this.getFormattedSummaryTextExpanded());
             this.oSnappedLabel.setText(this.getFormattedSummaryText());
             this.oTable.setShowOverlay(true);
         },
+        // Function to get formatted summary text for the collapsed FilterBar
         getFormattedSummaryText: function () {
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
@@ -188,6 +199,7 @@ sap.ui.define([
 
             return aFiltersWithValues.length + " filters active: " + aFiltersWithValues.join(", ");
         },
+        // Function to get formatted summary text for the expanded FilterBar
         getFormattedSummaryTextExpanded: function () {
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
@@ -208,6 +220,7 @@ sap.ui.define([
 
             return sText;
         },
+        // Event handler for search action
         onSearch: function () {
             var aTableFilters = this.oFilterBar.getFilterGroupItems().reduce(function (aResult, oFilterGroupItem) {
                 var oControl = oFilterGroupItem.getControl(),
@@ -233,10 +246,12 @@ sap.ui.define([
             this.oTable.getBinding("items").filter(aTableFilters, sap.ui.model.FilterType.Application);
             this.oTable.setShowOverlay(false);
         },
+        // Event handler for value help request
         onValueHelpRequest: function (oEvent) {
             var oView = this.getView(),
                 sInputValue = oEvent.getSource().getValue();
 
+            // Load the Value Help Dialog fragment
             if (!this._pValueHelpDialog) {
                 this._pValueHelpDialog = sap.ui.core.Fragment.load({
                     id: oView.getId(),
@@ -247,6 +262,8 @@ sap.ui.define([
                     return oValueHelpDialog;
                 });
             }
+
+            // Open the Value Help Dialog and apply a filter based on the input value
             this._pValueHelpDialog.then(function (oValueHelpDialog) {
                 oValueHelpDialog.getBinding("items").filter([new sap.ui.model.Filter(
                     "personalnummer",
@@ -256,6 +273,8 @@ sap.ui.define([
                 oValueHelpDialog.open();
             }.bind(this));
         },
+
+        // Event handler for updating tokens in the multi-input field for personal numbers
         multiInputPersTokenUpdate: function (oEvent) {
             var aContexts = oEvent.getParameter("selectedContexts"),
                 oMultiInput = this.byId("multiInputPers"),
@@ -263,6 +282,7 @@ sap.ui.define([
 
             switch (oEvent.getParameter("type")) {
                 case "added":
+                    // Handle added tokens
                     oEvent.getParameter("addedTokens").forEach(oToken => {
                         that.aSelectedPersonal.push({
                             personalnummer: oToken.getText(),
@@ -271,6 +291,7 @@ sap.ui.define([
                     }, this);
                     break;
                 case "removed":
+                    // Handle removed tokens
                     oEvent.getParameter("removedTokens").forEach(oToken => {
                         var indexToRemove = -1,
                             personalnummerToRemove = oToken.getText();
@@ -285,6 +306,7 @@ sap.ui.define([
                     }, this);
                     break;
                 default:
+                    // Handle other cases, e.g., when tokens are selected from the suggestion list
                     if (aContexts && aContexts.length) {
                         aContexts.forEach(function (oContext) {
                             var oSelectedObject = oContext.getObject();
@@ -296,80 +318,122 @@ sap.ui.define([
                                 Txtmd: oSelectedObject.Txtmd
                             });
                         });
-                        var selectedValues = "Ausgewählte Personalnummer: " + aContexts.map(function (oContext) {
+                        // Show a message toast with the selected personal numbers
+                        var selectedValues = "Selected Personal Numbers: " + aContexts.map(function (oContext) {
                             var oSelectedObject = oContext.getObject();
                             return oSelectedObject.personalnummer;
                         }).join(", ");
                         sap.m.MessageToast.show(selectedValues);
+                        // Reset the filter on the Value Help Dialog
                         oEvent.getSource().getBinding("items").filter([]);
                     }
                     break;
             }
+            // Perform any additional validation logic
             this.createValidation();
         },
+
+        // Event handler for Value Help Dialog close
         onValueHelpDialogClose: function (oEvent) {
-            sap.m.MessageToast.show("Aktion abgebrochen");
+            // Show a message toast indicating that the action was canceled
+            sap.m.MessageToast.show("Action canceled");
+
+            // Reset the filter on the Value Help Dialog
             oEvent.getSource().getBinding("items").filter([]);
         },
+
+        // Event handler for searching personal numbers in the Value Help Dialog
         onSearchPersonal: function (oEvent) {
             var sValue = oEvent.getParameter("value"),
+                // Create a filter based on the entered value
                 oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getParameter("itemsBinding");
+            // Apply the filter to the binding of the Value Help Dialog items
             oBinding.filter([oFilter]);
         },
+
+        // Event handler for suggesting personal numbers in the Value Help Dialog
         suggestPersonalnummer: function (oEvent) {
             var sValue = oEvent.getParameter("suggestValue"),
+                // Create a filter based on the suggested value
                 oFilter = new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sValue),
                 oBinding = oEvent.getSource().getBinding("suggestionItems");
+            // Apply the filter to the binding of the suggestion items
             oBinding.filter([oFilter]);
         },
+
+        // Event handler for finishing the selection in the Value Help Dialog
         handleSelectionFinish: function (oEvent) {
+            // Get the selected items from the Value Help Dialog
             var selectedItems = oEvent.getParameter("selectedItems");
+            // Reset the array of selected phases
             this.aSelectedPhase = [];
 
-            for (let i = 0; i < selectedItems.length; i++)
+            // Populate the array of selected phases with the selected items
+            for (let i = 0; i < selectedItems.length; i++) {
                 this.aSelectedPhase.push({
                     pla_pha: selectedItems[i].getText()
                 });
+            }
 
+            // Perform any additional validation logic
             this.createValidation();
         },
+
+        // Event handler for closing the view dialog
         onCloseViewDialog: function () {
+            // Reset any model changes
             this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
+
+            // Show a message toast indicating that the action was canceled
+            sap.m.MessageToast.show("Action canceled");
+
+            // Reset selected keys in the phase selection control
             this.byId("selectphase1").setSelectedKeys(null);
+
+            // Remove all tokens and clear the input value in the multi-input field
             this.byId("multiInputPers").removeAllTokens();
             this.byId("multiInputPers").setValue("");
 
+            // Remove all items from the table starting from the second item
             var aItems = this.byId("table2").getItems();
             for (let i = 1; i < aItems.length; i++) {
                 this.byId("table2").removeItem(aItems[i]);
             }
+
+            // Close the dialog
             this.oDialog.close();
         },
-        onCloseEditDialog: function () {
-            this._oModel.resetChanges();
-            sap.m.MessageToast.show("Aktion abgebrochen");
-            this.oDialogEdit.close();
-        },
+
+        // Event handler for opening the dialog
         onOpenDialog: function () {
+            // Load the fragment for the input fields if not loaded yet
             if (!this._oDialogCRUD) {
                 this._oDialogCRUD = this.loadFragment({
                     name: "auth.fragment.InputFieldsHAUPLPHA",
                     controller: this
                 });
             }
+
+            // Open the dialog
             this._oDialogCRUD.then(function (oDialog) {
                 this.oDialog = oDialog;
                 this.oDialog.open();
+
+                // Set a model for distinct phase items in the phase selection control
                 var oDistinctModel1 = new sap.ui.model.json.JSONModel({
                     distinctItems1: this.aPhase
                 });
                 this.byId("selectphase1").setModel(oDistinctModel1);
             }.bind(this));
         },
+
+        // Function to perform validation and enable/disable buttons based on conditions
         createValidation: function () {
+            // Get items from the table
             var aItems = this.getView().byId("table2").getItems();
+
+            // Enable/disable buttons based on the number of items in the table
             if (aItems.length > 1) {
                 this.byId("createButton").setEnabled(true);
                 this.byId("deleteButton2").setEnabled(true);
@@ -378,16 +442,22 @@ sap.ui.define([
                 this.byId("deleteButton2").setEnabled(false);
             }
 
-            if (this.aSelectedPhase != '' && this.aSelectedPersonal != '')
+            // Enable/disable the "Add" button based on the selected phase and personal values
+            if (this.aSelectedPhase !== '' && this.aSelectedPersonal !== '') {
                 this.byId("addButton2").setEnabled(true);
-            else
+            } else {
                 this.byId("addButton2").setEnabled(false);
-
+            }
         },
+
+        // Event handler for the "Add" button press
         onAddPress2: function () {
+            // Create a template array for new assignments
             var aTemplate = [],
                 aItems = this.byId("table1").getItems(),
                 that = this;
+
+            // Populate the template array with selected phase and personal values
             this.aSelectedPhase.forEach(phase => {
                 that.aSelectedPersonal.forEach(personal => {
                     aTemplate.push({
@@ -396,6 +466,7 @@ sap.ui.define([
                     });
                 });
             });
+
             try {
                 var oTable = this.byId("table2"),
                     bAssigExist = false,
@@ -403,6 +474,7 @@ sap.ui.define([
                     aAssigOK = [],
                     aColumnListItems = [];
 
+                // Check for existing assignments and valid assignments
                 aTemplate.forEach((item, index) => {
                     var bAssigExist1 = false;
                     for (var i = 0; i < aItems.length; i++) {
@@ -425,14 +497,16 @@ sap.ui.define([
                     }
                 });
 
+                // Handle existing assignments
                 if (bAssigExist) {
-                    var sMessage = "Die folgenden Zuordnungen sind bereits vorhanden:\n \n";
+                    var sMessage = "The following assignments already exist:\n\n";
                     aAssigExist.forEach(function (item) {
                         sMessage += "Phase: " + item.pla_pha + " => Personalnummer: " + item.personalnummer + "\n";
                     });
                     sap.m.MessageBox.warning(sMessage);
                 }
 
+                // Handle valid assignments
                 aAssigOK.forEach(function (item) {
                     var oColumnListItem = new sap.m.ColumnListItem({
                         cells: [
@@ -442,61 +516,84 @@ sap.ui.define([
                     });
                     aColumnListItems.push(oColumnListItem);
                 }, this);
+
+                // Add valid assignments to the table
                 aColumnListItems.forEach(function (oColumnListItem) {
                     oTable.addItem(oColumnListItem);
                 });
 
-                sap.m.MessageToast.show("Element erfolgreich hinzugefügt");
+                // Show a message toast for successful addition
+                sap.m.MessageToast.show("Element successfully added");
 
+                // Reset selected keys, tokens, and arrays
                 this.byId("selectphase1").setSelectedKeys(null);
                 this.byId("multiInputPers").removeAllTokens();
                 this.aSelectedPhase = [];
                 this.aSelectedPersonal = [];
-                this.createValidation();
 
+                // Perform validation
+                this.createValidation();
             } catch (error) {
-                if (error.message == "DuplicatedKey") {
-                    sap.m.MessageBox.warning("Ein Element ist bereits vorhanden");
+                // Handle errors (e.g., duplicated key or empty fields)
+                if (error.message === "DuplicatedKey") {
+                    sap.m.MessageBox.warning("An element already exists");
                 }
                 if (error instanceof TypeError) {
-                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                    sap.m.MessageBox.warning("No element can be added; empty fields are present");
                 }
             }
         },
+
+        // Event handler for the "Delete" button press
         onDeletePress2: function () {
+            // Get the selected item from the table
             var oSelectedItem = this.byId("table2").getSelectedItem(),
                 iIndex = this.byId("table2").indexOfItem(oSelectedItem);
 
+            // Check if an item is selected
             if (oSelectedItem) {
+                // Check if the selected item is the first item (cannot be deleted)
                 if (iIndex == 0) {
-                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
+                    sap.m.MessageBox.warning("This element cannot be deleted");
                 }
+                // Delete the selected item
                 else {
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Zuordnung erfolgreich gelöscht");
+                    sap.m.MessageToast.show("Assignment successfully deleted");
                 }
             } else {
-                sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
+                sap.m.MessageBox.warning("No element selected for deletion!");
             }
+
+            // Perform validation
             this.createValidation();
         },
+
+        // Event handler for the "Create" button press
         onCreatePress: function () {
             try {
+                // Get the table and its items
                 var oTable = this.getView().byId("table2"),
                     aItems = oTable.getItems(),
                     aCreate = [],
                     that = this,
                     fnSuccess = function () {
-                        sap.m.MessageToast.show("Phase erfolgreich zugeordnet");
+                        // Display success message when phase is successfully assigned
+                        sap.m.MessageToast.show("Phase successfully assigned");
                     }.bind(this),
                     fnError = function (oError) {
+                        // Display error message if there's an issue with the assignment
                         sap.m.MessageBox.error(oError.message);
                     }.bind(this);
+
+                // Iterate through the items in the table (excluding the header)
                 for (let i = 1; i < aItems.length; i++) {
-                    var aRow = [aItems[i].getCells()[0].getText(),
-                    aItems[i].getCells()[1].getText()];
+                    // Extract data from each row and add it to the array
+                    var aRow = [aItems[i].getCells()[0].getText(), aItems[i].getCells()[1].getText()];
                     aCreate.push(aRow);
                 }
+
+                // Iterate through the array of data to create assignments
                 aCreate.forEach(item => {
                     that._oModel.create("/HAUPLPHA", {
                         pla_pha: item[0],
@@ -506,190 +603,76 @@ sap.ui.define([
                         error: fnError
                     });
                 });
+
+                // Remove the items from the table after successful creation
                 for (var i = aItems.length - 1; i > 0; i--) {
                     oTable.removeItem(aItems[i]);
                 }
+
+                // Close the dialog and refresh the binding of the source table
                 this.oDialog.close();
                 this.byId("table1").getBinding("items").refresh();
             } catch (error) {
+                // Handle errors (e.g., empty fields)
                 if (error instanceof TypeError) {
-                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                    sap.m.MessageBox.warning("No element can be added; empty fields are present");
                 }
             }
         },
-        editValidation: function () {
-            var iInput1 = this.byId("__editCRUD0").getValue(),
-                iInput2 = this.byId("__editCRUD1").getValue(),
-                oInput1 = this.byId("__editCRUD0"),
-                oInput2 = this.byId("__editCRUD1");
 
-            // validation single inputs	
-            if (iInput1.length < 6 && iInput1.length > 0) {
-                //this._oWizard.setCurrentStep(this.byId("step1"));				                
-                oInput1.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput1.setValueState(sap.ui.core.ValueState.Error);
-            }
-            if (iInput2.length < 3 && iInput2.length > 0) {
-                oInput2.setValueState(sap.ui.core.ValueState.None);
-            } else {
-                oInput2.setValueState(sap.ui.core.ValueState.Error);
-            }
-            // validation all inputs - next button
-            if (iInput1.length < 6 && iInput2.length < 3 && iInput1.length > 0 && iInput2.length > 0) {
-                this.byId("editButton").setVisible(true);
-            } else {
-                this.byId("editButton").setVisible(false);
-            }
-        },
-        onUpdateEditPress: function () {
-            var oUpdateEntry = {},
-                oModel = this.getView().getModel(),
-                oContext = this.byId("table1").getSelectedItem().getBindingContext(),
-                sPath = oContext.getPath(),
-                sGroupId = oModel.getGroupId(),
-                fnSucces = function () {
-                    this._setBusy(false);
-                    sap.m.MessageToast.show("Objekt erfolgreich aktualisiert");
-                    var oList = this.byId("table1");
-                    oList.getItems().some(function (oItem) {
-                        if (oItem.getBindingContext() === oContext) {
-                            oItem.focus();
-                            oItem.setSelected(true);
-                            return true;
-                        }
-                    });
-                    this._setUIChanges(false);
-                }.bind(this),
-                fnError = function (oError) {
-                    this._setBusy(false);
-                    sap.m.MessageBox.error(oError.message);
-                    this._setUIChanges(false);
-                }.bind(this),
-                iIndex = oContext.getIndex();
-
-            this._oEditItem = this.byId("table1").getSelectedItem();
-
-            oUpdateEntry.Personalnummer = this.getView().byId("__editCRUD0").getValue();
-            oUpdateEntry.Funktion = this.getView().byId("__editCRUD1").getValue();
-
-            //oContext.getProperty(sPath);                       
-            //this._setBusy(true);
-
-            //oContext.setProperty("InfoAuthName",oUpdateEntry.InfoAuthName,"$auto",false);     
-            //oContext.setProperty("NameCube",oUpdateEntry.NameCube,"$auto",false);
-            //oContext.setProperty("InfoName",oUpdateEntry.InfoName,"$auto",false);
-            //oContext.setProperty("InfoTyp",oUpdateEntry.InfoTyp,"$auto",false);
-            //oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,"$auto",false);  
-
-            //oContext.requestProperty("Sequenz").then(oContext.setProperty("Sequenz",oUpdateEntry.Sequenz,)) ;
-
-            oModel.submitBatch(sGroupId, function () {
-
-                oContext.setProperty("personalnummer", oUpdateEntry.Personalnummer);
-                oContext.setProperty("funktion", oUpdateEntry.Funktion);
-
-                oModel.submitBatch(sGroupId).then(fnSucces, fnError);
-            }, fnError);
-
-            var sPersonalnummer = oContext.getProperty("personalnummer"),
-                sFunktion = oContext.getProperty("funktion");
-
-            if (sPersonalnummer != oUpdateEntry.Personalnummer) {
-                oContext.setProperty("personalnummer", oUpdateEntry.Personalnummer);
-            }
-            if (sFunktion != oUpdateEntry.Funktion) {
-                oContext.setProperty("funktion", oUpdateEntry.Funktion);
-            }
-
-            oModel.submitBatch(sGroupId).then(fnSucces, fnError);
-            //this._oModel.submitChanges();
-
-            //this._setBusy(false);
-            //oContext.requestObject().then(oContext.delete("$auto").then(fnSucces, fnError));                 
-            //this._bTechnicalErrors = false;            
-            //this.byId("table1").getBinding("items").refresh();             
-
-            if (oContext.hasPendingChanges()) {
-                oModel.submitBatch("$auto").then(fnSucces, fnError);
-                sap.m.MessageToast.show("kann aufgrund von anstehenden Änderungen nicht aktualisiert werden");
-            }
-            else {
-                //this._oModel.submitBatch("$auto").then(fnSucces, fnError);
-                oContext.refresh();
-                this.byId("dialog2").close();
-            }
-
-            //this._oModel.resetChanges();                                    
-            //var oContext = this.byId("table1").getBinding("items").update();
-
-        },
-        onUpdatePress: function () {
-            var oSelectedItem = this.byId("table1").getSelectedItem();
-
-            if (oSelectedItem) {
-                var oView = this.getView(),
-                    oContext = oSelectedItem.getBindingContext(),
-                    oEntry = oContext.getObject();
-                if (!this._oDialogEdit) {
-                    this._oDialogEdit = this.loadFragment({
-                        name: "auth.fragment.EditDialogHAUPLPHA",
-                        controller: this
-                    });
-                }
-                this._oDialogEdit.then(function (oDialog) {
-                    this.oDialogEdit = oDialog;
-                    oView.addDependent(this.oDialogEdit);
-                    this.oDialogEdit.open();
-
-                    this.byId("__editCRUD0").setValue(oEntry.personalnummer);
-                    this.byId("__editCRUD1").setValue(oEntry.funktion);
-
-                }.bind(this));
-
-            } else {
-                sap.m.MessageBox.warning("Es wurde kein Element zur Aktualisierung ausgewählt");
-            }
-        },
+        // Event handler for the "Delete" button press
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element (" + sPersNummer + ") erfolgreich gelöscht");
+                    // Display success message when element is successfully deleted
+                    sap.m.MessageToast.show("Element (" + sPersNummer + ") successfully deleted");
                 },
                 fnError = function (oError) {
+                    // Display error message if there's an issue with the deletion
                     sap.m.MessageBox.error(oError.message);
                 };
 
             if (oSelectedItem) {
+                // Get the context and properties of the selected item
                 var oContext = oSelectedItem.getBindingContext(),
                     sPersNummer = oContext.getProperty("personalnummer"),
                     sPhase = oContext.getProperty("pla_pha"),
                     sURL = "/HAUPLPHA(personalnummer='" + sPersNummer + "',pla_pha='" + sPhase + "')";
+
+                // Remove the item from the model based on its URL
                 this._oModel.remove(sURL, {
                     success: fnSuccess,
                     error: fnError
                 });
             } else {
-                sap.m.MessageBox.warning("kein Element zum Löschen ausgewählt");
+                // Display a warning if no item is selected for deletion
+                sap.m.MessageBox.warning("No element selected for deletion");
             }
         },
+
+        // Event handler for the search input field
         onSearch1: function (oEvent) {
             var aFilters = [],
                 sQuery = oEvent.getSource().getValue();
 
             if (sQuery && sQuery.length > 0) {
+                // Create filters based on the query for personalnummer and pla_pha
                 var filter = new sap.ui.model.Filter([
                     new sap.ui.model.Filter("personalnummer", sap.ui.model.FilterOperator.Contains, sQuery),
                     new sap.ui.model.Filter("pla_pha", sap.ui.model.FilterOperator.Contains, sQuery)
                 ], false);
                 aFilters.push(filter);
             }
-            this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
 
+            // Apply the filters to the table's binding
+            this.byId("table1").getBinding("items").filter(aFilters, sap.ui.model.FilterType.Application);
         },
+
+        // Function to get or load a view settings dialog fragment
         getViewSettingsDialog: function (sDialogFragmentName) {
             var pDialog = this._mViewSettingsDialogs[sDialogFragmentName];
             if (!pDialog) {
+                // Load the fragment and store the promise in the map
                 pDialog = sap.ui.core.Fragment.load({
                     id: this.getView().getId(),
                     name: sDialogFragmentName,
@@ -701,48 +684,53 @@ sap.ui.define([
             }
             return pDialog;
         },
+
+        // Function to reset the grouping dialog
         resetGroupDialog: function (oEvent) {
             this.groupReset = true;
         },
+
+        // Sorting functionality
         handleSortButtonPressed: function () {
+            // Open the sort dialog when the sort button is pressed
             this.getViewSettingsDialog("auth.fragment.SortDialogHAUPLPHA")
                 .then(function (oViewSettingsDialog) {
                     oViewSettingsDialog.open();
                 });
         },
-        handleFilterButtonPressed: function () {
-            this.getViewSettingsDialog("auth.fragment.FilterDialogHAUPLPHA")
-                .then(function (oViewSettingsDialog) {
-                    oViewSettingsDialog.open();
-                });
-        },
-        handleGroupButtonPressed: function () {
-            this.getViewSettingsDialog("auth.fragment.GroupDialogHAUPLPHA")
-                .then(function (oViewSettingsDialog) {
-                    oViewSettingsDialog.open();
-                });
-        },
         handleSortDialogConfirm: function (oEvent) {
+            // Handle confirmation of the sort dialog
             var mParams = oEvent.getParameters(),
                 sort = oEvent.getParameter("sortItem"),
                 aSorters = [];
 
             if (sort) {
+                // Get sort parameters and apply sorting to the table
                 var sPath = mParams.sortItem.getKey(),
                     bDescending = mParams.sortDescending;
 
                 aSorters.push(new sap.ui.model.Sorter(sPath, bDescending));
+                this.byId("table1").getBinding("items").sort(aSorters);
                 this.byId("sortUsersButton").setType("Emphasized");
             } else
                 this.byId("sortUsersButton").setType("Default");
+        },
 
-            this.byId("table1").getBinding("items").sort(aSorters);
+        // Filtering functionality
+        handleFilterButtonPressed: function () {
+            // Open the filter dialog when the filter button is pressed
+            this.getViewSettingsDialog("auth.fragment.FilterDialogHAUPLPHA")
+                .then(function (oViewSettingsDialog) {
+                    oViewSettingsDialog.open();
+                });
         },
         handleFilterDialogConfirm: function (oEvent) {
+            // Handle confirmation of the filter dialog
             var mParams = oEvent.getParameters(),
                 aFilters = [];
 
             mParams.filterItems.forEach(function (oItem) {
+                // Get filter parameters and apply filtering to the table
                 var aSplit = oItem.getKey().split("___"),
                     sPath = aSplit[0],
                     sValue = aSplit[1],
@@ -757,9 +745,18 @@ sap.ui.define([
                 this.byId("filterButton").setType("Emphasized");
             else
                 this.byId("filterButton").setType("Default");
+        },
 
+        // Grouping functionality
+        handleGroupButtonPressed: function () {
+            // Open the group dialog when the group button is pressed
+            this.getViewSettingsDialog("auth.fragment.GroupDialogHAUPLPHA")
+                .then(function (oViewSettingsDialog) {
+                    oViewSettingsDialog.open();
+                });
         },
         handleGroupDialogConfirm: function (oEvent) {
+            // Handle confirmation of the group dialog
             var mParams = oEvent.getParameters(),
                 sPath,
                 bDescending,
@@ -767,6 +764,7 @@ sap.ui.define([
                 aGroups = [];
 
             if (mParams.groupItem) {
+                // Get group parameters and apply grouping to the table
                 sPath = mParams.groupItem.getKey();
                 bDescending = mParams.groupDescending;
                 vGroup = this.mGroupFunctions[sPath];
@@ -774,16 +772,19 @@ sap.ui.define([
 
                 this.byId("table1").getBinding("items").sort(aGroups);
                 this.byId("groupButton").setType("Emphasized");
-
             } else if (this.groupReset) {
+                // Reset grouping if the groupReset flag is set
                 this.byId("table1").getBinding("items").sort();
                 this.byId("groupButton").setType("Default");
                 this.groupReset = false;
             }
         },
+
+        // Function to create configuration for Excel columns
         createColumnConfig: function () {
             var aCols = [];
 
+            // Define columns with properties and types
             aCols.push({
                 property: 'personalnummer',
                 type: sap.ui.export.EdmType.Number
@@ -795,16 +796,22 @@ sap.ui.define([
 
             return aCols;
         },
+
+        // Event handler for the "Export" button press
         onExport: function () {
             var aCols, oRowBinding, oSettings, oSheet, oTable;
 
+            // Get the table and its binding
             if (!this._oTable) {
                 this._oTable = this.byId("table1");
             }
             oTable = this._oTable;
             oRowBinding = oTable.getBinding('items');
+
+            // Create column configuration
             aCols = this.createColumnConfig();
 
+            // Define export settings
             oSettings = {
                 workbook: {
                     columns: aCols,
@@ -815,36 +822,12 @@ sap.ui.define([
                 worker: false
             };
 
+            // Create a new spreadsheet object and initiate the export
             oSheet = new sap.ui.export.Spreadsheet(oSettings);
             oSheet.build().finally(function () {
                 oSheet.destroy();
             });
-        },
-        onRefresh: function () {
-            var oBinding = this.byId("table1").getBinding("items");
-
-            if (oBinding.hasPendingChanges()) {
-                sap.m.MessageBox.error(this._getText("refreshNotPossibleMessage"));
-                return;
-            }
-            oBinding.refresh();
-            sap.m.MessageToast.show(this._getText("refreshSuccessMessage"));
-        },
-        _getText: function (sTextId, aArgs) {
-            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sTextId, aArgs);
-        },
-        _setUIChanges: function (bHasUIChanges) {
-            if (this._bTechnicalErrors) {
-                // If there is currently a technical error, then force 'true'.
-                bHasUIChanges = true;
-            } else if (bHasUIChanges === undefined) {
-                bHasUIChanges = this.getView().getModel().hasPendingChanges();
-            }
-
-            var oContext = this.byId("table1").getSelectedItem().getBindingContext().setProperty("/hasUIChanges", bHasUIChanges);
-        },
-        _setBusy: function (bIsBusy) {
-            var oView = this.getView().setBusy(bIsBusy);
         }
+
     });
 });
