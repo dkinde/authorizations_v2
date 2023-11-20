@@ -15,10 +15,7 @@
 					</f:expandedContent>
 					<f:snappedContent>
 						<Label id="snappedLabel" text="No filters active" />
-					</f:snappedContent>
-                    <!-- <f:actions>
-                        <Button text="Schließen" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
-                    </f:actions> -->
+					</f:snappedContent>                    
                     <f:navigationActions>
                         <Button text="zur Startseite" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:navigationActions>

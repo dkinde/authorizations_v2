@@ -5,7 +5,7 @@
 		    xmlns:fb="sap.ui.comp.filterbar"
             controllerName="auth.controller.HAUFW001">
 
-    <f:DynamicPage id="dynamicPage1" headerExpanded="true" >
+    <f:DynamicPage id="dynamicPage1" >
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
@@ -117,7 +117,7 @@
                         <Column mergeDuplicates="false">
                             <Text text="{i18n>colAUFKT}" />
                         </Column>
-                        <Column mergeDuplicates="false">
+                        <Column >
                             <Text text="{i18n>colTxtlg}" />
                         </Column>                                                                                               
                     </columns>

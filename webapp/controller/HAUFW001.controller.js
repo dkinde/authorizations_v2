@@ -1220,13 +1220,13 @@ sap.ui.define([
             } catch (error) {
                 // Handle different types of errors and show corresponding messages
                 if (error.message == "EmptyFieldException")
-                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
                 if (error.message == "DuplicatedKey")
-                    sap.m.MessageBox.warning("The element already exists");
+                    sap.m.MessageBox.warning("Das Element ist bereits vorhanden");
                 if (error.message == "OnlyDatamartException")
-                    sap.m.MessageBox.warning("Only Datamart can be added to this function");
+                    sap.m.MessageBox.warning("Nur Datamart kann zu dieser Funktion hinzugefügt werden");
                 if (error.message == "DatamartNoExistException")
-                    sap.m.MessageBox.warning("The value of the entered Datamart does not exist");
+                    sap.m.MessageBox.warning("Der Wert des eingegebenen Datamarts existiert nicht");
                 if (error instanceof TypeError)
                     sap.m.MessageBox.warning(error);
             }
@@ -1240,19 +1240,19 @@ sap.ui.define([
             if (oSelectedItem) {
                 // Check if the selected item is the first one, and show a warning message
                 if (iIndex == 0) {
-                    sap.m.MessageBox.warning("This element cannot be deleted");
+                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
                 } else {
                     // Adjust the index and remove the corresponding entry from 'aIOBJ_Sondern'
                     iIndex -= 1;
                     this.aIOBJ_Sondern.splice(iIndex, 1);
                     // Destroy the selected item from the table
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Element successfully deleted");
+                    sap.m.MessageToast.show("Element erfolgreich gelöscht");
                     // Perform validation after deletion
                     this.createValidation();
                 }
             } else {
-                sap.m.MessageBox.warning("No element selected for deletion!");
+                sap.m.MessageBox.warning("Kein Element zur Löschung ausgewählt!");
             }
             // Perform validation after deletion
             this.createValidation();
@@ -1266,7 +1266,7 @@ sap.ui.define([
             if (oSelectedItem) {
                 // Check if the selected item is the first one, and show a warning message
                 if (iIndex == 0) {
-                    sap.m.MessageBox.warning("This element cannot be deleted");
+                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
                 } else {
                     // Adjust the index and create an array to represent the row data
                     iIndex -= 1;
@@ -1292,7 +1292,7 @@ sap.ui.define([
 
                     // Destroy the selected item from the table
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Element successfully deleted");
+                    sap.m.MessageToast.show("Element erfolgreich gelöscht");
                     // Perform validation after deletion
                     this.editValidation();
                 }
@@ -1569,17 +1569,17 @@ sap.ui.define([
             // Check if an item is selected
             if (oSelectedItem) {
                 // Show a confirmation dialog with options
-                sap.m.MessageBox.confirm("Do you want to delete the entire function?", {
-                    title: "Delete special function",
-                    actions: [sap.m.MessageBox.Action.YES, "Only this Element", sap.m.MessageBox.Action.CANCEL],
-                    emphasizedAction: "Only this Element",
+                sap.m.MessageBox.confirm("Möchten Sie die gesamte Funktion löschen?", {
+                    title: "Sonderfunktion löschen",
+                    actions: [sap.m.MessageBox.Action.YES, "Nur dieses Element", sap.m.MessageBox.Action.CANCEL],
+                    emphasizedAction: "Nur dieses Element",
                     styleClass: "confirmMessageBox",
                     onClose: function (sAction) {
                         // Handle the selected action
                         if (sAction === sap.m.MessageBox.Action.YES) {
                             // Open the delete dialog for the entire function
                             that.onOpenDeleteDialog();
-                        } else if (sAction === "Only this Element") {
+                        } else if (sAction === "Nur dieses Element") {
                             // Get the binding context of the selected item
                             var oContext = oSelectedItem.getBindingContext(),
                                 // Array to store entries with the same function
@@ -1594,7 +1594,7 @@ sap.ui.define([
 
                             // Check if the selected item has type 'D' and value '*'
                             if (sTyp === "D" && sWert === "*")
-                                sap.m.MessageBox.warning("This Element cannot be deleted as the function must have at least one Datamart");
+                                sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");
                             else if (sTyp === "D") {
                                 var iCount = 0;
                                 // Loop through all items to find entries with the same function
@@ -1612,7 +1612,7 @@ sap.ui.define([
                                 });
                                 // Check if there is at least one entry with type 'D'
                                 if (iCount < 2)
-                                    sap.m.MessageBox.warning("This Element cannot be deleted as the function must have at least one Datamart");
+                                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");
                                 else
                                     // Remove the entry using the DELETE request
                                     that._oModel.remove(sURL, {
@@ -1632,7 +1632,7 @@ sap.ui.define([
                     }
                 });
             } else {
-                sap.m.MessageBox.warning("No element selected for deletion");
+                sap.m.MessageBox.warning("Kein Element zur Löschung ausgewählt");
             }
         },
 
@@ -1642,7 +1642,7 @@ sap.ui.define([
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 // Success callback function for deletion
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element (" + sFunktion + ") successfully deleted");
+                    sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
                 },
                 // Error callback function for deletion
                 fnError = function (oError) {

@@ -11,10 +11,10 @@
                     id="t1"/>
             <ToolbarSpacer/>
             <Image  alt="DVZ Icon"                    
-                    src="src/DVZ_icon.png"
+                    src="src/DVZ_icon.PNG"
                     useMap=""
                     height="5rem"
-                    width="5rem">            
+                    width="5rem">          
             </Image>                  
         </Toolbar> 
         <layout:VerticalLayout  class="sapUiResponsiveMargin" id="layout1">                       
@@ -40,11 +40,11 @@
             </layout:HorizontalLayout>  
             <layout:HorizontalLayout allowWrapping="true" id="layout3">
                 <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
-                            id="g4" 
-                            frameType="TwoByOne"                          
-                            header="{i18n>homepageGenTile4Header}" 
-                            subheader="{i18n>homepageGenTile4Content}"                                
-                            press="onNavToKontroll">                    
+                                id="g4" 
+                                frameType="TwoByOne"                          
+                                header="{i18n>homepageGenTile4Header}" 
+                                subheader="{i18n>homepageGenTile4Content}"                                
+                                press="onNavToKontroll">                    
                         <TileContent id="t5">                                                        
                             <NumericContent value="" 
                                             id="numericCont1"
@@ -54,11 +54,11 @@
                         </TileContent>                    
                 </GenericTile>
                 <GenericTile    class="sapUiTinyMarginBegin sapUiTinyMarginTop" 
-                            id="g5" 
-                            frameType="TwoByOne"                          
-                            header="{i18n>homepageGenTile5Header}" 
-                            subheader="{i18n>homepageGenTile5Content}"                                
-                            press="onNavToPersPlan">                    
+                                id="g5" 
+                                frameType="TwoByOne"                          
+                                header="{i18n>homepageGenTile5Header}" 
+                                subheader="{i18n>homepageGenTile5Content}"                                
+                                press="onNavToPersPlan">                    
                         <TileContent id="t6">                                                        
                             <NumericContent value="" 
                                             id="numericCont2"
