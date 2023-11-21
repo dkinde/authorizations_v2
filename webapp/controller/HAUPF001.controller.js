@@ -141,6 +141,9 @@ sap.ui.define([
             //this.oView.getParent().getParent().setLayout(sap.f.LayoutType.OneColumn);
             UIComponent.getRouterFor(this).navTo("RouteFunktion");
         },
+        getI18nText: function (key) {
+            return this.getView().getModel("i18n").getResourceBundle().getText(key);
+        },
         // Function triggered when a list item is pressed
         onListItemPress: function (oEvent) {
             /*this.oView.getParent().getParent().setLayout(sap.f.LayoutType.TwoColumnsBeginExpanded); */
@@ -220,32 +223,34 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                return "No filters active";
+                // return "No filters active";
+                return this.getI18nText("noFilters");
             }
 
             if (aFiltersWithValues.length === 1) {
-                return aFiltersWithValues.length + " filter active: " + aFiltersWithValues.join(", ");
+                return aFiltersWithValues.length + " " + this.getI18nText("activeFilter") + " " + aFiltersWithValues.join(", ");
             }
 
-            return aFiltersWithValues.length + " filters active: " + aFiltersWithValues.join(", ");
+            return aFiltersWithValues.length + " " + this.getI18nText("activeFilters") + " " + aFiltersWithValues.join(", ");
         },
         // Function to get formatted summary text for the expanded FilterBar
         getFormattedSummaryTextExpanded: function () {
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                return "No filters active";
+                // return "No filters active";
+                return this.getI18nText("noFilters");
             }
 
-            var sText = aFiltersWithValues.length + " filters active",
+            var sText = aFiltersWithValues.length + " " + this.getI18nText("activeFilters") + " ",
                 aNonVisibleFiltersWithValues = this.oFilterBar.retrieveNonVisibleFiltersWithValues();
 
             if (aFiltersWithValues.length === 1) {
-                sText = aFiltersWithValues.length + " filter active";
+                sText = aFiltersWithValues.length + " " + this.getI18nText("activeFilter") + " ";
             }
 
             if (aNonVisibleFiltersWithValues && aNonVisibleFiltersWithValues.length > 0) {
-                sText += " (" + aNonVisibleFiltersWithValues.length + " hidden)";
+                sText += " (" + aNonVisibleFiltersWithValues.length + " " + this.getI18nText("hiddenFilter") + ")";
             }
 
             return sText;

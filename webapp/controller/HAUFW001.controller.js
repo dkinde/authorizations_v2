@@ -193,6 +193,9 @@ sap.ui.define([
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteFunktion");
         },
+        getI18nText: function (key) {
+            return this.getView().getModel("i18n").getResourceBundle().getText(key);
+        },
         // Function to retrieve filter data from the FilterBar
         fetchData: function () {
             var aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
@@ -252,32 +255,34 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                return "No filters active";
+                // return "No filters active";
+                return this.getI18nText("noFilters");
             }
 
             if (aFiltersWithValues.length === 1) {
-                return aFiltersWithValues.length + " filter active: " + aFiltersWithValues.join(", ");
+                return aFiltersWithValues.length + " " + this.getI18nText("activeFilter") + " " + aFiltersWithValues.join(", ");
             }
 
-            return aFiltersWithValues.length + " filters active: " + aFiltersWithValues.join(", ");
+            return aFiltersWithValues.length + " " + this.getI18nText("activeFilters") + " " + aFiltersWithValues.join(", ");
         },
         // Function to get formatted summary text for the expanded FilterBar
         getFormattedSummaryTextExpanded: function () {
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                return "No filters active";
+                // return "No filters active";
+                return this.getI18nText("noFilters");
             }
 
-            var sText = aFiltersWithValues.length + " filters active",
+            var sText = aFiltersWithValues.length + " " + this.getI18nText("activeFilters") + " ",
                 aNonVisibleFiltersWithValues = this.oFilterBar.retrieveNonVisibleFiltersWithValues();
 
             if (aFiltersWithValues.length === 1) {
-                sText = aFiltersWithValues.length + " filter active";
+                sText = aFiltersWithValues.length + " " + this.getI18nText("activeFilter") + " ";
             }
 
             if (aNonVisibleFiltersWithValues && aNonVisibleFiltersWithValues.length > 0) {
-                sText += " (" + aNonVisibleFiltersWithValues.length + " hidden)";
+                sText += " (" + aNonVisibleFiltersWithValues.length + " " + this.getI18nText("hiddenFilter") + ")";
             }
 
             return sText;
@@ -426,10 +431,10 @@ sap.ui.define([
             // Set the value state and text based on whether the Funktion exists or not
             if (bExistFunktion) {
                 oInput.setValueState(sap.ui.core.ValueState.Error);
-                oInput.setValueStateText("Diese Funktion ist bereits vorhanden");
+                oInput.setValueStateText(this.getI18nText("functionExists"));
             } else {
                 oInput.setValueState(sap.ui.core.ValueState.None);
-                oInput.setValueStateText("Geben Sie nicht mehr als 2 Ziffern ein");
+                oInput.setValueStateText(this.getI18nText("noMoreTwoDigit"));
             }
 
             // Call a function to update validation based on the input
@@ -466,7 +471,7 @@ sap.ui.define([
             this._oModel.resetChanges();
 
             // Display a toast message indicating the action was canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Set specific controls to initial states
             this.byId("dialog1").setBusy(true);
@@ -501,7 +506,7 @@ sap.ui.define([
             this._oModel.resetChanges();
 
             // Display a toast message indicating the action was canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Set specific controls to initial states
             this.byId("__inputEditFunktion").setText("");
@@ -529,7 +534,7 @@ sap.ui.define([
             this._oModel.resetChanges();
 
             // Display a toast message indicating the action was canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Set specific controls to initial states
             this.byId("__textFunktion").setText("");
@@ -622,7 +627,7 @@ sap.ui.define([
                     },
                     error: function (oError) {
                         // Log an error if there is an issue fetching data
-                        console.error("Error al recuperar datos:", oError);
+                        console.error("Fehler beim Abrufen von Daten:", oError);
                         // Set the "busy" state of the dialog to false
                         that.byId("dialog1").setBusy(false);
                     }
@@ -702,7 +707,7 @@ sap.ui.define([
                             },
                             error: function (oError) {
                                 // Log an error if there is an issue fetching data
-                                console.error("Error al recuperar datos:", oError);
+                                console.error("Fehler beim Abrufen von Daten:", oError);
                             }
                         });
                     }
@@ -816,7 +821,7 @@ sap.ui.define([
                             },
                             error: function (oError) {
                                 // Log an error if there is an issue fetching data
-                                console.error("Error al recuperar datos:", oError);
+                                console.error("Fehler beim Abrufen von Daten:", oError);
                             }
                         });
                     }
@@ -1014,53 +1019,71 @@ sap.ui.define([
                 this.byId("addButton3").setEnabled(false);
         },
 
-        // This function is responsible for validating inputs and enabling/disabling buttons accordingly
-        editValidation: function () {
-            // Get the selected values from 'selecttyp1' and 'selectentit1'
-            var selectTyp = this.getView().byId("selecttyp1").getSelectedKey(),
-                selectEntit = this.getView().byId("selectentit1").getSelectedKey(),
-                // Get the value of '__editCRUD3' control
-                sInput = this.byId("__editCRUD3").getValue(),
-                // Get the '__editCRUD3' control
-                oInput = this.byId("__editCRUD3"),
-                // Regular expression for letters only
-                lettersOnly = /^[A-Za-z]+$/;
+        // This function is triggered when the user presses the 'Add' button
+        onAddPress2: function () {
+            try {
+                // Get the reference to the 'table2' control
+                var oTable = this.byId("table2"),
+                    // Create a template for a new row in the table
+                    oTemplate = new sap.m.ColumnListItem({
+                        cells: [
+                            new sap.m.Text({ text: this.byId("__inputFunktion2").getText() }),
+                            new sap.m.Text({ text: this.byId("selecttyp").getSelectedItem().getText() }),
+                            new sap.m.Text({ text: this.byId("selectentit").getSelectedItem().getText() }),
+                            new sap.m.Text({ text: this.byId("__inputWert").getValue() })
+                        ]
+                    });
 
-            // Reset value state and text of '__editCRUD3'
-            oInput.setValueState(sap.ui.core.ValueState.None);
-            oInput.setValueStateText("");
-
-            // Convert '__editCRUD3' to uppercase if it contains letters
-            if (lettersOnly.test(this.byId("__editCRUD3").getValue()))
-                this.byId("__editCRUD3").setValue(this.byId("__editCRUD3").getValue().toUpperCase());
-
-            // Check the selected values from 'selecttyp1' and 'selectentit1'
-            if (selectTyp) {
-                // If the selected type is 'D', enable suggestion and autocomplete
-                if (this.byId("selecttyp1").getSelectedItem().getText() === "D")
-                    this.byId("__editCRUD3").setShowSuggestion(true);
-                else {
-                    // If not, disable autocomplete and suggestion
-                    this.byId("__editCRUD3").setAutocomplete(false);
-                    this.byId("__editCRUD3").setShowSuggestion(false);
+                // Check if any of the required fields is empty
+                if (
+                    this.byId("__inputFunktion2").getText() == "" ||
+                    this.byId("selecttyp").getSelectedKey() == null ||
+                    this.byId("selectentit").getSelectedKey() == null ||
+                    this.byId("__inputWert").getValue() == ""
+                ) {
+                    throw new sap.ui.base.Exception("EmptyFieldException", "Incorrect Definition");
                 }
-            }
-            if (selectEntit) {
-                // If the selected entity is 'DATAMART', enable suggestion and autocomplete
-                if (this.byId("selectentit1").getSelectedItem().getText() === "DATAMART")
-                    this.byId("__editCRUD3").setShowSuggestion(true);
-                else {
-                    // If not, disable autocomplete and suggestion
-                    this.byId("__editCRUD3").setAutocomplete(false);
-                    this.byId("__editCRUD3").setShowSuggestion(false);
-                }
-            }
 
-            // Validation for all inputs - enable/disable 'addButton3' based on conditions
-            if (selectTyp && selectEntit && sInput !== "")
-                this.byId("addButton3").setEnabled(true);
-            else
-                this.byId("addButton3").setEnabled(false);
+                // Check for duplicate entries in the 'aIOBJ_Sondern' array
+                this.aIOBJ_Sondern.forEach(element => {
+                    if (
+                        element[0] == this.byId("__inputFunktion2").getText() &&
+                        element[1] == this.byId("selecttyp").getSelectedItem().getText() &&
+                        element[2] == this.byId("selectentit").getSelectedItem().getText() &&
+                        element[3] == this.byId("__inputWert").getValue()
+                    ) {
+                        throw new sap.ui.base.Exception("DuplicatedKey", "Incorrect Definition");
+                    }
+                });
+
+                // Add the new row to the table
+                oTable.addItem(oTemplate);
+
+                // Add the new entry to the 'aIOBJ_Sondern' array
+                this.aIOBJ_Sondern.push([
+                    this.byId("__inputFunktion2").getText(),
+                    this.byId("selecttyp").getSelectedItem().getText(),
+                    this.byId("selectentit").getSelectedItem().getText(),
+                    this.byId("__inputWert").getValue()
+                ]);
+
+                // Show a success message
+                sap.m.MessageToast.show("Element successfully added");
+
+                // Perform validation and reset input fields
+                this.createValidation();
+                this.byId("selecttyp").setSelectedKey(null);
+                this.byId("selectentit").setSelectedKey(null);
+                this.byId("__inputWert").setValue("");
+            } catch (error) {
+                // Handle different types of errors and show corresponding messages
+                if (error.message == "EmptyFieldException")
+                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                if (error.message == "DuplicatedKey")
+                    sap.m.MessageBox.warning("The element already exists");
+                if (error instanceof TypeError)
+                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+            }
         },
 
         // This function is triggered when the user presses the 'Add' button in a different context

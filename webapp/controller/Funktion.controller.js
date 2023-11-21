@@ -29,7 +29,7 @@ sap.ui.define([
                         that.getView().byId("numericCont1").setValue(data.toString());
                     }.bind(this),
                     error: function (errorEntit1) {
-                        console.log("Error querying Entity 1:", errorEntit1);
+                        console.log("Fehler bei der Abfrage einer Entität 1:", errorEntit1);
                     }
                 });
 
@@ -42,7 +42,7 @@ sap.ui.define([
                         that.getView().byId("numericCont2").setValue(data.toString());
                     }.bind(this),
                     error: function (errorEntit1) {
-                        console.log("Error querying Entity 2:", errorEntit1);
+                        console.log("Fehler bei der Abfrage einer Entität 2:", errorEntit1);
                     }
                 });
             },
