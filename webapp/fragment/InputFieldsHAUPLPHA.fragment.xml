@@ -1,11 +1,7 @@
-<core:FragmentDefinition xmlns="sap.m" 
-                         xmlns:core="sap.ui.core">                         
-    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="650px" contentHeight="500px">
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">                         
+    <Dialog title="{i18n>inputFieldDialogTitleAssig}" id="dialog1" contentWidth="650px" contentHeight="500px">
 		<content>					
-			<Table  id="table2" 
-                    mode="SingleSelectMaster"
-					headerText="Zuordnung hinzufügen"
-					fixedLayout="false">
+			<Table  id="table2" mode="SingleSelectMaster" fixedLayout="false">
 							<headerToolbar>
 								<Toolbar>
 									<content>
@@ -42,7 +38,7 @@
 														selectionChange="createValidation"
 														selectionFinish="handleSelectionFinish"	
 														required="true"
-														placeholder="Phase auswählen"																																
+														placeholder="{i18n>inputFieldDialogPlaceholderPhase}"																																
 														items="{
 															path: '/distinctItems1'
 														}">
@@ -54,7 +50,7 @@
 													valueHelpRequest=".onValueHelpRequest"													
 													liveChange="createValidation"
 													tokenUpdate="multiInputPersTokenUpdate"
-													placeholder="Personalnummer auswählen"
+													placeholder="{i18n>inputFieldDialogPlaceholderPersonal}"
 													showClearIcon="true"
 													showSuggestion="true"
 													suggest="suggestPersonalnummer"
@@ -71,7 +67,7 @@
 		</content>
 		<beginButton>
 			<Button id="createButton" 
-					text="Zuordnungen erstellen" 
+					text="{i18n>inputFieldDialogBeginButtonAssig}" 
 					type="Accept"  
 					press=".onCreatePress" 
 					enabled="false" />

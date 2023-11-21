@@ -4,7 +4,6 @@
             xmlns:f="sap.f"
 		    xmlns:fb="sap.ui.comp.filterbar"
             controllerName="auth.controller.HAUFW001">
-
     <f:DynamicPage id="dynamicPage1" >
 			<f:title>
 				<f:DynamicPageTitle>
@@ -12,14 +11,14 @@
                         <Title text="{i18n>table4PageTitle}"/>						
 					</f:heading>
 					<f:expandedContent>
-						<Label id="expandedLabel" text="No filters active" />
+						<Label id="expandedLabel" text="{i18n>expandedContent}" />
 					</f:expandedContent>
 					<f:snappedContent>
-						<Label id="snappedLabel" text="No filters active" />
+						<Label id="snappedLabel" text="{i18n>expandedContent}" />
 					</f:snappedContent>                    
                     <f:navigationActions>
-                        <Button text="zur Menü-Sonderfunktion" type="Reject"  icon="sap-icon://decline" 
-                                tooltip="zur Menü-Sonderfunktion"
+                        <Button text="{i18n>navigationActionFunktion}" type="Reject"  icon="sap-icon://decline" 
+                                tooltip="{i18n>navigationActionFunktion}"
                                 press="onNavButtonPressed"></Button>
                     </f:navigationActions>
 				</f:DynamicPageTitle>
@@ -90,7 +89,7 @@
 			</f:header>
 			<f:content>
             <VBox class="sapUiSmallMargin">
-                <Title  text="Sonderfunktion Übersicht"/>  
+                <Title  text="{i18n>table4FktTxtTitle}"/>  
                 <Table  growing="true"
                         growingThreshold="4" 
                         mode="SingleSelectMaster"                  
@@ -108,7 +107,7 @@
                     <headerToolbar>
                         <Toolbar>
                             <content>                                
-                                <Button text="Auswahl löschen"
+                                <Button text="{i18n>buttonQuitSelectFkt}"
                                         press="onCleanFilter"/>                                                
                             </content>
                         </Toolbar>
@@ -130,7 +129,7 @@
                         </ColumnListItem>
                     </items>                                
                 </Table>            
-                <Title  text="Details zu Sonderfunktion"/> 
+                <Title  text="{i18n>table4FktWertTitle}"/> 
                 <Table  growing="true"
                         growingScrollToLoad="true"
                         growingThreshold="50"

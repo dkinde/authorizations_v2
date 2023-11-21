@@ -958,9 +958,10 @@ sap.ui.define([
 
             // Validation for all inputs - enable/disable 'createButton' based on conditions
             if (this.aNewEntryDatamart != '' && aItems.length > 1 &&
-                selectTyp && selectEntit && oInput.getValueStateText() === "Diese Funktion existiert nicht") {
+                selectTyp && selectEntit &&
+                oInput.getValueStateText() === "Diese Funktion existiert nicht")
                 this.byId("createButton").setEnabled(true);
-            } else
+            else
                 this.byId("createButton").setEnabled(false);
         },
 

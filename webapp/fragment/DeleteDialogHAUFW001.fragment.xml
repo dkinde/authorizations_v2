@@ -2,11 +2,11 @@
                          xmlns:core="sap.ui.core"                                                   
 						 xmlns:form="sap.ui.layout.form" 
 						 width="100%">
-    <Dialog title="Sonderfunktion vollständig entfernen " id="dialog3" 
+    <Dialog title="{i18n>deleteDialogTitle}" id="dialog3" 
 			contentHeight="700px" contentWidth="750px" resizable="true">
 		<content>			
 			<VBox   class="sapUiSmallMargin">
-				<Title  text="Ausgewähltes Element"/>
+				<Title  text="{i18n>deleteFormTitle}"/>
 				<form:SimpleForm id="form2" editable="false" width="600px" >
 					<form:content>						
 						<Label text="{i18n>colAUFKT}" required="true"/>					
@@ -19,19 +19,19 @@
 						<Text 	id="__textWert" text=""/>																		
 					</form:content>							
 				</form:SimpleForm>					
-					<Title  text="Zugewiesene Personalnummer"/>
+					<Title  text="{i18n>deleteTableTitle}"/>
 						<Table  id="table3"                         										
 								items="{ 
 									path: '/HAUPF001' 
 								}"   
-								noDataText="Dieser Funktion hat keine Personalnummer zugeordnet"
+								noDataText="{i18n>deleteTableNoDataText}"
 								fixedLayout="false">
 							<headerToolbar>
 								<Toolbar>
 									<content>
 										<MessageStrip
 											id="messageStrip1"
-											text="Wenn Sie die gesamte Funktion löschen, werden alle zugeordneten Personalnummern gelöscht"
+											text="{i18n>deleteMsgStrip}"
 											type="Warning"
 											showIcon="true">
 										</MessageStrip>										                                                                                          
@@ -59,7 +59,7 @@
 		</content>
 		<beginButton>
 			<Button id="deleteButton" 
-					text="Sonderfunktion Löschen" 
+					text="{i18n>deleteBeginButton}" 
 					type="Reject"  
 					icon="sap-icon://delete" 
 					press=".onDeleteAllPress" />

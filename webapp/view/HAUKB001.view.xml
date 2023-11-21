@@ -8,16 +8,16 @@
 			<f:title>
 				<f:DynamicPageTitle>
 					<f:heading>
-                        <Title text="Kontrolbericht"/>						
+                        <Title text="{i18n>table6PageTitle}"/>						
 					</f:heading>
 					<f:expandedContent>
-						<Label id="expandedLabel" text="No filters active" />
+						<Label id="expandedLabel" text="{i18n>expandedContent}" />
 					</f:expandedContent>
 					<f:snappedContent>
-						<Label id="snappedLabel" text="No filters active" />
+						<Label id="snappedLabel" text="{i18n>expandedContent}" />
 					</f:snappedContent>                    
                     <f:navigationActions>
-                        <Button text="zur Startseite" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                        <Button text="{i18n>navigationActionHome}" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:navigationActions>
 				</f:DynamicPageTitle>
 			</f:title>

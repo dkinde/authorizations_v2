@@ -6,7 +6,7 @@
 			contentHeight="700px" contentWidth="750px" resizable="true">
 		<content>			
 			<VBox   class="sapUiSmallMargin">
-				<Title  text="Datamart hinzufügen"/>
+				<Title  text="{i18n>inputFieldDialogTitleFormFunktion}"/>
 				<form:SimpleForm id="form1" editable="false" width="600px" >
 					<form:content>						
 						<Label text="{i18n>colAUFKT}" id="text9" required="true"/>											
@@ -15,7 +15,7 @@
 								type="Number"
 								maxLength="2"
 								valueLiveUpdate="true" 
-								valueStateText="Geben Sie nicht mehr als 2 Ziffern ein"/>
+								valueStateText="{i18n>inputFieldDialogValueStateInputFunktion}"/>
 						<Label 	text="{i18n>colAUENTTYP}"  id="text10" required="true"/>
 						<Text 	id="__inputTyp1"  text="D"/>						
 						<Label 	text="{i18n>colAUENT}"  id="text11" required="true"/>	
@@ -35,10 +35,9 @@
 						</MultiComboBox>												
 					</form:content>							
 				</form:SimpleForm>					
-					<Title  text="IOBJ/Sondern hinzufügen"/>
+					<Title  text="{i18n>inputFieldDialogTitleTableFunktion}"/>
 						<Table  id="table2" 
-                        		mode="SingleSelectMaster"
-								headerText="IOBJ/Sondern hinzufügen"
+                        		mode="SingleSelectMaster"								
 								fixedLayout="false">
 							<headerToolbar>
 								<Toolbar>

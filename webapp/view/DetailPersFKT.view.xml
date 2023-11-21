@@ -14,7 +14,7 @@
                             <ObjectPageDynamicHeaderTitle>
                                 <actions>                                       
                                     <m:Button
-                                        text="Zur Personalnummer - Funktion"
+                                        text="{i18n>buttonActions}"
                                         press="onCancelTwoColumns"
                                         icon="sap-icon://decline"
                                         type="Reject"/>
@@ -37,7 +37,7 @@
                         </headerContent>
 
                         <sections>
-                            <ObjectPageSection title="Definition der Funktion und der ihr zugeordneten Personalnummern">
+                            <ObjectPageSection title="{i18n>sectionTitle}">
                                 <subSections>
                                     <ObjectPageSubSection>
                                         <blocks>                        
@@ -48,7 +48,7 @@
                                                                 $count: true                                    
                                                             }    
                                                         }"    
-                                                        noDataText="Diese Funktion hat keine Definition"                                                    
+                                                        noDataText="{i18n>noDataTextTableLeft}"                                                    
                                                         fixedLayout="false"
                                                         alternateRowColors="false">
                                                 <m:columns>
@@ -84,7 +84,7 @@
                                                             }    
                                                         }"                                                        
                                                         fixedLayout="false"
-                                                        noDataText="Hat keine Zuordnung" 
+                                                        noDataText="{i18n>noDataTextTableRigth}" 
                                                         alternateRowColors="false">
                                                 <m:columns>                                                    
                                                     <m:Column>

@@ -11,13 +11,13 @@
                         <Title text="{i18n>table5PageTitle}"/>						
 					</f:heading>
 					<f:expandedContent>
-						<Label id="expandedLabel" text="No filters active" />
+						<Label id="expandedLabel" text="{i18n>expandedContent}" />
 					</f:expandedContent>
 					<f:snappedContent>
-						<Label id="snappedLabel" text="No filters active" />
+						<Label id="snappedLabel" text="{i18n>expandedContent}" />
 					</f:snappedContent>                    
                     <f:navigationActions>
-                        <Button text="zur Menü-Sondernfunktion" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
+                        <Button text="{i18n>navigationActionFunktion}" type="Reject" icon="sap-icon://decline" press="onNavButtonPressed"></Button>
                     </f:navigationActions>
 				</f:DynamicPageTitle>
 			</f:title>
@@ -77,12 +77,12 @@
                         <Toolbar>
                             <content>                            
                                 <Button icon="sap-icon://add" 
-                                        text="Neue Zuordnung" 
+                                        text="{i18n>buttonAddAssig}" 
                                         press="onOpenDialog"
                                         type="Accept"/>                                                                           
                                 <Button icon="sap-icon://delete" 
                                         type="Reject" 
-                                        text="Zuordnung aufheben" 
+                                        text="{i18n>buttonDeleteAssig}" 
                                         press="onDeletePress"/>
                                 <ToolbarSpacer/> 
                                 <!-- <SearchField    id="searchField"

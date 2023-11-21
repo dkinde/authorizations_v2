@@ -1,11 +1,7 @@
-<core:FragmentDefinition xmlns="sap.m" 
-                         xmlns:core="sap.ui.core">
-    <Dialog title="Neue Zuweisung" id="dialog1" contentWidth="650px" contentHeight="500px">
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog title="{i18n>inputFieldDialogTitleAssig}" id="dialog1" contentWidth="650px" contentHeight="500px">
 		<content>
-			<Table  id="table2" 
-                    mode="SingleSelectMaster"
-					headerText="Zuordnung hinzufügen"
-					fixedLayout="false">
+			<Table  id="table2" mode="SingleSelectMaster" fixedLayout="false">
 							<headerToolbar>
 								<Toolbar>
 									<content>
@@ -38,10 +34,10 @@
 										<MultiInput id="multiInputPers"													
 													autocomplete="false"
 													type="Number"
+													placeholder="{i18n>inputFieldDialogPlaceholderPersonal}"
 													valueHelpRequest=".onValueHelpRequestPersonal"													
 													liveChange="createValidation"
 													tokenUpdate="multiInputPersTokenUpdate"
-													placeholder="Personalnummer auswählen"
 													showClearIcon="true"
 													showSuggestion="true"
 													suggest="suggestPersonalnummer"
@@ -55,10 +51,10 @@
 										<MultiInput id="multiInputFunktion"													
 													autocomplete="false"
 													type="Number"
+													placeholder="{i18n>inputFieldDialogPlaceholderFunktion}"
 													valueHelpRequest=".onValueHelpRequestFunktion"													
 													liveChange="createValidation"
 													tokenUpdate="multiInputFunktionTokenUpdate"
-													placeholder="Funktion auswählen"
 													showClearIcon="true"
 													showSuggestion="true"
 													suggest="suggestFunktion"
@@ -76,7 +72,7 @@
 		</content>
 		<beginButton>
 			<Button id="createButton" 
-					text="Zuordnungen erstellen" 
+					text="{i18n>inputFieldDialogBeginButtonAssig}" 
 					type="Accept"  
 					press=".onCreatePress" 
 					enabled="false" />
