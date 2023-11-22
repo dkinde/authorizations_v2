@@ -12,7 +12,7 @@
   "devDependencies": {
     "@sap-ux/ui5-middleware-fe-mockserver": "2",
     "@sap/ux-ui5-tooling": "1",
-    "@ui5/cli": "^3.7.1"
+    "@ui5/cli": "^3.7.2"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-ui-xx-viewCache=false#auth-display\"",

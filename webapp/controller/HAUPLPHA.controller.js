@@ -193,7 +193,6 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                // return "No filters active";
                 return this.getI18nText("noFilters");
             }
 
@@ -208,7 +207,6 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                // return "No filters active";
                 return this.getI18nText("noFilters");
             }
 
@@ -324,7 +322,7 @@ sap.ui.define([
                             });
                         });
                         // Show a message toast with the selected personal numbers
-                        var selectedValues = "Selected Personal Numbers: " + aContexts.map(function (oContext) {
+                        var selectedValues = this.getI18nText("selectedPersNum") + aContexts.map(function (oContext) {
                             var oSelectedObject = oContext.getObject();
                             return oSelectedObject.personalnummer;
                         }).join(", ");
@@ -341,7 +339,7 @@ sap.ui.define([
         // Event handler for Value Help Dialog close
         onValueHelpDialogClose: function (oEvent) {
             // Show a message toast indicating that the action was canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Reset the filter on the Value Help Dialog
             oEvent.getSource().getBinding("items").filter([]);
@@ -391,7 +389,7 @@ sap.ui.define([
             this._oModel.resetChanges();
 
             // Show a message toast indicating that the action was canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Reset selected keys in the phase selection control
             this.byId("selectphase1").setSelectedKeys(null);
@@ -480,7 +478,7 @@ sap.ui.define([
                     aColumnListItems = [];
 
                 // Check for existing assignments and valid assignments
-                aTemplate.forEach((item, index) => {
+                aTemplate.forEach((item) => {
                     var bAssigExist1 = false;
                     for (var i = 0; i < aItems.length; i++) {
                         if (item.pla_pha === aItems[i].getCells()[0].getTitle() &&
@@ -504,9 +502,9 @@ sap.ui.define([
 
                 // Handle existing assignments
                 if (bAssigExist) {
-                    var sMessage = "The following assignments already exist:\n\n";
+                    var sMessage = this.getI18nText("existsAssig");
                     aAssigExist.forEach(function (item) {
-                        sMessage += "Phase: " + item.pla_pha + " => Personalnummer: " + item.personalnummer + "\n";
+                        sMessage += "Phase: " + item.pla_pha + " => " + this.getI18nText("persNum") + item.personalnummer + "\n";
                     });
                     sap.m.MessageBox.warning(sMessage);
                 }
@@ -528,7 +526,7 @@ sap.ui.define([
                 });
 
                 // Show a message toast for successful addition
-                sap.m.MessageToast.show("Element successfully added");
+                sap.m.MessageToast.show(this.getI18nText("successAdd"));
 
                 // Reset selected keys, tokens, and arrays
                 this.byId("selectphase1").setSelectedKeys(null);
@@ -541,10 +539,10 @@ sap.ui.define([
             } catch (error) {
                 // Handle errors (e.g., duplicated key or empty fields)
                 if (error.message === "DuplicatedKey") {
-                    sap.m.MessageBox.warning("An element already exists");
+                    sap.m.MessageBox.warning(this.getI18nText("duplicatedElementWarning"));
                 }
                 if (error instanceof TypeError) {
-                    sap.m.MessageBox.warning("No element can be added; empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
                 }
             }
         },
@@ -559,15 +557,15 @@ sap.ui.define([
             if (oSelectedItem) {
                 // Check if the selected item is the first item (cannot be deleted)
                 if (iIndex == 0) {
-                    sap.m.MessageBox.warning("This element cannot be deleted");
+                    sap.m.MessageBox.warning(this.getI18nText("noDeleteElement"));
                 }
                 // Delete the selected item
                 else {
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Assignment successfully deleted");
+                    sap.m.MessageToast.show(this.getI18nText("successDeleteAssig"));
                 }
             } else {
-                sap.m.MessageBox.warning("No element selected for deletion!");
+                sap.m.MessageBox.warning(this.getI18nText("noElementDelete"));
             }
 
             // Perform validation
@@ -584,7 +582,7 @@ sap.ui.define([
                     that = this,
                     fnSuccess = function () {
                         // Display success message when phase is successfully assigned
-                        sap.m.MessageToast.show("Phase successfully assigned");
+                        sap.m.MessageToast.show(this.getI18nText("successAddPhase"));
                     }.bind(this),
                     fnError = function (oError) {
                         // Display error message if there's an issue with the assignment
@@ -620,7 +618,7 @@ sap.ui.define([
             } catch (error) {
                 // Handle errors (e.g., empty fields)
                 if (error instanceof TypeError) {
-                    sap.m.MessageBox.warning("No element can be added; empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
                 }
             }
         },
@@ -630,7 +628,7 @@ sap.ui.define([
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 fnSuccess = function () {
                     // Display success message when element is successfully deleted
-                    sap.m.MessageToast.show("Element (" + sPersNummer + ") successfully deleted");
+                    sap.m.MessageToast.show("Element (" + sPersNummer + ")" + this.getI18nText("deletePressSuccess"));
                 },
                 fnError = function (oError) {
                     // Display error message if there's an issue with the deletion
@@ -651,7 +649,7 @@ sap.ui.define([
                 });
             } else {
                 // Display a warning if no item is selected for deletion
-                sap.m.MessageBox.warning("No element selected for deletion");
+                sap.m.MessageBox.warning(this.getI18nText("noElementDelete"));
             }
         },
 

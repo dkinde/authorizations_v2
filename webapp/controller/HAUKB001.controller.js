@@ -311,7 +311,6 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                // return "No filters active";
                 return this.getI18nText("expandedContent");
             }
 
@@ -326,7 +325,7 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                return "No filters active";
+                return this.getI18nText("expandedContent");
             }
 
             var sText = aFiltersWithValues.length + " " + this.getI18nText("activeFilters") + " ",
@@ -374,7 +373,7 @@ sap.ui.define([
             this._oModel.resetChanges();
 
             // Show a message toast indicating the action is canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Hide and reset input fields in the entry dialog
             this.byId("cleanEntryFilter").setVisible(false);
@@ -396,7 +395,7 @@ sap.ui.define([
             this.byId("cleanEntryFilter").setVisible(false);
 
             // Show a message toast indicating the initial filter is removed
-            sap.m.MessageToast.show("Initial filter removed");
+            sap.m.MessageToast.show(this.getI18nText("initialFilterRemoved"));
         },
 
         // Function to open the entry dialog
@@ -452,7 +451,7 @@ sap.ui.define([
             }
 
             // Show toast message and reset input values
-            sap.m.MessageToast.show("Filter einschalten");
+            sap.m.MessageToast.show(this.getI18nText("filterOn"));
             this.byId("entryPersonal").setValue("");
             this.byId("entryDatamart").setValue("");
             this.byId("entryFunktion").setValue("");

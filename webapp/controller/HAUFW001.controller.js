@@ -142,7 +142,7 @@ sap.ui.define([
                         }
                     },
                     error: function (oError) {
-                        console.error("Error retrieving data:", oError);
+                        console.error("Fehler beim Abrufen von Daten:", oError);
                     }
                 });
             }
@@ -168,7 +168,7 @@ sap.ui.define([
                         }
                     },
                     error: function (oError) {
-                        console.error("Error retrieving data:", oError);
+                        console.error("Fehler beim Abrufen von Daten:", oError);
                     }
                 });
             }
@@ -759,7 +759,7 @@ sap.ui.define([
                                             oInput = new sap.m.Input({
                                                 value: item.wert,
                                                 valueLiveUpdate: true,
-                                                valueStateText: "Geben Sie nicht mehr als 60 Zeichen ein",
+                                                valueStateText: that.getI18nText("noMore60"),
                                                 liveChange: that.liveChangeInput.bind(that)
                                             });
 
@@ -778,12 +778,12 @@ sap.ui.define([
                                                             additionalText: "{Txtlg}"
                                                         })
                                                     },
-                                                    placeholder: "Geben Sie nur vorhandene Datamarts ein",
+                                                    placeholder: that.getI18nText("onlyExistsDatamart"),
                                                     showSuggestion: true,
                                                     value: item.wert,
                                                     valueLiveUpdate: true,
                                                     liveChange: that.liveChangeInput.bind(that),
-                                                    valueStateText: "Geben Sie nicht mehr als 2 Zeichen ein und nur Buchstaben",
+                                                    valueStateText: that.getI18nText("noMoreTwoCharOnlyLetter"),
                                                 });
                                                 break;
                                             case "I":
@@ -837,7 +837,7 @@ sap.ui.define([
 
             } else {
                 // Show a warning message if no item is selected for update
-                sap.m.MessageBox.warning("Es wurde kein Funktion zur Aktualisierung ausgewählt");
+                sap.m.MessageBox.warning(this.getI18nText("noUpdateFunction"));
             }
         },
 
@@ -892,7 +892,7 @@ sap.ui.define([
 
             } else {
                 // Show a warning message if no item is selected for delete
-                sap.m.MessageBox.warning("Kein Element zum Löschen ausgewählt!");
+                sap.m.MessageBox.warning(this.getI18nText("noElementDelete"));
             }
         },
 
@@ -927,14 +927,14 @@ sap.ui.define([
             if (iInput.length > 0 && iInput.length < 3) {
                 if (bExistFunktion) {
                     oInput.setValueState(sap.ui.core.ValueState.Error);
-                    oInput.setValueStateText("Diese Funktion ist bereits vorhanden");
+                    oInput.setValueStateText(this.getI18nText("functionExists"));
                 } else {
                     oInput.setValueState(sap.ui.core.ValueState.Success);
-                    oInput.setValueStateText("Diese Funktion existiert nicht");
+                    oInput.setValueStateText(this.getI18nText("noFunctionExists"));
                 }
             } else {
                 oInput.setValueState(sap.ui.core.ValueState.Error);
-                oInput.setValueStateText("Geben Sie nicht mehr als 2 Ziffern ein");
+                oInput.setValueStateText(this.getI18nText("noMoreTwoDigit"));
             }
 
             // Validation for single inputs - convert '__inputWert' to uppercase if it contains letters
@@ -946,7 +946,7 @@ sap.ui.define([
                 oInput.setValueState(sap.ui.core.ValueState.None);
 
             // Enable/disable 'addButton2' based on conditions
-            if (this.aNewEntryDatamart != '' && oInput.getValueStateText() === "Diese Funktion existiert nicht")
+            if (this.aNewEntryDatamart != '' && oInput.getValueStateText() === this.getI18nText("noFunctionExists"))
                 this.byId("addButton2").setEnabled(true);
             else
                 this.byId("addButton2").setEnabled(false);
@@ -964,7 +964,7 @@ sap.ui.define([
             // Validation for all inputs - enable/disable 'createButton' based on conditions
             if (this.aNewEntryDatamart != '' && aItems.length > 1 &&
                 selectTyp && selectEntit &&
-                oInput.getValueStateText() === "Diese Funktion existiert nicht")
+                oInput.getValueStateText() === this.getI18nText("noFunctionExists"))
                 this.byId("createButton").setEnabled(true);
             else
                 this.byId("createButton").setEnabled(false);
@@ -1068,7 +1068,7 @@ sap.ui.define([
                 ]);
 
                 // Show a success message
-                sap.m.MessageToast.show("Element successfully added");
+                sap.m.MessageToast.show(this.getI18nText("successAdd"));
 
                 // Perform validation and reset input fields
                 this.createValidation();
@@ -1078,11 +1078,11 @@ sap.ui.define([
             } catch (error) {
                 // Handle different types of errors and show corresponding messages
                 if (error.message == "EmptyFieldException")
-                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
                 if (error.message == "DuplicatedKey")
-                    sap.m.MessageBox.warning("The element already exists");
+                    sap.m.MessageBox.warning(this.getI18nText("duplicatedElementWarning"));
                 if (error instanceof TypeError)
-                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
             }
         },
 
@@ -1146,7 +1146,7 @@ sap.ui.define([
 
                     // Show error if Datamart doesn't exist
                     if (!bDatamart) {
-                        this.byId("__editCRUD3").setValueStateText("This Datamart does not exist");
+                        this.byId("__editCRUD3").setValueStateText(this.getI18nText("noExistDatamart"));
                         this.byId("__editCRUD3").setValueState(sap.ui.core.ValueState.Error);
                         throw new sap.ui.base.Exception("DatamartNoExistException", "Incorrect Definition");
                     }
@@ -1167,7 +1167,7 @@ sap.ui.define([
                     oInput = new sap.m.Input({
                         value: this.byId("__editCRUD3").getValue(),
                         valueLiveUpdate: true,
-                        valueStateText: "Enter no more than 60 characters",
+                        valueStateText: this.getI18nText("noMore60"),
                         liveChange: this.liveChangeInput.bind(this)
                     });
 
@@ -1185,13 +1185,13 @@ sap.ui.define([
                                     additionalText: "{Txtlg}"
                                 })
                             },
-                            placeholder: "Enter only existing Datamarts",
+                            placeholder: this.getI18nText("onlyExistsDatamart"),
                             showSuggestion: true,
                             value: this.byId("__editCRUD3").getValue(),
                             maxLength: 2,
                             valueLiveUpdate: true,
                             liveChange: this.liveChangeInput.bind(this),
-                            valueStateText: "Enter no more than 2 characters and only letters",
+                            valueStateText: this.getI18nText("noMoreTwoCharOnlyLetter"),
                         });
                         break;
                     case "I":
@@ -1233,7 +1233,7 @@ sap.ui.define([
                 this.aCreate.push(aRow);
 
                 // Show a success message
-                sap.m.MessageToast.show("Element successfully added");
+                sap.m.MessageToast.show(this.getI18nText("successAdd"));
 
                 // Reset input fields and perform validation
                 this.byId("selecttyp1").setSelectedKey(null);
@@ -1244,13 +1244,13 @@ sap.ui.define([
             } catch (error) {
                 // Handle different types of errors and show corresponding messages
                 if (error.message == "EmptyFieldException")
-                    sap.m.MessageBox.warning("Kein Element kann hinzugefügt werden, leere Felder sind vorhanden");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
                 if (error.message == "DuplicatedKey")
-                    sap.m.MessageBox.warning("Das Element ist bereits vorhanden");
+                    sap.m.MessageBox.warning(this.getI18nText("duplicatedElementWarning"));
                 if (error.message == "OnlyDatamartException")
-                    sap.m.MessageBox.warning("Nur Datamart kann zu dieser Funktion hinzugefügt werden");
+                    sap.m.MessageBox.warning(this.getI18nText("onlyDatamartException"));
                 if (error.message == "DatamartNoExistException")
-                    sap.m.MessageBox.warning("Der Wert des eingegebenen Datamarts existiert nicht");
+                    sap.m.MessageBox.warning(this.getI18nText("noExistDatamart"));
                 if (error instanceof TypeError)
                     sap.m.MessageBox.warning(error);
             }
@@ -1264,19 +1264,19 @@ sap.ui.define([
             if (oSelectedItem) {
                 // Check if the selected item is the first one, and show a warning message
                 if (iIndex == 0) {
-                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
+                    sap.m.MessageBox.warning(this.getI18nText("noDeleteElement"));
                 } else {
                     // Adjust the index and remove the corresponding entry from 'aIOBJ_Sondern'
                     iIndex -= 1;
                     this.aIOBJ_Sondern.splice(iIndex, 1);
                     // Destroy the selected item from the table
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Element erfolgreich gelöscht");
+                    sap.m.MessageToast.show(this.getI18nText("successDelete"));
                     // Perform validation after deletion
                     this.createValidation();
                 }
             } else {
-                sap.m.MessageBox.warning("Kein Element zur Löschung ausgewählt!");
+                sap.m.MessageBox.warning(this.getI18nText("noElementDelete"));
             }
             // Perform validation after deletion
             this.createValidation();
@@ -1290,7 +1290,7 @@ sap.ui.define([
             if (oSelectedItem) {
                 // Check if the selected item is the first one, and show a warning message
                 if (iIndex == 0) {
-                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden");
+                    sap.m.MessageBox.warning(this.getI18nText("noDeleteElement"));
                 } else {
                     // Adjust the index and create an array to represent the row data
                     iIndex -= 1;
@@ -1316,12 +1316,12 @@ sap.ui.define([
 
                     // Destroy the selected item from the table
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Element erfolgreich gelöscht");
+                    sap.m.MessageToast.show(this.getI18nText("successDelete"));
                     // Perform validation after deletion
                     this.editValidation();
                 }
             } else {
-                sap.m.MessageBox.warning("No element selected for deletion!");
+                sap.m.MessageBox.warning(this.getI18nText("noDeleteElement"));
             }
             // Perform validation after deletion
             this.editValidation();
@@ -1331,7 +1331,7 @@ sap.ui.define([
         onCreatePress: function () {
             // Define success and error callback functions
             var fnSuccess = function () {
-                sap.m.MessageToast.show("Element successfully created");
+                sap.m.MessageToast.show(this.getI18nText("successCreate"));
             }.bind(this);
 
             var fnError = function (oError) {
@@ -1394,10 +1394,10 @@ sap.ui.define([
             } catch (error) {
                 // Handle different types of errors
                 if (error instanceof TypeError) {
-                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
                 }
                 if (error.message == "DuplicatedKey")
-                    sap.m.MessageBox.warning("The element already exists");
+                    sap.m.MessageBox.warning(this.getI18nText("duplicatedElementWarning"));
             }
 
             // Reset values and states after creation
@@ -1440,7 +1440,7 @@ sap.ui.define([
                 iTotalSuccess = 0, // Counter for successful updates
                 iItems = this.byId("table6").getItems(), // Get items from 'table6'
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Function successfully updated");
+                    sap.m.MessageToast.show(this.getI18nText("successUpdateFunction"));
                 }.bind(this), // Success callback function
                 fnError = function (oError) {
                     sap.m.MessageBox.error(oError.message);
@@ -1468,13 +1468,13 @@ sap.ui.define([
                         }
                         if (!bDatamartOK) {
                             bExistDatamrt = false;
-                            oInput.setValueStateText("This Datamart does not exist");
+                            oInput.setValueStateText(this.getI18nText("noExistDatamart"));
                             oInput.setValueState(sap.ui.core.ValueState.Error);
                         }
                     }
                     if (iItems[i].getCells()[3].getValue() === "") {
                         iItems[i].getCells()[3].setValueState(sap.ui.core.ValueState.Error);
-                        iItems[i].getCells()[3].setValueStateText("This field is empty");
+                        iItems[i].getCells()[3].setValueStateText(this.getI18nText("emptyField"));
                         bEmptyField = true;
                     }
                 }
@@ -1560,16 +1560,16 @@ sap.ui.define([
             } catch (error) {
                 // Handle different types of errors
                 if (error instanceof TypeError)
-                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
 
                 if (error.message == "EmptyFieldException")
-                    sap.m.MessageBox.warning("This function cannot be updated as there is an empty field");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldFunction"));
 
                 if (error.message == "NoDatamartException")
-                    sap.m.MessageBox.warning("The function you are trying to create does not have a Datamart (D) type associated with it");
+                    sap.m.MessageBox.warning(this.getI18nText("noDatamartException"));
 
                 if (error.message == "IncorrectDatamartException")
-                    sap.m.MessageBox.warning("One of the Datamarts you are trying to add does not exist");
+                    sap.m.MessageBox.warning(this.getI18nText("incorrectDatamartException"));
             }
         },
 
@@ -1581,7 +1581,7 @@ sap.ui.define([
                 oSelectedItem = this.byId("table1").getSelectedItem(),
                 // Success callback function
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element (" + sFunktion + ") successfully deleted");
+                    sap.m.MessageToast.show("Element (" + sFunktion + ")" + this.getI18nText("deletePressSuccess"));
                 },
                 // Error callback function
                 fnError = function (oError) {
@@ -1593,17 +1593,17 @@ sap.ui.define([
             // Check if an item is selected
             if (oSelectedItem) {
                 // Show a confirmation dialog with options
-                sap.m.MessageBox.confirm("Möchten Sie die gesamte Funktion löschen?", {
-                    title: "Sonderfunktion löschen",
-                    actions: [sap.m.MessageBox.Action.YES, "Nur dieses Element", sap.m.MessageBox.Action.CANCEL],
-                    emphasizedAction: "Nur dieses Element",
+                sap.m.MessageBox.confirm(this.getI18nText("deleteCompleteFunction"), {
+                    title: this.getI18nText("msgBoxTitleDelete"),
+                    actions: [sap.m.MessageBox.Action.YES, this.getI18nText("oneElementDelete"), sap.m.MessageBox.Action.CANCEL],
+                    emphasizedAction: this.getI18nText("oneElementDelete"),
                     styleClass: "confirmMessageBox",
                     onClose: function (sAction) {
                         // Handle the selected action
                         if (sAction === sap.m.MessageBox.Action.YES) {
                             // Open the delete dialog for the entire function
                             that.onOpenDeleteDialog();
-                        } else if (sAction === "Nur dieses Element") {
+                        } else if (sAction === this.getI18nText("oneElementDelete")) {
                             // Get the binding context of the selected item
                             var oContext = oSelectedItem.getBindingContext(),
                                 // Array to store entries with the same function
@@ -1618,7 +1618,7 @@ sap.ui.define([
 
                             // Check if the selected item has type 'D' and value '*'
                             if (sTyp === "D" && sWert === "*")
-                                sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");
+                                sap.m.MessageBox.warning(this.getI18nText("noDeleteAlleDatamart"));
                             else if (sTyp === "D") {
                                 var iCount = 0;
                                 // Loop through all items to find entries with the same function
@@ -1636,7 +1636,7 @@ sap.ui.define([
                                 });
                                 // Check if there is at least one entry with type 'D'
                                 if (iCount < 2)
-                                    sap.m.MessageBox.warning("Dieses Element kann nicht gelöscht werden, da die Funktion mindestens einen Datamart haben muss");
+                                    sap.m.MessageBox.warning(this.getI18nText("noDeleteAlleDatamart"));
                                 else
                                     // Remove the entry using the DELETE request
                                     that._oModel.remove(sURL, {
@@ -1651,12 +1651,12 @@ sap.ui.define([
                                 });
                             }
                         } else {
-                            sap.m.MessageToast.show("Action canceled");
+                            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
                         }
                     }
                 });
             } else {
-                sap.m.MessageBox.warning("Kein Element zur Löschung ausgewählt");
+                sap.m.MessageBox.warning(this.getI18nText("noElementDelete"));
             }
         },
 
@@ -1666,7 +1666,7 @@ sap.ui.define([
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 // Success callback function for deletion
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element (" + sFunktion + ") erfolgreich gelöscht");
+                    sap.m.MessageToast.show("Element (" + sFunktion + ")" + this.getI18nText("deletePressSuccess"));
                 },
                 // Error callback function for deletion
                 fnError = function (oError) {
@@ -1715,7 +1715,7 @@ sap.ui.define([
                         }
                     },
                     error: function (oError) {
-                        console.error("Error retrieving data:", oError);
+                        console.error("Fehler beim Abrufen von Daten:", oError);
                     }
                 });
             }
@@ -1766,7 +1766,7 @@ sap.ui.define([
                         }
                     },
                     error: function (oError) {
-                        console.error("Error retrieving data:", oError);
+                        console.error("Fehler beim Abrufen von Daten:", oError);
                     }
                 });
             }

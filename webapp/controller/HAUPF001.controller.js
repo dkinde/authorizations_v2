@@ -223,7 +223,6 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                // return "No filters active";
                 return this.getI18nText("noFilters");
             }
 
@@ -238,7 +237,6 @@ sap.ui.define([
             var aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
 
             if (aFiltersWithValues.length === 0) {
-                // return "No filters active";
                 return this.getI18nText("noFilters");
             }
 
@@ -303,7 +301,7 @@ sap.ui.define([
             this._oModel.resetChanges();
 
             // Show a message indicating that the action was canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Reset and clear certain input fields and tokens
             this.byId("multiInputPers").setValue("");
@@ -387,7 +385,7 @@ sap.ui.define([
         // Function triggered when the value help dialog is closed
         onValueHelpDialogClose: function (oEvent) {
             // Show a toast message indicating that the action was canceled
-            sap.m.MessageToast.show("Action canceled");
+            sap.m.MessageToast.show(this.getI18nText("actionCancel"));
 
             // Remove any applied filters on the items in the value help dialog
             oEvent.getSource().getBinding("items").filter([]);
@@ -492,7 +490,7 @@ sap.ui.define([
                                 Txtmd: oSelectedObject.Txtmd
                             });
                         });
-                        var selectedValues = "Selected Personal Numbers: " + aContexts.map(function (oContext) {
+                        var selectedValues = this.getI18nText("selectedPersNum") + aContexts.map(function (oContext) {
                             var oSelectedObject = oContext.getObject();
                             return oSelectedObject.personalnummer;
                         }).join(", ");
@@ -553,7 +551,7 @@ sap.ui.define([
                                 Txtlg: oSelectedObject.Txtlg
                             });
                         });
-                        var selectedValues = "Selected Functions: " + aContexts.map(function (oContext) {
+                        var selectedValues = this.getI18nText("selectedFunction") + aContexts.map(function (oContext) {
                             var oSelectedObject = oContext.getObject();
                             return oSelectedObject.funktion;
                         }).join(", ");
@@ -617,9 +615,9 @@ sap.ui.define([
 
                 // Display warning message if assignments already exist
                 if (bAssigExist) {
-                    var sMessage = "The following assignments already exist:\n \n";
+                    var sMessage = this.getI18nText("existsAssig");
                     aAssigExist.forEach(function (item) {
-                        sMessage += "Personal Number: " + item.personalnummer + " => Function: " + item.funktion + "\n";
+                        sMessage += this.getI18nText("persNum") + item.personalnummer + " => " + this.getI18nText("function") + item.funktion + "\n";
                     });
                     sap.m.MessageBox.warning(sMessage);
                 }
@@ -639,7 +637,7 @@ sap.ui.define([
                 });
 
                 // Display success message and reset input controls
-                sap.m.MessageToast.show("Element successfully added");
+                sap.m.MessageToast.show(this.getI18nText("successAdd"));
 
                 this.byId("multiInputPers").removeAllTokens();
                 this.byId("multiInputFunktion").removeAllTokens();
@@ -650,10 +648,10 @@ sap.ui.define([
             } catch (error) {
                 // Handle specific error cases and display corresponding warning messages
                 if (error.message == "DuplicatedKey") {
-                    sap.m.MessageBox.warning("An element already exists");
+                    sap.m.MessageBox.warning(this.getI18nText("duplicatedElementWarning"));
                 }
                 if (error instanceof TypeError) {
-                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
                 }
             }
         },
@@ -667,15 +665,15 @@ sap.ui.define([
             if (oSelectedItem) {
                 // Check if the selected item is the header (index 0)
                 if (iIndex == 0) {
-                    sap.m.MessageBox.warning("This element cannot be deleted");
+                    sap.m.MessageBox.warning(this.getI18nText("noDeleteElement"));
                 } else {
                     // Destroy the selected item and show success message
                     oSelectedItem.destroy();
-                    sap.m.MessageToast.show("Assignment successfully deleted");
+                    sap.m.MessageToast.show(this.getI18nText("successDeleteAssig"));
                 }
             } else {
                 // Show warning if no item is selected for deletion
-                sap.m.MessageBox.warning("No element selected for deletion!");
+                sap.m.MessageBox.warning(this.getI18nText("noElementDelete"));
             }
 
             // Trigger validation after deletion
@@ -712,7 +710,7 @@ sap.ui.define([
                     aCreate = [], // Array to store data for creation
                     that = this,
                     fnSuccess = function () {
-                        sap.m.MessageToast.show("Function successfully assigned");
+                        sap.m.MessageToast.show(this.getI18nText("successAssigFunction"));
                     }.bind(this),
                     fnError = function (oError) {
                         sap.m.MessageBox.error(oError.message);
@@ -749,7 +747,7 @@ sap.ui.define([
             } catch (error) {
                 // Handle a TypeError, if any, during the creation process
                 if (error instanceof TypeError) {
-                    sap.m.MessageBox.warning("No element can be added, empty fields are present");
+                    sap.m.MessageBox.warning(this.getI18nText("emptyFieldException"));
                 }
             }
         },
@@ -758,7 +756,7 @@ sap.ui.define([
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 fnSuccess = function () {
                     // Display a success message with the deleted personal number
-                    sap.m.MessageToast.show("Personal number (" + sPersNummer + ") successfully deleted");
+                    sap.m.MessageToast.show(this.getI18nText("persNum1") + "(" + sPersNummer + ")" + this.getI18nText("deletePressSuccess"));
                 },
                 fnError = function (oError) {
                     // Display an error message if deletion fails
@@ -778,7 +776,7 @@ sap.ui.define([
                 });
             } else {
                 // Display a warning if no item is selected for deletion
-                sap.m.MessageBox.warning("No element selected for deletion");
+                sap.m.MessageBox.warning(this.getI18nText("noElementDelete"));
             }
         },
 
