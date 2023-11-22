@@ -118,8 +118,8 @@
                     <items>
                         <ColumnListItem type="Navigation" press="onListItemPress" >
                             <cells>                                                
-                                <ObjectIdentifier title="{personalnummer}" text="{txt_pers}" tooltip="zur Definition der Funktion" />
-                                <ObjectIdentifier title="{funktion}" text="{txt_fkt}" tooltip="zur Definition der Funktion"/>                                                                                       
+                                <ObjectIdentifier title="{personalnummer}" text="{txt_pers}" tooltip="{i18n>tooltipFunctionDef}" />
+                                <ObjectIdentifier title="{funktion}" text="{txt_fkt}" tooltip="{i18n>tooltipFunctionDef}"/>                                                                                       
                             </cells>                                        
                         </ColumnListItem>
                     </items>

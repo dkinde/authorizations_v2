@@ -53,10 +53,10 @@
                                                         alternateRowColors="false">
                                                 <m:columns>
                                                     <m:Column mergeDuplicates="true">
-                                                        <m:Text text="Funktion" />
+                                                        <m:Text text="{i18n>colAUFKT}" />
                                                     </m:Column>
                                                     <m:Column mergeDuplicates="true">
-                                                        <m:Text text="Typ" />
+                                                        <m:Text text="{i18n>colAUENTTYP}" />
                                                     </m:Column>
                                                     <m:Column mergeDuplicates="true">
                                                         <m:Text text="{i18n>colAUENT}" />

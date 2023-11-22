@@ -56,7 +56,7 @@ sap.ui.define([
             this.oView = this.getView();
 
             // Set App language to German
-            sap.ui.getCore().getConfiguration().setLanguage("de");
+            // sap.ui.getCore().getConfiguration().setLanguage("de");
 
             // Get Filters Data
             var that = this,
@@ -617,7 +617,7 @@ sap.ui.define([
                 if (bAssigExist) {
                     var sMessage = this.getI18nText("existsAssig");
                     aAssigExist.forEach(function (item) {
-                        sMessage += this.getI18nText("persNum") + item.personalnummer + " => " + this.getI18nText("function") + item.funktion + "\n";
+                        sMessage += that.getI18nText("persNum") + item.personalnummer + " => " + that.getI18nText("function") + item.funktion + "\n";
                     });
                     sap.m.MessageBox.warning(sMessage);
                 }
