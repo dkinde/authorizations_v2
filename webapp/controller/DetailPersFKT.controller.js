@@ -41,7 +41,7 @@ sap.ui.define([
             this.oRouter.getRoute("RouteDetailPersFKT").attachPatternMatched(this._onFunktionMatched, this);
 
             // Set the language of the entire app to German
-            sap.ui.getCore().getConfiguration().setLanguage("de");
+            // sap.ui.getCore().getConfiguration().setLanguage("de");
 
             //this.oRouter.getRoute("RouteHAUPF001").attachPatternMatched(this._onFunktionMatched, this);
         },

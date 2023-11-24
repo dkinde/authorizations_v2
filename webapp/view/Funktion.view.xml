@@ -31,7 +31,7 @@
                     <TileContent id="t2">                            
                         <NumericContent value=""                                                                            
                                         id="numericCont1" 
-                                        scale="Einträge"
+                                        scale="{i18n>numericScale}"
                                         icon="sap-icon://menu2"/>                            
                     </TileContent>                    
                 </GenericTile>
@@ -41,7 +41,7 @@
                                 press="onNavToMasterPersFKT">                    
                     <TileContent id="t3">                            
                         <NumericContent value=""                 
-                                        scale="Einträge"                       
+                                        scale="{i18n>numericScale}"                       
                                         id="numericCont2" 
                                         icon="sap-icon://menu2"/>                            
                     </TileContent>                    

@@ -754,9 +754,10 @@ sap.ui.define([
         // Function triggered when delete button is pressed
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
+                that = this,
                 fnSuccess = function () {
                     // Display a success message with the deleted personal number
-                    sap.m.MessageToast.show(this.getI18nText("persNum1") + "(" + sPersNummer + ")" + this.getI18nText("deletePressSuccess"));
+                    sap.m.MessageToast.show(this.getI18nText("persNum1") + "(" + sPersNummer + ") " + that.getI18nText("deletePressSuccess"));
                 },
                 fnError = function (oError) {
                     // Display an error message if deletion fails

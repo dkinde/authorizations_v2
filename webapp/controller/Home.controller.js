@@ -11,8 +11,8 @@ sap.ui.define([
             // Initialization function called when the view is created
             onInit: function () {
                 // Set the language to German for the application
-                sap.ui.getCore().getConfiguration().setLanguage("de");
-                sap.ui.getCore().applyChanges();
+                // sap.ui.getCore().getConfiguration().setLanguage("de");
+                // sap.ui.getCore().applyChanges();
 
                 // Get the OData model from the owner component
                 this._oModel = this.getOwnerComponent().getModel();
@@ -24,7 +24,9 @@ sap.ui.define([
                     method: "GET",
                     success: function (data) {
                         // Set the count value in the corresponding numeric control
-                        that.getView().byId("numericCont1").setValue(data.toString());
+                        // that.getView().byId("numericCont1").setValue(data.toString());
+                        that.getView().byId("numericCont1").setValue(parseFloat(data));
+                        console.log(data);
                     }.bind(this),
                     error: function (errorEntit1) {
                         console.log("Fehler bei der Abfrage einer Entität 1:", errorEntit1);

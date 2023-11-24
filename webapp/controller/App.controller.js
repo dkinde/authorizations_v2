@@ -6,7 +6,11 @@ sap.ui.define(
     "use strict";
 
     return BaseController.extend("auth.controller.App", {
-      onInit() {
+      onInit: function () {
+        this.setLanguage("en");
+      },
+      setLanguage: function (sLanguage) {
+        sap.ui.getCore().getConfiguration().setLanguage(sLanguage);
       }
     });
   }

@@ -28,7 +28,7 @@
                                 press="onNavToAUDMART">                    
                         <TileContent id="t2">                                                        
                                 <NumericContent value=""                                                 
-                                                scale="Einträge"
+                                                scale="{i18n>numericScale}"
                                                 id="numericCont1" 
                                                 icon="sap-icon://menu2"/>                                                               
                         </TileContent>                    
@@ -39,7 +39,7 @@
                                 press="onNavToHAUPARZL">                    
                         <TileContent id="t4">                            
                                 <NumericContent value=""                                                                                                 
-                                                scale="Einträge" 
+                                                scale="{i18n>numericScale}" 
                                                 id="numericCont2" 
                                                 icon="sap-icon://menu2"/>                            
                         </TileContent>                    

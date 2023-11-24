@@ -56,7 +56,7 @@ sap.ui.define([
             this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
 
             // Set Language App to German
-            sap.ui.getCore().getConfiguration().setLanguage("de");
+            // sap.ui.getCore().getConfiguration().setLanguage("de");
 
             // Get Filters Data
             var that = this,
@@ -504,7 +504,7 @@ sap.ui.define([
                 if (bAssigExist) {
                     var sMessage = this.getI18nText("existsAssig");
                     aAssigExist.forEach(function (item) {
-                        sMessage += "Phase: " + item.pla_pha + " => " + this.getI18nText("persNum") + item.personalnummer + "\n";
+                        sMessage += "Phase: " + item.pla_pha + " => " + that.getI18nText("persNum") + item.personalnummer + "\n";
                     });
                     sap.m.MessageBox.warning(sMessage);
                 }
@@ -626,9 +626,10 @@ sap.ui.define([
         // Event handler for the "Delete" button press
         onDeletePress: function () {
             var oSelectedItem = this.byId("table1").getSelectedItem(),
+                that = this,
                 fnSuccess = function () {
                     // Display success message when element is successfully deleted
-                    sap.m.MessageToast.show("Element (" + sPersNummer + ")" + this.getI18nText("deletePressSuccess"));
+                    sap.m.MessageToast.show("Element (" + sPersNummer + ") " + that.getI18nText("deletePressSuccess"));
                 },
                 fnError = function (oError) {
                     // Display error message if there's an issue with the deletion

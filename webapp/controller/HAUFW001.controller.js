@@ -45,6 +45,7 @@ sap.ui.define([
             this.aPersNumm = [];
             this.aDatamart = [];
             this.aCreate = [];
+            this.aDelete = [];
             this.aDistinctFunktion = [];
             this._mViewSettingsDialogs = {};
             this.mGroupFunctions = {};
@@ -61,7 +62,7 @@ sap.ui.define([
             this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
 
             // Set App language to German
-            sap.ui.getCore().getConfiguration().setLanguage("de");
+            // sap.ui.getCore().getConfiguration().setLanguage("de");
 
             // Get Filters Data
             var that = this,
@@ -1579,9 +1580,10 @@ sap.ui.define([
             var aItems = this.byId("table1").getItems(),
                 // Get the selected item
                 oSelectedItem = this.byId("table1").getSelectedItem(),
+                sFunktion = oSelectedItem.getBindingContext().getProperty("funktion"),
                 // Success callback function
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element (" + sFunktion + ")" + this.getI18nText("deletePressSuccess"));
+                    sap.m.MessageToast.show("Element (" + sFunktion + ") " + that.getI18nText("deletePressSuccess"));
                 },
                 // Error callback function
                 fnError = function (oError) {
@@ -1603,7 +1605,7 @@ sap.ui.define([
                         if (sAction === sap.m.MessageBox.Action.YES) {
                             // Open the delete dialog for the entire function
                             that.onOpenDeleteDialog();
-                        } else if (sAction === this.getI18nText("oneElementDelete")) {
+                        } else if (sAction === that.getI18nText("oneElementDelete")) {
                             // Get the binding context of the selected item
                             var oContext = oSelectedItem.getBindingContext(),
                                 // Array to store entries with the same function
@@ -1618,7 +1620,7 @@ sap.ui.define([
 
                             // Check if the selected item has type 'D' and value '*'
                             if (sTyp === "D" && sWert === "*")
-                                sap.m.MessageBox.warning(this.getI18nText("noDeleteAlleDatamart"));
+                                sap.m.MessageBox.warning(that.getI18nText("noDeleteAlleDatamart"));
                             else if (sTyp === "D") {
                                 var iCount = 0;
                                 // Loop through all items to find entries with the same function
@@ -1636,7 +1638,7 @@ sap.ui.define([
                                 });
                                 // Check if there is at least one entry with type 'D'
                                 if (iCount < 2)
-                                    sap.m.MessageBox.warning(this.getI18nText("noDeleteAlleDatamart"));
+                                    sap.m.MessageBox.warning(that.getI18nText("noDeleteAlleDatamart"));
                                 else
                                     // Remove the entry using the DELETE request
                                     that._oModel.remove(sURL, {
@@ -1666,7 +1668,7 @@ sap.ui.define([
             var oSelectedItem = this.byId("table1").getSelectedItem(),
                 // Success callback function for deletion
                 fnSuccess = function () {
-                    sap.m.MessageToast.show("Element (" + sFunktion + ")" + this.getI18nText("deletePressSuccess"));
+                    sap.m.MessageToast.show("Element (" + sFunktion + ")" + that.getI18nText("deletePressSuccess"));
                 },
                 // Error callback function for deletion
                 fnError = function (oError) {

@@ -46,9 +46,9 @@
                                 subheader="{i18n>homepageGenTile4Content}"                                
                                 press="onNavToKontroll">                    
                         <TileContent id="t5">                                                        
-                            <NumericContent value="" 
-                                            id="numericCont1"
-                                            scale="Einträge"
+                            <NumericContent id="numericCont1"                                            
+                                            value=""
+                                            scale="{i18n>numericScale}"
                                             icon="sap-icon://menu2" 
                                             withMargin="false" />   
                         </TileContent>                    
@@ -61,8 +61,8 @@
                                 press="onNavToPersPlan">                    
                         <TileContent id="t6">                                                        
                             <NumericContent value="" 
-                                            id="numericCont2"
-                                            scale="Einträge"
+                                            id="numericCont2"                                            
+                                            scale="{i18n>numericScale}"
                                             icon="sap-icon://menu2" 
                                             withMargin="false" />   
                         </TileContent>                    

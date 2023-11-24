@@ -31,7 +31,7 @@ sap.ui.define([
         // Initialization function called when the view is created
         onInit: function () {
             // Set the language to German for the application
-            sap.ui.getCore().getConfiguration().setLanguage("de");
+            // sap.ui.getCore().getConfiguration().setLanguage("de");
 
             // Get the OData model from the owner component
             this._oModel = this.getOwnerComponent().getModel();
